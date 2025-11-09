@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useTranslations } from "next-intl";
 import type { Locale } from "@/lib/i18n";
+import type { Route } from "next";
 import { LangSwitcher } from "./lang-switcher";
 
 type Props = {
@@ -12,11 +13,11 @@ type Props = {
 export function MainNav({ locale }: Props) {
   const t = useTranslations();
 
-  const links = [
-    { href: `/${locale}/spots`, label: "Spots" },
-    { href: `/${locale}/articles`, label: "Articles" },
-    { href: `/${locale}/plan`, label: "Plan" },
-    { href: `/${locale}/events`, label: "Events" }
+  const links: { href: Route; label: string }[] = [
+    { href: `/${locale}/spots` as Route, label: "Spots" },
+    { href: `/${locale}/articles` as Route, label: "Articles" },
+    { href: `/${locale}/plan` as Route, label: "Plan" },
+    { href: `/${locale}/events` as Route, label: "Events" }
   ];
 
   return (

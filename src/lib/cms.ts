@@ -23,7 +23,7 @@ const fallbackSpots: Spot[] = [
     slug: "naruto-whirlpool",
     title: "鳴門の渦潮クルーズ",
     summary: "潮が最大になる時間帯をAIが提案し、渦潮観測船のチケットリンクを提供。",
-    ogImage: "/sample/naruto.jpg",
+    ogImage: "/sample/naruto.png",
     updatedAt: new Date().toISOString(),
     publishedAt: new Date().toISOString(),
     name: "鳴門の渦潮",
@@ -41,7 +41,7 @@ const fallbackSpots: Spot[] = [
       stroller: true
     },
     mapLink: "https://maps.google.com/?q=naruto+whirlpool",
-    images: [{ url: "/sample/naruto.jpg", alt: "鳴門の渦潮" }],
+    images: [{ url: "/sample/naruto.png", alt: "鳴門の渦潮" }],
     lastVerifiedAt: new Date().toISOString()
   }
 ];
@@ -54,7 +54,7 @@ const fallbackItineraries: Itinerary[] = [
     slug: "family-halfday",
     title: "子連れ半日モデルコース",
     summary: "雨天でも楽しめるよう屋内施設を組み合わせた半日プラン。",
-    ogImage: "/sample/family.jpg",
+    ogImage: "/sample/family.png",
     updatedAt: new Date().toISOString(),
     publishedAt: new Date().toISOString(),
     audienceTags: ["子連れ", "雨天"],
@@ -69,7 +69,7 @@ const fallbackItineraries: Itinerary[] = [
     alternatives: ["屋外公園"],
     foodToiletNotes: "館内に授乳室あり",
     warnings: ["最終バス 17:30 までに帰路へ"],
-    links: [{ label: "PDF", url: "/sample.pdf" }],
+    links: [{ label: "PDF", url: "/sample/sample.pdf" }],
     mapLink: "https://maps.google.com/?q=tokushima"
   }
 ];
@@ -82,12 +82,12 @@ const fallbackArticles: Article[] = [
     slug: "awa-odori-guide",
     title: "阿波おどりを120%楽しむ学生ガイド",
     summary: "混雑回避や雨天の持ち物などを学生ライターが現地からレポート。",
-    ogImage: "/sample/awa.jpg",
+    ogImage: "/sample/awa.png",
     updatedAt: new Date().toISOString(),
     publishedAt: new Date().toISOString(),
     type: "guide",
     body: "<p>本文リッチテキスト</p>",
-    heroImage: "/sample/awa.jpg",
+    heroImage: "/sample/awa.png",
     related: ["naruto-whirlpool"]
   }
 ];
@@ -100,11 +100,11 @@ const fallbackSponsors: Sponsor[] = [
     slug: "sponsor-hotel",
     title: "徳島シーサイドホテル",
     summary: "渦潮エリア徒歩5分のホテル。",
-    ogImage: "/sample/hotel.jpg",
+    ogImage: "/sample/hotel.png",
     updatedAt: new Date().toISOString(),
     publishedAt: new Date().toISOString(),
     tier: "A",
-    asset: { url: "/sample/hotel.jpg", alt: "ホテルバナー" },
+    asset: { url: "/sample/hotel.png", alt: "ホテルバナー" },
     destinationUrl: "https://hotel.example.com?utm_source=tokushima_app&utm_medium=referral",
     positions: ["top", "spots"],
     activeFrom: new Date().toISOString(),
@@ -112,40 +112,58 @@ const fallbackSponsors: Sponsor[] = [
   }
 ];
 
+function getFallbackList<T>(endpoint: string, queries?: MicroCMSQueries) {
+  switch (endpoint) {
+    case "spots":
+      return { contents: fallbackSpots as T[], totalCount: fallbackSpots.length, offset: 0, limit: fallbackSpots.length };
+    case "itineraries":
+      return { contents: fallbackItineraries as T[], totalCount: fallbackItineraries.length, offset: 0, limit: fallbackItineraries.length };
+    case "articles":
+      return { contents: fallbackArticles as T[], totalCount: fallbackArticles.length, offset: 0, limit: fallbackArticles.length };
+    case "sponsors":
+      return { contents: fallbackSponsors as T[], totalCount: fallbackSponsors.length, offset: 0, limit: fallbackSponsors.length };
+    default:
+      return { contents: [] as T[], totalCount: 0, offset: 0, limit: queries?.limit ?? 0 };
+  }
+}
+
+function getFallbackDetail<T>(endpoint: string, contentId: string) {
+  const fallbackMap: Record<string, LocalizedEntry[]> = {
+    spots: fallbackSpots,
+    itineraries: fallbackItineraries,
+    articles: fallbackArticles
+  };
+  const match = fallbackMap[endpoint]?.find((item) => item.id === contentId || item.slug === contentId);
+  if (!match) {
+    throw new Error(`Fallback ${endpoint} not found: ${contentId}`);
+  }
+  return match as T;
+}
+
 async function safeGetList<T>(endpoint: string, queries?: MicroCMSQueries) {
   if (!client) {
-    switch (endpoint) {
-      case "spots":
-        return { contents: fallbackSpots as T[], totalCount: fallbackSpots.length, offset: 0, limit: fallbackSpots.length };
-      case "itineraries":
-        return { contents: fallbackItineraries as T[], totalCount: fallbackItineraries.length, offset: 0, limit: fallbackItineraries.length };
-      case "articles":
-        return { contents: fallbackArticles as T[], totalCount: fallbackArticles.length, offset: 0, limit: fallbackArticles.length };
-      case "sponsors":
-        return { contents: fallbackSponsors as T[], totalCount: fallbackSponsors.length, offset: 0, limit: fallbackSponsors.length };
-      default:
-        return { contents: [] as T[], totalCount: 0, offset: 0, limit: queries?.limit ?? 0 };
-    }
+    return getFallbackList<T>(endpoint, queries);
   }
 
-  return client.getList<T>({ endpoint, queries });
+  try {
+    return await client.getList<T>({ endpoint, queries });
+  } catch (error) {
+    console.warn(`[microCMS] Falling back to mock data for ${endpoint}`, error);
+    return getFallbackList<T>(endpoint, queries);
+  }
 }
 
 async function safeGetDetail<T>(endpoint: string, contentId: string, queries?: MicroCMSQueries) {
   if (!client) {
-    const fallbackMap: Record<string, LocalizedEntry[]> = {
-      spots: fallbackSpots,
-      itineraries: fallbackItineraries,
-      articles: fallbackArticles
-    };
-    const match = fallbackMap[endpoint]?.find((item) => item.id === contentId || item.slug === contentId);
-    if (!match) {
-      throw new Error(`Fallback ${endpoint} not found: ${contentId}`);
-    }
-    return match as T;
+    return getFallbackDetail<T>(endpoint, contentId);
   }
 
-  return client.getListDetail<T>({ endpoint, contentId, queries });
+  try {
+    return await client.getListDetail<T>({ endpoint, contentId, queries });
+  } catch (error) {
+    console.warn(`[microCMS] Falling back to mock detail for ${endpoint}:${contentId}`, error);
+    return getFallbackDetail<T>(endpoint, contentId);
+  }
 }
 
 export async function getSpots(params: { lang?: Locale; area?: string; tags?: string[]; limit?: number }) {
@@ -169,16 +187,21 @@ export async function getSpotDetail(slug: string, lang: Locale, draftKey?: strin
     return safeGetDetail<Spot>("spots", slug);
   }
 
-  const data = await client.getList<Spot>({
-    endpoint: "spots",
-    queries: {
-      filters: `slug[equals]${slug}[and]lang[equals]${lang}`,
-      limit: 1,
-      draftKey
-    }
-  });
+  try {
+    const data = await client.getList<Spot>({
+      endpoint: "spots",
+      queries: {
+        filters: `slug[equals]${slug}[and]lang[equals]${lang}`,
+        limit: 1,
+        draftKey
+      }
+    });
 
-  return data.contents[0];
+    return data.contents[0];
+  } catch (error) {
+    console.warn(`[microCMS] Falling back to mock spot detail for slug=${slug}`, error);
+    return safeGetDetail<Spot>("spots", slug);
+  }
 }
 
 export async function getItineraries(params: { lang?: Locale; audienceTag?: string; limit?: number }) {

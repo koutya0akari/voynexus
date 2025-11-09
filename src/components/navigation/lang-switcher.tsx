@@ -4,6 +4,7 @@ import { usePathname } from "next/navigation";
 import Link from "next/link";
 import clsx from "clsx";
 import { locales, type Locale } from "@/lib/i18n";
+import type { Route } from "next";
 
 type Props = {
   current: Locale;
@@ -15,10 +16,11 @@ export function LangSwitcher({ current }: Props) {
   return (
     <div className="flex gap-1 rounded-full border border-slate-200 bg-white px-2 py-1 text-sm">
       {locales.map((locale) => {
-        const nextPath =
+        const computedPath =
           pathname && pathname.startsWith(`/${current}`)
             ? pathname.replace(`/${current}`, `/${locale}`)
             : `/${locale}`;
+        const nextPath = computedPath as Route;
         return (
           <Link
             key={locale}
