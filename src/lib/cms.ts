@@ -6,7 +6,7 @@ const serviceDomain = process.env.MICROCMS_SERVICE_DOMAIN;
 const apiKey = process.env.MICROCMS_API_KEY;
 
 const client = serviceDomain && apiKey ? createClient({ serviceDomain, apiKey }) : null;
-const blogEndpoint = process.env.MICROCMS_BLOG_ENDPOINT || "blog";
+const blogEndpoint = process.env.MICROCMS_BLOG_ENDPOINT || "blogs";
 
 const fallbackSpots: Spot[] = [
   {
