@@ -1,4 +1,5 @@
 import Link from "next/link";
+import clsx from "clsx";
 
 type Props = {
   locale: string;
@@ -6,11 +7,17 @@ type Props = {
   description: string;
   ctaPlan: string;
   ctaChat: string;
+  className?: string;
 };
 
-export function HeroSection({ locale, title, description, ctaPlan, ctaChat }: Props) {
+export function HeroSection({ locale, title, description, ctaPlan, ctaChat, className }: Props) {
   return (
-    <section className="mx-auto flex max-w-6xl flex-col gap-6 rounded-3xl bg-gradient-to-r from-brand to-slate-900 px-6 py-10 text-white md:flex-row md:items-center">
+    <section
+      className={clsx(
+        "flex w-full flex-col gap-6 rounded-3xl bg-gradient-to-r from-brand to-slate-900 px-6 py-10 text-white md:flex-row md:items-center",
+        className
+      )}
+    >
       <div className="flex-1 space-y-4">
         <p className="text-sm uppercase tracking-wide">Tokushima Travel</p>
         <h1 className="text-3xl font-semibold md:text-4xl">{title}</h1>
