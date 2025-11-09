@@ -1,0 +1,22 @@
+{
+  "name": "Tokushima Travel PWA",
+  "short_name": "Tokushima",
+  "start_url": "/ja",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#1f8ea8",
+  "lang": "ja",
+  "description": "徳島観光向けAI旅程・コンテンツ配信PWA",
+  "icons": [
+    {
+      "src": "/icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

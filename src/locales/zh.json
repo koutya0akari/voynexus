@@ -1,0 +1,41 @@
+{
+  "hero": {
+    "title": "用一個 PWA 探索德島",
+    "description": "依照天氣與交通推薦景點、學生文章與 AI 旅程生成功能，一切盡在指尖。"
+  },
+  "cta": {
+    "planTrip": "產生行程",
+    "chat": "詢問 AI 管家"
+  },
+  "sections": {
+    "topSpots": "今日推薦",
+    "latestArticles": "最新文章",
+    "modelCourses": "經典行程",
+    "events": "活動特輯"
+  },
+  "filters": {
+    "title": "條件篩選",
+    "kidFriendly": "親子友善",
+    "noCar": "無需開車",
+    "rainy": "雨天適用",
+    "lowBudget": "低預算",
+    "duration": "時間"
+  },
+  "spot": {
+    "lastVerified": "最後驗證",
+    "access": "交通",
+    "tags": "標籤"
+  },
+  "itinerary": {
+    "generate": "AI 產生",
+    "conditions": "輸入條件",
+    "timeline": "時間表"
+  },
+  "widget": {
+    "title": "給設施使用的 AI 小工具",
+    "cta": "取得嵌入碼"
+  },
+  "footer": {
+    "disclaimer": "資訊可能變更，請以官方公告為準。"
+  }
+}

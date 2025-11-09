@@ -1,0 +1,26 @@
+import type { Metadata } from "next";
+import { ItineraryPlanner } from "@/components/itineraries/itinerary-planner";
+import type { Locale } from "@/lib/i18n";
+
+type Props = {
+  params: { lang: Locale };
+};
+
+export const metadata: Metadata = {
+  title: "旅程生成 | Tokushima Travel"
+};
+
+export default function PlanPage({ params }: Props) {
+  return (
+    <div className="mx-auto max-w-6xl space-y-6 px-4 py-10">
+      <header>
+        <p className="text-sm uppercase text-slate-500">Plan</p>
+        <h1 className="text-4xl font-semibold text-slate-900">AI＋ルールで旅程を生成</h1>
+        <p className="text-sm text-slate-500">
+          営業時間/移動時間/天候/潮汐/最終バスを考慮した旅程を生成し、PDFやURLで保存できます。
+        </p>
+      </header>
+      <ItineraryPlanner locale={params.lang} />
+    </div>
+  );
+}

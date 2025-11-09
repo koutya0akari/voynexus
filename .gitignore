@@ -1,0 +1,16 @@
+node_modules
+.next
+.turbo
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+dist
+coverage
+reports
+pnpm-lock.yaml
+data/embeddings.json
+*.log
+playwright-report
+test-results
+.DS_Store

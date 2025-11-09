@@ -1,0 +1,246 @@
+import { createClient, type MicroCMSQueries } from "microcms-js-sdk";
+import type { Locale } from "@/lib/i18n";
+import type {
+  Article,
+  EventContent,
+  GlobalSettings,
+  Itinerary,
+  LocalizedEntry,
+  Spot,
+  Sponsor
+} from "@/lib/types/cms";
+
+const serviceDomain = process.env.MICROCMS_SERVICE_DOMAIN;
+const apiKey = process.env.MICROCMS_API_KEY;
+
+const client = serviceDomain && apiKey ? createClient({ serviceDomain, apiKey }) : null;
+
+const fallbackSpots: Spot[] = [
+  {
+    id: "naruto-whirlpool",
+    lang: "ja",
+    translationGroupId: "grp-naruto-whirlpool",
+    slug: "naruto-whirlpool",
+    title: "鳴門の渦潮クルーズ",
+    summary: "潮が最大になる時間帯をAIが提案し、渦潮観測船のチケットリンクを提供。",
+    ogImage: "/sample/naruto.jpg",
+    updatedAt: new Date().toISOString(),
+    publishedAt: new Date().toISOString(),
+    name: "鳴門の渦潮",
+    area: "鳴門",
+    tags: ["自然", "雨天OK", "車なし"],
+    openHours: "9:00-17:00",
+    requiredTime: 120,
+    access: {
+      busLine: "徳島バス",
+      stop: "鳴門公園",
+      lastBusTime: "18:10"
+    },
+    accessibility: {
+      stepFree: true,
+      stroller: true
+    },
+    mapLink: "https://maps.google.com/?q=naruto+whirlpool",
+    images: [{ url: "/sample/naruto.jpg", alt: "鳴門の渦潮" }],
+    lastVerifiedAt: new Date().toISOString()
+  }
+];
+
+const fallbackItineraries: Itinerary[] = [
+  {
+    id: "family-halfday",
+    lang: "ja",
+    translationGroupId: "grp-family-halfday",
+    slug: "family-halfday",
+    title: "子連れ半日モデルコース",
+    summary: "雨天でも楽しめるよう屋内施設を組み合わせた半日プラン。",
+    ogImage: "/sample/family.jpg",
+    updatedAt: new Date().toISOString(),
+    publishedAt: new Date().toISOString(),
+    audienceTags: ["子連れ", "雨天"],
+    totalTime: 240,
+    budget: 4000,
+    season: "spring",
+    transport: "bus",
+    timeline: [
+      { time: "09:00", spotRef: "museum", stayMin: 60, moveMin: 20, note: "ワークショップ参加" },
+      { time: "11:00", spotRef: "naruto-whirlpool", stayMin: 90, moveMin: 30 }
+    ],
+    alternatives: ["屋外公園"],
+    foodToiletNotes: "館内に授乳室あり",
+    warnings: ["最終バス 17:30 までに帰路へ"],
+    links: [{ label: "PDF", url: "/sample.pdf" }],
+    mapLink: "https://maps.google.com/?q=tokushima"
+  }
+];
+
+const fallbackArticles: Article[] = [
+  {
+    id: "awa-odori-guide",
+    lang: "ja",
+    translationGroupId: "grp-awa-odori-guide",
+    slug: "awa-odori-guide",
+    title: "阿波おどりを120%楽しむ学生ガイド",
+    summary: "混雑回避や雨天の持ち物などを学生ライターが現地からレポート。",
+    ogImage: "/sample/awa.jpg",
+    updatedAt: new Date().toISOString(),
+    publishedAt: new Date().toISOString(),
+    type: "guide",
+    body: "<p>本文リッチテキスト</p>",
+    heroImage: "/sample/awa.jpg",
+    related: ["naruto-whirlpool"]
+  }
+];
+
+const fallbackSponsors: Sponsor[] = [
+  {
+    id: "sponsor-hotel",
+    lang: "ja",
+    translationGroupId: "grp-sponsor-hotel",
+    slug: "sponsor-hotel",
+    title: "徳島シーサイドホテル",
+    summary: "渦潮エリア徒歩5分のホテル。",
+    ogImage: "/sample/hotel.jpg",
+    updatedAt: new Date().toISOString(),
+    publishedAt: new Date().toISOString(),
+    tier: "A",
+    asset: { url: "/sample/hotel.jpg", alt: "ホテルバナー" },
+    destinationUrl: "https://hotel.example.com?utm_source=tokushima_app&utm_medium=referral",
+    positions: ["top", "spots"],
+    activeFrom: new Date().toISOString(),
+    activeTo: new Date(new Date().setMonth(new Date().getMonth() + 1)).toISOString()
+  }
+];
+
+async function safeGetList<T>(endpoint: string, queries?: MicroCMSQueries) {
+  if (!client) {
+    switch (endpoint) {
+      case "spots":
+        return { contents: fallbackSpots as T[], totalCount: fallbackSpots.length, offset: 0, limit: fallbackSpots.length };
+      case "itineraries":
+        return { contents: fallbackItineraries as T[], totalCount: fallbackItineraries.length, offset: 0, limit: fallbackItineraries.length };
+      case "articles":
+        return { contents: fallbackArticles as T[], totalCount: fallbackArticles.length, offset: 0, limit: fallbackArticles.length };
+      case "sponsors":
+        return { contents: fallbackSponsors as T[], totalCount: fallbackSponsors.length, offset: 0, limit: fallbackSponsors.length };
+      default:
+        return { contents: [] as T[], totalCount: 0, offset: 0, limit: queries?.limit ?? 0 };
+    }
+  }
+
+  return client.getList<T>({ endpoint, queries });
+}
+
+async function safeGetDetail<T>(endpoint: string, contentId: string, queries?: MicroCMSQueries) {
+  if (!client) {
+    const fallbackMap: Record<string, LocalizedEntry[]> = {
+      spots: fallbackSpots,
+      itineraries: fallbackItineraries,
+      articles: fallbackArticles
+    };
+    const match = fallbackMap[endpoint]?.find((item) => item.id === contentId || item.slug === contentId);
+    if (!match) {
+      throw new Error(`Fallback ${endpoint} not found: ${contentId}`);
+    }
+    return match as T;
+  }
+
+  return client.getListDetail<T>({ endpoint, contentId, queries });
+}
+
+export async function getSpots(params: { lang?: Locale; area?: string; tags?: string[]; limit?: number }) {
+  const filters = [
+    params.lang ? `lang[equals]${params.lang}` : null,
+    params.area ? `area[equals]${params.area}` : null,
+    params.tags?.length ? params.tags.map((tag) => `tags[contains]${tag}`).join("[and]") : null
+  ]
+    .filter(Boolean)
+    .join("[and]");
+
+  return safeGetList<Spot>("spots", {
+    filters: filters || undefined,
+    limit: params.limit ?? 24,
+    orders: "-updatedAt"
+  });
+}
+
+export async function getSpotDetail(slug: string, lang: Locale, draftKey?: string): Promise<Spot | undefined> {
+  if (!client) {
+    return safeGetDetail<Spot>("spots", slug);
+  }
+
+  const data = await client.getList<Spot>({
+    endpoint: "spots",
+    queries: {
+      filters: `slug[equals]${slug}[and]lang[equals]${lang}`,
+      limit: 1,
+      draftKey
+    }
+  });
+
+  return data.contents[0];
+}
+
+export async function getItineraries(params: { lang?: Locale; audienceTag?: string; limit?: number }) {
+  const filters = [
+    params.lang ? `lang[equals]${params.lang}` : null,
+    params.audienceTag ? `audience_tags[contains]${params.audienceTag}` : null
+  ]
+    .filter(Boolean)
+    .join("[and]");
+
+  return safeGetList<Itinerary>("itineraries", {
+    filters: filters || undefined,
+    limit: params.limit ?? 5,
+    orders: "-updatedAt"
+  });
+}
+
+export async function getArticles(params: { lang?: Locale; type?: string; limit?: number; q?: string }) {
+  const filters = [
+    params.lang ? `lang[equals]${params.lang}` : null,
+    params.type ? `type[equals]${params.type}` : null
+  ]
+    .filter(Boolean)
+    .join("[and]");
+
+  return safeGetList<Article>("articles", {
+    filters: filters || undefined,
+    limit: params.limit ?? 12,
+    q: params.q,
+    orders: "-updatedAt"
+  });
+}
+
+export async function getEvents(params: { lang?: Locale }) {
+  return safeGetList<EventContent>("events", {
+    filters: params.lang ? `lang[equals]${params.lang}` : undefined,
+    orders: "-updatedAt"
+  });
+}
+
+export async function getSponsors(params: { position?: string; lang?: Locale }) {
+  const filters = [
+    params.lang ? `lang[equals]${params.lang}` : null,
+    params.position ? `positions[contains]${params.position}` : null
+  ]
+    .filter(Boolean)
+    .join("[and]");
+
+  return safeGetList<Sponsor>("sponsors", {
+    filters: filters || undefined,
+    orders: "tier"
+  });
+}
+
+export async function getGlobals(): Promise<GlobalSettings | null> {
+  if (!client) {
+    return {
+      disclaimer: "表示の料金等は変更になる場合があります。",
+      warnings: ["最終バスにはご注意ください"]
+    };
+  }
+
+  const result = await client.getObject<GlobalSettings>({ endpoint: "globals" });
+  return result;
+}

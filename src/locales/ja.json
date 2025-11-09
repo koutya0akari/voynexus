@@ -1,0 +1,41 @@
+{
+  "hero": {
+    "title": "徳島をもっと身近にする旅アプリ",
+    "description": "天候や移動手段に合わせたおすすめスポット、学生ライターの記事、AI旅程生成を1つのPWAで。"
+  },
+  "cta": {
+    "planTrip": "旅程を作成",
+    "chat": "AIに相談"
+  },
+  "sections": {
+    "topSpots": "今日のおすすめスポット",
+    "latestArticles": "最新の記事",
+    "modelCourses": "モデルコース",
+    "events": "イベント特集"
+  },
+  "filters": {
+    "title": "条件で探す",
+    "kidFriendly": "子連れOK",
+    "noCar": "車なし",
+    "rainy": "雨の日OK",
+    "lowBudget": "低予算",
+    "duration": "所要時間"
+  },
+  "spot": {
+    "lastVerified": "最終確認",
+    "access": "アクセス",
+    "tags": "タグ"
+  },
+  "itinerary": {
+    "generate": "AIで旅程を生成",
+    "conditions": "条件を入力",
+    "timeline": "タイムライン"
+  },
+  "widget": {
+    "title": "施設向けAIウィジェット",
+    "cta": "ウィジェットコードを取得"
+  },
+  "footer": {
+    "disclaimer": "表示の料金・営業時間は変更になる可能性があります。最新情報は公式サイトをご確認ください。"
+  }
+}
