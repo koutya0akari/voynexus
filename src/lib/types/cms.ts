@@ -69,6 +69,23 @@ export type Article = LocalizedEntry & {
   ctaLinks?: { label: string; url: string }[];
 };
 
+export type Blog = {
+  id: string;
+  title: string;
+  body: string;
+  slug?: string;
+  publishedAt?: string;
+  category?: {
+    id?: string;
+    name?: string;
+  };
+  eyecatch?: {
+    url: string;
+    width?: number;
+    height?: number;
+  };
+};
+
 export type EventContent = LocalizedEntry & {
   dateRange: string;
   venueMap?: string;

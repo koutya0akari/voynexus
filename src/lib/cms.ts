@@ -1,14 +1,6 @@
 import { createClient, type MicroCMSQueries } from "microcms-js-sdk";
 import type { Locale } from "@/lib/i18n";
-import type {
-  Article,
-  EventContent,
-  GlobalSettings,
-  Itinerary,
-  LocalizedEntry,
-  Spot,
-  Sponsor
-} from "@/lib/types/cms";
+import type { Article, Blog, EventContent, GlobalSettings, Itinerary, Spot, Sponsor } from "@/lib/types/cms";
 
 const serviceDomain = process.env.MICROCMS_SERVICE_DOMAIN;
 const apiKey = process.env.MICROCMS_API_KEY;
@@ -92,6 +84,17 @@ const fallbackArticles: Article[] = [
   }
 ];
 
+const fallbackBlogs: Blog[] = [
+  {
+    id: "welcome-to-tokushima",
+    slug: "welcome-to-tokushima",
+    title: "徳島トラベルブログを公開しました",
+    publishedAt: new Date().toISOString(),
+    category: { name: "お知らせ" },
+    body: "<p>徳島での旅のヒントやイベント情報を発信するブログをスタートしました。microCMSのブログAPIを有効化すれば、ここにCMSで管理した本文が表示されます。</p>"
+  }
+];
+
 const fallbackSponsors: Sponsor[] = [
   {
     id: "sponsor-hotel",
@@ -120,6 +123,8 @@ function getFallbackList<T>(endpoint: string, queries?: MicroCMSQueries) {
       return { contents: fallbackItineraries as T[], totalCount: fallbackItineraries.length, offset: 0, limit: fallbackItineraries.length };
     case "articles":
       return { contents: fallbackArticles as T[], totalCount: fallbackArticles.length, offset: 0, limit: fallbackArticles.length };
+    case "blog":
+      return { contents: fallbackBlogs as T[], totalCount: fallbackBlogs.length, offset: 0, limit: fallbackBlogs.length };
     case "sponsors":
       return { contents: fallbackSponsors as T[], totalCount: fallbackSponsors.length, offset: 0, limit: fallbackSponsors.length };
     default:
@@ -127,11 +132,14 @@ function getFallbackList<T>(endpoint: string, queries?: MicroCMSQueries) {
   }
 }
 
+type FallbackEntity = { id: string; slug?: string };
+
 function getFallbackDetail<T>(endpoint: string, contentId: string) {
-  const fallbackMap: Record<string, LocalizedEntry[]> = {
+  const fallbackMap: Record<string, FallbackEntity[]> = {
     spots: fallbackSpots,
     itineraries: fallbackItineraries,
-    articles: fallbackArticles
+    articles: fallbackArticles,
+    blog: fallbackBlogs
   };
   const match = fallbackMap[endpoint]?.find((item) => item.id === contentId || item.slug === contentId);
   if (!match) {
@@ -233,6 +241,23 @@ export async function getArticles(params: { lang?: Locale; type?: string; limit?
     q: params.q,
     orders: "-updatedAt"
   });
+}
+
+export async function getBlogs(params?: { limit?: number; q?: string; order?: string }) {
+  return safeGetList<Blog>("blog", {
+    limit: params?.limit ?? 10,
+    q: params?.q,
+    orders: params?.order ?? "-publishedAt"
+  });
+}
+
+export async function getBlogPost(contentId: string): Promise<Blog | null> {
+  try {
+    return await safeGetDetail<Blog>("blog", contentId);
+  } catch (error) {
+    console.warn(`[microCMS] Blog not found: ${contentId}`, error);
+    return null;
+  }
 }
 
 export async function getEvents(params: { lang?: Locale }) {
