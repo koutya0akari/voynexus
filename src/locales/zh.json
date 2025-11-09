@@ -11,7 +11,8 @@
     "topSpots": "今日推薦",
     "latestArticles": "最新文章",
     "modelCourses": "經典行程",
-    "events": "活動特輯"
+    "events": "活動特輯",
+    "blog": "旅遊部落格"
   },
   "filters": {
     "title": "條件篩選",
@@ -37,5 +38,14 @@
   },
   "footer": {
     "disclaimer": "資訊可能變更，請以官方公告為準。"
+  },
+  "blog": {
+    "spotlightTitle": "旅遊部落格",
+    "spotlightDescription": "長篇故事、專訪與編輯手記都在這裡。",
+    "spotlightCta": "查看全部文章",
+    "spotlightEmpty": "在 microCMS 發布文章後就會顯示於此。",
+    "spotlightTip": "只要在 microCMS 儲存，即可立刻同步到 PWA。",
+    "listDescription": "由學生與在地團隊撰寫的文章，完全在 microCMS 裡維護。",
+    "empty": "目前還沒有部落格文章。"
   }
 }

@@ -11,7 +11,8 @@
     "topSpots": "Today’s highlights",
     "latestArticles": "Latest articles",
     "modelCourses": "Model courses",
-    "events": "Event spotlight"
+    "events": "Event spotlight",
+    "blog": "Travel blog"
   },
   "filters": {
     "title": "Filter",
@@ -37,5 +38,14 @@
   },
   "footer": {
     "disclaimer": "Times and fees may change. Always confirm with the official source."
+  },
+  "blog": {
+    "spotlightTitle": "Travel blog",
+    "spotlightDescription": "Long-form stories, interviews, and student dispatches.",
+    "spotlightCta": "See all posts",
+    "spotlightEmpty": "Publish a blog entry in microCMS to feature it here.",
+    "spotlightTip": "Blog entries update instantly after you publish from microCMS.",
+    "listDescription": "Stories from students and locals, managed entirely in microCMS.",
+    "empty": "No blog posts yet."
   }
 }

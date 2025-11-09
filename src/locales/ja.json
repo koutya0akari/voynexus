@@ -11,7 +11,8 @@
     "topSpots": "今日のおすすめスポット",
     "latestArticles": "最新の記事",
     "modelCourses": "モデルコース",
-    "events": "イベント特集"
+    "events": "イベント特集",
+    "blog": "トラベルブログ"
   },
   "filters": {
     "title": "条件で探す",
@@ -37,5 +38,14 @@
   },
   "footer": {
     "disclaimer": "表示の料金・営業時間は変更になる可能性があります。最新情報は公式サイトをご確認ください。"
+  },
+  "blog": {
+    "spotlightTitle": "トラベルブログ",
+    "spotlightDescription": "現地レポやロングインタビューなどをまとめた特集です。",
+    "spotlightCta": "ブログ一覧",
+    "spotlightEmpty": "microCMSでブログ記事を公開するとここに表示されます。",
+    "spotlightTip": "ブログはmicroCMSで更新するとすぐにPWAにも反映されます。",
+    "listDescription": "学生ライターや現地編集チームによる記事をmicroCMSで管理しています。",
+    "empty": "まだブログ記事がありません。"
   }
 }

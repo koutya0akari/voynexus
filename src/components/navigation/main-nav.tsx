@@ -19,13 +19,13 @@ export function MainNav({ locale }: Props) {
     { href: `/${locale}/articles` as Route, label: "Articles" },
     { href: `/${locale}/events` as Route, label: "Events" },
     { href: `/${locale}/plan` as Route, label: "Plan" },
-    { href: "/blog" as Route, label: "Blog" }
+    { href: `/${locale}/blog` as Route, label: "Blog" }
   ];
 
   const secondaryLinks: { href: Route; label: string }[] = [
     { href: `/${locale}/chat` as Route, label: t("cta.chat") },
     { href: `/${locale}/contact` as Route, label: "Contact" },
-    { href: "/blog" as Route, label: "Blog" }
+    { href: `/${locale}/blog` as Route, label: "Blog" }
   ];
 
   return (

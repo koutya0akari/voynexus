@@ -37,24 +37,24 @@ export default async function LocaleHome({ params }: Props) {
     getBlogs({ limit: 3 })
   ]);
 
-  const quickLinkCopy: Record<Locale, { spots: string; plan: string; articles: string; blog: string }> = {
+  const quickLinkCopy: Record<Locale, { spots: string; plan: string; articles: string; blogDescription: string }> = {
     ja: {
       spots: "旬のスポットと現地Tips",
       plan: "AIが天気と所要時間を調整",
       articles: "学生ライターによる現地レポ",
-      blog: "microCMSで更新できる特集"
+      blogDescription: "microCMSで更新できる特集"
     },
     en: {
       spots: "Seasonal picks with on-site tips",
       plan: "AI balances weather, time and transport",
       articles: "Dispatches from student writers",
-      blog: "Stories and deep dives from the blog"
+      blogDescription: "Stories and deep dives from the blog"
     },
     zh: {
       spots: "當季亮點與在地提醒",
       plan: "AI 依天氣與時間客製行程",
       articles: "學生作者的現場報導",
-      blog: "部落格特輯與幕後花絮"
+      blogDescription: "部落格特輯與幕後花絮"
     }
   };
 
@@ -77,11 +77,19 @@ export default async function LocaleHome({ params }: Props) {
       href: `/${locale}/articles`
     },
     {
-      title: "Travel Blog",
-      body: copy.blog,
-      href: "/blog"
+      title: t("sections.blog"),
+      body: copy.blogDescription,
+      href: `/${locale}/blog`
     }
   ];
+
+  const blogSpotlightCopy = {
+    title: t("blog.spotlightTitle"),
+    description: t("blog.spotlightDescription"),
+    ctaLabel: t("blog.spotlightCta"),
+    emptyMessage: t("blog.spotlightEmpty"),
+    tip: t("blog.spotlightTip")
+  };
 
   return (
     <div className="space-y-12 bg-slate-50 pb-16">
@@ -95,7 +103,7 @@ export default async function LocaleHome({ params }: Props) {
             ctaChat={t("cta.chat")}
             className="shadow-xl shadow-brand/20"
           />
-          <BlogSpotlight posts={blogs ?? []} />
+          <BlogSpotlight locale={locale} posts={blogs ?? []} {...blogSpotlightCopy} />
         </div>
       </section>
 
