@@ -6,6 +6,7 @@ const serviceDomain = process.env.MICROCMS_SERVICE_DOMAIN;
 const apiKey = process.env.MICROCMS_API_KEY;
 
 const client = serviceDomain && apiKey ? createClient({ serviceDomain, apiKey }) : null;
+const blogEndpoint = process.env.MICROCMS_BLOG_ENDPOINT || "blog";
 
 const fallbackSpots: Spot[] = [
   {
@@ -123,7 +124,7 @@ function getFallbackList<T>(endpoint: string, queries?: MicroCMSQueries) {
       return { contents: fallbackItineraries as T[], totalCount: fallbackItineraries.length, offset: 0, limit: fallbackItineraries.length };
     case "articles":
       return { contents: fallbackArticles as T[], totalCount: fallbackArticles.length, offset: 0, limit: fallbackArticles.length };
-    case "blog":
+    case blogEndpoint:
       return { contents: fallbackBlogs as T[], totalCount: fallbackBlogs.length, offset: 0, limit: fallbackBlogs.length };
     case "sponsors":
       return { contents: fallbackSponsors as T[], totalCount: fallbackSponsors.length, offset: 0, limit: fallbackSponsors.length };
@@ -139,7 +140,7 @@ function getFallbackDetail<T>(endpoint: string, contentId: string) {
     spots: fallbackSpots,
     itineraries: fallbackItineraries,
     articles: fallbackArticles,
-    blog: fallbackBlogs
+    [blogEndpoint]: fallbackBlogs
   };
   const match = fallbackMap[endpoint]?.find((item) => item.id === contentId || item.slug === contentId);
   if (!match) {
@@ -244,7 +245,7 @@ export async function getArticles(params: { lang?: Locale; type?: string; limit?
 }
 
 export async function getBlogs(params?: { limit?: number; q?: string; order?: string }) {
-  return safeGetList<Blog>("blog", {
+  return safeGetList<Blog>(blogEndpoint, {
     limit: params?.limit ?? 10,
     q: params?.q,
     orders: params?.order ?? "-publishedAt"
@@ -253,7 +254,7 @@ export async function getBlogs(params?: { limit?: number; q?: string; order?: st
 
 export async function getBlogPost(contentId: string): Promise<Blog | null> {
   try {
-    return await safeGetDetail<Blog>("blog", contentId);
+    return await safeGetDetail<Blog>(blogEndpoint, contentId);
   } catch (error) {
     console.warn(`[microCMS] Blog not found: ${contentId}`, error);
     return null;
