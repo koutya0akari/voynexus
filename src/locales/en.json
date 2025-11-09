@@ -1,0 +1,41 @@
+{
+  "hero": {
+    "title": "A smarter way to travel Tokushima",
+    "description": "Discover weather-ready highlights, student articles, and AI-generated itineraries inside one installable PWA."
+  },
+  "cta": {
+    "planTrip": "Plan itinerary",
+    "chat": "Ask AI concierge"
+  },
+  "sections": {
+    "topSpots": "Today’s highlights",
+    "latestArticles": "Latest articles",
+    "modelCourses": "Model courses",
+    "events": "Event spotlight"
+  },
+  "filters": {
+    "title": "Filter",
+    "kidFriendly": "Family friendly",
+    "noCar": "No car",
+    "rainy": "Rain safe",
+    "lowBudget": "Low budget",
+    "duration": "Duration"
+  },
+  "spot": {
+    "lastVerified": "Last verified",
+    "access": "Access",
+    "tags": "Tags"
+  },
+  "itinerary": {
+    "generate": "Generate with AI",
+    "conditions": "Input preferences",
+    "timeline": "Timeline"
+  },
+  "widget": {
+    "title": "AI widget for facilities",
+    "cta": "Get embed code"
+  },
+  "footer": {
+    "disclaimer": "Times and fees may change. Always confirm with the official source."
+  }
+}
