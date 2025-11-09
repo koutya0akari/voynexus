@@ -1,5 +1,4 @@
 import Image from "next/image";
-import Link from "next/link";
 import type { Sponsor } from "@/lib/types/cms";
 
 type Props = {
@@ -15,7 +14,7 @@ export function SponsorRail({ sponsors }: Props) {
         <span className="text-xs uppercase text-slate-500">Sponsored</span>
         <div className="flex flex-1 gap-4 overflow-auto">
           {sponsors.map((sponsor) => (
-            <Link
+            <a
               key={sponsor.id}
               href={sponsor.destinationUrl}
               target="_blank"
@@ -31,7 +30,7 @@ export function SponsorRail({ sponsors }: Props) {
                 <p className="text-sm font-semibold text-slate-900">{sponsor.title}</p>
                 <p className="text-xs text-slate-500">{sponsor.summary}</p>
               </div>
-            </Link>
+            </a>
           ))}
         </div>
       </div>

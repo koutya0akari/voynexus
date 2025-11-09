@@ -5,6 +5,28 @@ import { searchRag } from "@/lib/rag";
 const openAiKey = process.env.OPENAI_API_KEY;
 const client = openAiKey ? new OpenAI({ apiKey: openAiKey }) : null;
 
+function extractOutputText(chunk: unknown): string | null {
+  if (!chunk || typeof chunk !== "object" || !("content" in chunk)) {
+    return null;
+  }
+  const content = (chunk as { content?: unknown }).content;
+  if (!Array.isArray(content) || content.length === 0) {
+    return null;
+  }
+  const first = content[0];
+  if (
+    first &&
+    typeof first === "object" &&
+    "type" in first &&
+    (first as { type?: unknown }).type === "output_text" &&
+    "text" in first &&
+    typeof (first as { text?: unknown }).text === "string"
+  ) {
+    return (first as { text: string }).text;
+  }
+  return null;
+}
+
 export type ChatPayload = {
   lang: Locale;
   userQuery: string;
@@ -56,8 +78,7 @@ export async function generateChatResponse(payload: ChatPayload): Promise<ChatRe
     ]
   });
 
-  const text = completion.output?.[0]?.content?.[0];
-  const answer = typeof text === "object" && text?.type === "output_text" ? text.text : "情報を取得できませんでした。";
+  const answer = extractOutputText(completion.output?.[0]) ?? "情報を取得できませんでした。";
 
   return {
     answer,
@@ -96,14 +117,13 @@ export async function generateItinerary(payload: ItineraryPayload) {
     input: [
       { role: "system", content: prompt },
       { role: "user", content: "Generate itinerary JSON." }
-    ],
-    response_format: { type: "json_object" }
+    ]
   });
 
-  const text = completion.output?.[0]?.content?.[0];
-  if (typeof text === "object" && text?.type === "output_text") {
+  const embeddedContent = extractOutputText(completion.output?.[0]);
+  if (embeddedContent) {
     try {
-      const parsed = JSON.parse(text.text);
+      const parsed = JSON.parse(embeddedContent);
       return { ...parsed, references: docs };
     } catch (error) {
       console.error("Failed to parse itinerary JSON", error);
