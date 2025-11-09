@@ -72,12 +72,14 @@ export type Article = LocalizedEntry & {
 export type Blog = {
   id: string;
   title: string;
-  body: string;
+  body?: string;
+  content?: string;
   slug?: string;
   publishedAt?: string;
   category?: {
     id?: string;
     name?: string;
+    category?: string;
   };
   eyecatch?: {
     url: string;

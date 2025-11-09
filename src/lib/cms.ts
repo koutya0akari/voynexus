@@ -135,6 +135,20 @@ function getFallbackList<T>(endpoint: string, queries?: MicroCMSQueries) {
 
 type FallbackEntity = { id: string; slug?: string };
 
+type BlogLike = Blog & {
+  content?: string;
+  category?: Blog["category"] & { category?: string };
+};
+
+function normalizeBlogEntry(entry: BlogLike): Blog {
+  const categoryName = entry.category?.name ?? entry.category?.category;
+  return {
+    ...entry,
+    body: entry.body ?? entry.content ?? "",
+    category: entry.category ? { ...entry.category, name: categoryName } : undefined
+  };
+}
+
 function getFallbackDetail<T>(endpoint: string, contentId: string) {
   const fallbackMap: Record<string, FallbackEntity[]> = {
     spots: fallbackSpots,
@@ -245,16 +259,21 @@ export async function getArticles(params: { lang?: Locale; type?: string; limit?
 }
 
 export async function getBlogs(params?: { limit?: number; q?: string; order?: string }) {
-  return safeGetList<Blog>(blogEndpoint, {
+  const response = await safeGetList<Blog>(blogEndpoint, {
     limit: params?.limit ?? 10,
     q: params?.q,
     orders: params?.order ?? "-publishedAt"
   });
+  return {
+    ...response,
+    contents: response.contents.map((entry) => normalizeBlogEntry(entry as BlogLike))
+  };
 }
 
 export async function getBlogPost(contentId: string): Promise<Blog | null> {
   try {
-    return await safeGetDetail<Blog>(blogEndpoint, contentId);
+    const entry = await safeGetDetail<Blog>(blogEndpoint, contentId);
+    return normalizeBlogEntry(entry as BlogLike);
   } catch (error) {
     console.warn(`[microCMS] Blog not found: ${contentId}`, error);
     return null;
