@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useTranslations } from "next-intl";
+import type { Route } from "next";
 import type { Locale } from "@/lib/i18n";
 import { LangSwitcher } from "./lang-switcher";
 
@@ -12,19 +13,19 @@ type Props = {
 export function MainNav({ locale }: Props) {
   const t = useTranslations();
 
-  const primaryLinks: { href: string; label: string }[] = [
-    { href: `/${locale}`, label: "Home" },
-    { href: `/${locale}/spots`, label: "Spots" },
-    { href: `/${locale}/articles`, label: "Articles" },
-    { href: `/${locale}/events`, label: "Events" },
-    { href: `/${locale}/plan`, label: "Plan" },
-    { href: "/blog", label: "Blog" }
+  const primaryLinks: { href: Route; label: string }[] = [
+    { href: `/${locale}` as Route, label: "Home" },
+    { href: `/${locale}/spots` as Route, label: "Spots" },
+    { href: `/${locale}/articles` as Route, label: "Articles" },
+    { href: `/${locale}/events` as Route, label: "Events" },
+    { href: `/${locale}/plan` as Route, label: "Plan" },
+    { href: "/blog" as Route, label: "Blog" }
   ];
 
-  const secondaryLinks: { href: string; label: string }[] = [
-    { href: `/${locale}/chat`, label: t("cta.chat") },
-    { href: `/${locale}/contact`, label: "Contact" },
-    { href: "/blog", label: "Blog" }
+  const secondaryLinks: { href: Route; label: string }[] = [
+    { href: `/${locale}/chat` as Route, label: t("cta.chat") },
+    { href: `/${locale}/contact` as Route, label: "Contact" },
+    { href: "/blog" as Route, label: "Blog" }
   ];
 
   return (
