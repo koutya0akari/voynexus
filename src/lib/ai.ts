@@ -27,6 +27,24 @@ function extractOutputText(chunk: unknown): string | null {
   return null;
 }
 
+function tryParseJson<T = unknown>(text?: string | null): T | null {
+  if (!text) return null;
+  try {
+    return JSON.parse(text) as T;
+  } catch {
+    return null;
+  }
+}
+
+function extractJsonPayload(text: string): string | null {
+  const start = text.indexOf("{");
+  const end = text.lastIndexOf("}");
+  if (start === -1 || end === -1 || end <= start) {
+    return null;
+  }
+  return text.slice(start, end + 1);
+}
+
 export type ChatPayload = {
   lang: Locale;
   userQuery: string;
@@ -117,7 +135,6 @@ export async function generateItinerary(payload: ItineraryPayload) {
 
   const completion = await client.responses.create({
     model: "gpt-4o-mini",
-    response_format: { type: "json_object" },
     input: [
       { role: "system", content: prompt },
       {
@@ -128,14 +145,13 @@ export async function generateItinerary(payload: ItineraryPayload) {
     ]
   });
 
-  const embeddedContent = extractOutputText(completion.output?.[0]);
+  const embeddedContent = extractOutputText(completion.output?.[0])?.trim();
   if (embeddedContent) {
-    try {
-      const parsed = JSON.parse(embeddedContent);
+    const parsed = tryParseJson(embeddedContent) ?? tryParseJson(extractJsonPayload(embeddedContent));
+    if (parsed) {
       return { ...parsed, references: docs };
-    } catch (error) {
-      console.error("Failed to parse itinerary JSON", error, embeddedContent.slice(0, 200));
     }
+    console.error("Failed to parse itinerary JSON", embeddedContent.slice(0, 200));
   }
 
   return {
