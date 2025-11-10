@@ -39,7 +39,7 @@ pnpm dev
 
 ### 必須環境変数
 
-`MICROCMS_SERVICE_DOMAIN`, `MICROCMS_API_KEY`, `PREVIEW_SECRET`, `REVALIDATE_SECRET`, `NEXT_PUBLIC_SITE_URL`, `OPENAI_API_KEY`, `SUPABASE_URL`, `SUPABASE_ANON_KEY`, `MAPBOX_ACCESS_TOKEN`, `OPENWEATHER_API_KEY`, `GA_MEASUREMENT_ID` (詳細は `.env.example`)
+`MICROCMS_SERVICE_DOMAIN`, `MICROCMS_API_KEY`, `PREVIEW_SECRET`, `REVALIDATE_SECRET`, `NEXT_PUBLIC_SITE_URL`, `OPENAI_API_KEY`, `SUPABASE_URL`, `SUPABASE_ANON_KEY`, `MAPBOX_ACCESS_TOKEN`, `OPENWEATHER_API_KEY`, `GA_MEASUREMENT_ID`, `MEMBERSHIP_TOKEN_SECRET` (詳細は `.env.example`)
 
 AI機能は課金済み会員のみ利用できるように、`MEMBERSHIP_API_URL` / `MEMBERSHIP_API_KEY` で会員サイトの検証APIを設定します。会員サイトがまだ無い場合は `MEMBERSHIP_TEST_TOKEN` を設定し、開発中は `Authorization: Bearer <token>` あるいは `X-Membership-Token: <token>` を付与して `/api/ai/chat` / `/api/ai/itinerary` を呼び出してください。本番では会員サイト側で発行したセッション/トークンを同じヘッダーで付与するだけでゲートが機能します。
 
@@ -71,7 +71,7 @@ AI機能は課金済み会員のみ利用できるように、`MEMBERSHIP_API_UR
 - `scripts/build-embeddings.ts` をCI/CDで日次実行し、Supabase/Cloudflare Vectorizeへ同期
 - AIチャットはNGワード検知後に施設連絡先を返す実装を追加予定 (`generateChatResponse` 内でTODOコメント)
 - 施設向けウィジェット: `public/widget.js` を各施設サイトに貼り付ける。許可ドメインのみ`X-Frame-Options`の例外を設定
-- 課金: `/api/billing/checkout` に `customerId` または `email` をPOSTするとStripe Checkout SessionのURLを返します。ローカルで手早く動作を確かめたい場合は `GET /api/billing/checkout?email=test@example.com` にアクセスすると即座にStripeの決済画面へリダイレクトされます。決済後に表示される `customer` ID をフロントの「会員トークン」欄に貼り付けると、AIコンシェルジュ/旅程生成が自動的に `Authorization: Bearer <customerId>` ヘッダーを付与します。既存会員は `/api/billing/portal` へ `customerId` を送るとStripe Billing Portalへ遷移できます。
+- 課金: `/api/billing/checkout` に `customerId` または `email` をPOSTするとStripe Checkout SessionのURLを返します。`NEXT_PUBLIC_SITE_URL` を自分のドメインに設定しておくと、デフォルトの `success`/`cancel` 先も自動的に `https://<site>/billing/success` に変わります。ローカルで手早く動作を確かめたい場合は `GET /api/billing/checkout?email=test@example.com` にアクセスすると即座にStripeの決済画面へリダイレクトされます。決済後は `/billing/success` で署名付きトークンが自動作成され、HTTP-onlyクッキーとローカルストレージへ保存されたのち `/members` へ遷移します。AIコンシェルジュ/旅程生成はこのトークンを `Authorization: Bearer <token>` として利用します。既存会員は `/api/billing/portal` へ `customerId` を送るとStripe Billing Portalへ遷移できます。
 
 ## 追加ドキュメント
 

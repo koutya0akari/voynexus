@@ -1,6 +1,6 @@
 "use client";
 
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { saveMembershipToken } from "@/lib/membership-client";
 
@@ -13,6 +13,7 @@ export function BillingSuccessContent({ fallbackSessionId }: Props) {
   const sessionId = localParams?.get("session_id") ?? fallbackSessionId ?? null;
   const [status, setStatus] = useState<"loading" | "success" | "error">("loading");
   const [message, setMessage] = useState("Stripe決済を確認しています...");
+  const router = useRouter();
 
   useEffect(() => {
     async function fetchSession() {
@@ -22,13 +23,18 @@ export function BillingSuccessContent({ fallbackSessionId }: Props) {
         return;
       }
       try {
-        const res = await fetch(`/api/billing/session?session_id=${encodeURIComponent(sessionId)}`);
+        const res = await fetch(`/api/billing/session?session_id=${encodeURIComponent(sessionId)}`, {
+          credentials: "include"
+        });
         if (!res.ok) throw new Error("session fetch failed");
         const data = await res.json();
         if (!data.customerId) throw new Error("missing customerId");
-        saveMembershipToken(data.customerId);
+        if (data.token) {
+          saveMembershipToken(data.token);
+        }
         setStatus("success");
         setMessage("会員トークンを保存しました。AIコンシェルジュを開いてみてください。");
+        setTimeout(() => router.push("/members"), 1200);
       } catch (error) {
         console.error("Billing success error", error);
         setStatus("error");
@@ -36,7 +42,7 @@ export function BillingSuccessContent({ fallbackSessionId }: Props) {
       }
     }
     fetchSession();
-  }, [sessionId]);
+  }, [sessionId, router]);
 
   return (
     <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">

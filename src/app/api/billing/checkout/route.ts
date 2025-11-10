@@ -10,8 +10,9 @@ const schema = z.object({
 });
 
 const priceId = process.env.STRIPE_PRICE_ID;
-const defaultSuccess = process.env.STRIPE_SUCCESS_URL ?? "https://example.com/billing/success";
-const defaultCancel = process.env.STRIPE_CANCEL_URL ?? "https://example.com/billing/cancel";
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
+const defaultSuccess = process.env.STRIPE_SUCCESS_URL ?? `${siteUrl}/billing/success`;
+const defaultCancel = process.env.STRIPE_CANCEL_URL ?? `${siteUrl}/`;
 
 export async function POST(request: Request) {
   if (!priceId) {

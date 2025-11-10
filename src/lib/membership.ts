@@ -1,4 +1,5 @@
 import { stripe } from "@/lib/stripe";
+import { verifyMembershipToken } from "@/lib/membership-token";
 
 const fallbackToken = process.env.MEMBERSHIP_TEST_TOKEN;
 const allowedStatuses = new Set(["active", "trialing", "past_due"]);
@@ -16,19 +17,25 @@ export async function verifyMembership(request: Request): Promise<{ ok: true; me
   if (!token) {
     return { ok: false, status: 401, message: "Membership token is required." };
   }
+  return verifyMembershipTokenValue(token);
+}
 
+export async function verifyMembershipTokenValue(token: string) {
   if (fallbackToken && token === fallbackToken) {
-    return { ok: true };
+    return { ok: true, memberId: "test" } as const;
   }
+
+  const tokenInfo = verifyMembershipToken(token);
+  const customerId = tokenInfo?.customerId ?? token;
 
   if (!stripe) {
     console.error("Stripe is not configured; cannot verify membership");
-    return { ok: false, status: 500, message: "Membership service unavailable." };
+    return { ok: false, status: 500, message: "Membership service unavailable." } as const;
   }
 
   try {
     const subscriptions = await stripe.subscriptions.list({
-      customer: token,
+      customer: customerId,
       status: "all",
       expand: ["data.default_payment_method"],
       limit: 10
@@ -36,12 +43,12 @@ export async function verifyMembership(request: Request): Promise<{ ok: true; me
 
     const active = subscriptions.data.find((sub) => allowedStatuses.has(sub.status));
     if (!active) {
-      return { ok: false, status: 402, message: "Active membership required." };
+      return { ok: false, status: 402, message: "Active membership required." } as const;
     }
 
-    return { ok: true, memberId: token };
+    return { ok: true, memberId: customerId } as const;
   } catch (error) {
     console.error("Stripe membership lookup failed", error);
-    return { ok: false, status: 502, message: "Membership service unavailable." };
+    return { ok: false, status: 502, message: "Membership service unavailable." } as const;
   }
 }

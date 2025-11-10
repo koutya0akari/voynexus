@@ -11,6 +11,11 @@ export function getMembershipTokenFromStorage(): string | null {
 export function saveMembershipToken(token: string) {
   if (typeof window === "undefined") return;
   localStorage.setItem(STORAGE_KEY, token);
+  fetch("/api/membership/token", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ token })
+  }).catch((error) => console.error("Failed to sync membership cookie", error));
 }
 
 export function clearMembershipToken() {
