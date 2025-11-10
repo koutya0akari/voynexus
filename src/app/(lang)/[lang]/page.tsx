@@ -11,6 +11,7 @@ import { EventSpotlight } from "@/components/events/event-spotlight";
 import { SponsorRail } from "@/components/sponsors/sponsor-rail";
 import { FacilityWidgetCTA } from "@/components/widgets/facility-widget-cta";
 import { BlogSpotlight } from "@/components/blog/blog-spotlight";
+import { BillingCheckoutCTA } from "@/components/billing/checkout-cta";
 
 type Props = {
   params: {
@@ -140,6 +141,10 @@ export default async function LocaleHome({ params }: Props) {
           />
           <BlogSpotlight locale={locale} posts={blogs ?? []} {...blogSpotlightCopy} />
         </div>
+      </section>
+
+      <section className="mx-auto max-w-6xl px-4">
+        <BillingCheckoutCTA />
       </section>
 
       <section className="mx-auto max-w-6xl px-4">

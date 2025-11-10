@@ -71,7 +71,7 @@ AI機能は課金済み会員のみ利用できるように、`MEMBERSHIP_API_UR
 - `scripts/build-embeddings.ts` をCI/CDで日次実行し、Supabase/Cloudflare Vectorizeへ同期
 - AIチャットはNGワード検知後に施設連絡先を返す実装を追加予定 (`generateChatResponse` 内でTODOコメント)
 - 施設向けウィジェット: `public/widget.js` を各施設サイトに貼り付ける。許可ドメインのみ`X-Frame-Options`の例外を設定
-- 課金: `/api/billing/checkout` に `customerId` または `email` をPOSTするとStripe Checkout SessionのURLを返します。決済完了後の `customer` ID を `X-Membership-Token` として保存し、AI API 呼び出し時に同じトークンを渡してください。既存会員は `/api/billing/portal` へ `customerId` を送るとStripe Billing Portalへ遷移できます。
+- 課金: `/api/billing/checkout` に `customerId` または `email` をPOSTするとStripe Checkout SessionのURLを返します。ローカルで手早く動作を確かめたい場合は `GET /api/billing/checkout?email=test@example.com` にアクセスすると即座にStripeの決済画面へリダイレクトされます。決済後に表示される `customer` ID をフロントの「会員トークン」欄に貼り付けると、AIコンシェルジュ/旅程生成が自動的に `Authorization: Bearer <customerId>` ヘッダーを付与します。既存会員は `/api/billing/portal` へ `customerId` を送るとStripe Billing Portalへ遷移できます。
 
 ## 追加ドキュメント
 

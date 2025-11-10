@@ -2,6 +2,9 @@
 
 import { useState } from "react";
 import { toast } from "@/components/toaster";
+import { MembershipTokenBanner } from "@/components/membership/token-banner";
+import { getMembershipTokenFromStorage } from "@/lib/membership-client";
+import { locales } from "@/lib/i18n";
 
 type PlannerInput = {
   start: string;
@@ -39,6 +42,8 @@ export function ItineraryPlanner({ locale }: { locale: string }) {
   const [input, setInput] = useState(defaultInput);
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState<GeneratedItinerary | null>(null);
+  const [aiLang, setAiLang] = useState(locale);
+  const [downloading, setDownloading] = useState(false);
 
   const update = (key: keyof PlannerInput, value: string | number) => {
     setInput((prev) => ({ ...prev, [key]: value }));
@@ -50,8 +55,8 @@ export function ItineraryPlanner({ locale }: { locale: string }) {
     try {
       const response = await fetch("/api/ai/itinerary", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ lang: locale, ...input })
+        headers: buildHeaders(),
+        body: JSON.stringify({ lang: aiLang, ...input })
       });
       if (!response.ok) {
         throw new Error("Failed to generate");
@@ -69,6 +74,21 @@ export function ItineraryPlanner({ locale }: { locale: string }) {
   return (
     <div className="grid gap-6 md:grid-cols-[1.2fr_1fr]">
       <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+        <MembershipTokenBanner />
+        <div className="mb-4 flex flex-col gap-2 text-xs text-slate-500 sm:flex-row sm:items-center sm:justify-between">
+          <span>旅程の言語</span>
+          <select
+            value={aiLang}
+            onChange={(event) => setAiLang(event.target.value)}
+            className="rounded-full border border-slate-200 px-3 py-1 text-sm"
+          >
+            {locales.map((code) => (
+              <option key={code} value={code}>
+                {code.toUpperCase()}
+              </option>
+            ))}
+          </select>
+        </div>
         <h2 className="text-xl font-semibold text-slate-900">条件を入力</h2>
         <div className="mt-4 grid gap-4">
           <label className="flex flex-col text-sm text-slate-600">
@@ -144,11 +164,30 @@ export function ItineraryPlanner({ locale }: { locale: string }) {
           type="button"
           className="mt-6 w-full rounded-full bg-brand px-4 py-3 font-semibold text-white disabled:opacity-60"
           onClick={generate}
-          disabled={loading}
-        >
-          {loading ? "生成中..." : "AIで旅程を生成"}
-        </button>
-      </div>
+            disabled={loading}
+          >
+            {loading ? "生成中..." : "AIで旅程を生成"}
+          </button>
+          {result?.timeline?.length ? (
+            <div className="mt-4 flex flex-wrap gap-2 text-xs">
+              <button
+                type="button"
+                onClick={saveItineraryResult(result, input, aiLang)}
+                className="rounded-full border border-slate-200 px-4 py-2 font-semibold text-slate-600"
+              >
+                保存
+              </button>
+              <button
+                type="button"
+                onClick={() => downloadItineraryPdf(result, input, aiLang, setDownloading)}
+                className="rounded-full bg-slate-900 px-4 py-2 font-semibold text-white disabled:opacity-60"
+                disabled={downloading}
+              >
+                {downloading ? "生成中..." : "PDFとして保存"}
+              </button>
+            </div>
+          ) : null}
+        </div>
       <div className="rounded-2xl border border-dashed border-brand/40 bg-slate-50/50 p-5">
         {loading && <p className="text-sm text-slate-500">AIが制約をチェック中...</p>}
         {!loading && !result && (
@@ -186,4 +225,64 @@ export function ItineraryPlanner({ locale }: { locale: string }) {
       </div>
     </div>
   );
+}
+
+function buildHeaders(): HeadersInit {
+  const headers: HeadersInit = { "Content-Type": "application/json" };
+  const token = getMembershipTokenFromStorage();
+  if (token) {
+    headers.Authorization = `Bearer ${token}`;
+  }
+  return headers;
+}
+
+function saveItineraryResult(result: GeneratedItinerary, input: PlannerInput, lang: string) {
+  return () => {
+    try {
+      const key = "voynex_itinerary_history";
+      const existingRaw = typeof window === "undefined" ? null : localStorage.getItem(key);
+      const existing = existingRaw ? JSON.parse(existingRaw) : [];
+      existing.unshift({ id: crypto.randomUUID(), createdAt: new Date().toISOString(), lang, input, result });
+      if (existing.length > 20) existing.pop();
+      localStorage.setItem(key, JSON.stringify(existing));
+      toast("ローカルに保存しました");
+    } catch (error) {
+      console.error("Failed to save itinerary", error);
+      toast("保存に失敗しました");
+    }
+  };
+}
+
+async function downloadItineraryPdf(
+  result: GeneratedItinerary,
+  input: PlannerInput,
+  lang: string,
+  setDownloading: (value: boolean) => void
+) {
+  setDownloading(true);
+  try {
+    const response = await fetch("/api/pdf", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        title: `Voynex itinerary (${lang.toUpperCase()})`,
+        summary: `Transport: ${input.transport} / Party: ${input.party} / Budget: ¥${input.budget}`,
+        timeline: result.timeline ?? [],
+        warnings: result.warnings ?? []
+      })
+    });
+    if (!response.ok) throw new Error("pdf");
+    const blob = await response.blob();
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = "voynex-itinerary.pdf";
+    link.click();
+    URL.revokeObjectURL(url);
+  } catch (error) {
+    console.error("PDF download failed", error);
+    toast("PDFの生成に失敗しました");
+  } finally {
+    setDownloading(false);
+  }
 }

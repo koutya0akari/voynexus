@@ -42,3 +42,41 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Failed to create checkout session" }, { status: 500 });
   }
 }
+
+export async function GET(request: Request) {
+  if (!priceId) {
+    return NextResponse.json({ error: "STRIPE_PRICE_ID is not configured" }, { status: 500 });
+  }
+
+  const stripe = requireStripe();
+  const { searchParams } = new URL(request.url);
+  const customerId = searchParams.get("customerId") ?? undefined;
+  const email = searchParams.get("email") ?? undefined;
+  const successUrl = searchParams.get("successUrl") ?? defaultSuccess;
+  const cancelUrl = searchParams.get("cancelUrl") ?? defaultCancel;
+
+  if (!customerId && !email) {
+    return NextResponse.json({ error: "email or customerId is required" }, { status: 400 });
+  }
+
+  try {
+    const session = await stripe.checkout.sessions.create({
+      mode: "subscription",
+      line_items: [{ price: priceId, quantity: 1 }],
+      customer: customerId,
+      customer_email: customerId ? undefined : email,
+      success_url: successUrl,
+      cancel_url: cancelUrl,
+      allow_promotion_codes: true
+    });
+
+    if (!session.url) {
+      return NextResponse.json({ error: "Checkout session missing URL" }, { status: 500 });
+    }
+
+    return NextResponse.redirect(session.url, { status: 303 });
+  } catch (error) {
+    console.error("Stripe checkout redirect error", error);
+    return NextResponse.json({ error: "Failed to create checkout session" }, { status: 500 });
+  }
+}
