@@ -101,22 +101,30 @@ export async function generateItinerary(payload: ItineraryPayload) {
   }
 
   const prompt = [
-    "You are an itinerary planner abiding by strict rules.",
-    "- Respect opening hours / travel time / last bus.",
-    "- Output JSON with timeline (time,title,duration,note) and warnings array.",
+    "You are Voynex itineraries, a planner that only outputs strict JSON.",
+    "Return an object with 'timeline' (array of {time,title,duration,note}) and 'warnings' (array of strings).",
+    "Durations are minutes, note is optional. Mention last bus / weather constraints in warnings if relevant.",
     `Travel window: ${payload.start} - ${payload.end}`,
     `Transport: ${payload.transport}`,
     `Budget: ¥${payload.budget}`,
     `Party: ${payload.party}`,
     `Weather: ${payload.weather}`,
+    payload.tidesHint ? `Tides: ${payload.tidesHint}` : "",
     `Docs: ${docs.map((doc) => `${doc.title}:${doc.summary}`).join("|")}`
-  ].join("\n");
+  ]
+    .filter(Boolean)
+    .join("\n");
 
   const completion = await client.responses.create({
     model: "gpt-4o-mini",
+    response_format: { type: "json_object" },
     input: [
       { role: "system", content: prompt },
-      { role: "user", content: "Generate itinerary JSON." }
+      {
+        role: "user",
+        content:
+          "Respond with valid JSON only. Example: {\"timeline\":[{\"time\":\"09:00\",\"title\":\"Naruto Whirlpool\",\"duration\":120,\"note\":\"catch 11:30 bus\"}],\"warnings\":[\"Last bus 17:30\"]}."
+      }
     ]
   });
 
@@ -126,7 +134,7 @@ export async function generateItinerary(payload: ItineraryPayload) {
       const parsed = JSON.parse(embeddedContent);
       return { ...parsed, references: docs };
     } catch (error) {
-      console.error("Failed to parse itinerary JSON", error);
+      console.error("Failed to parse itinerary JSON", error, embeddedContent.slice(0, 200));
     }
   }
 
