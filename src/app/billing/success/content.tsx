@@ -19,7 +19,7 @@ export function BillingSuccessContent({ fallbackSessionId }: Props) {
     async function fetchSession() {
       if (!sessionId) {
         setStatus("error");
-        setMessage("session_id が見つかりませんでした。");
+        setMessage("session_id が見つかりませんでした。成功URLに {CHECKOUT_SESSION_ID} を含める必要があります。");
         return;
       }
       try {
@@ -33,8 +33,8 @@ export function BillingSuccessContent({ fallbackSessionId }: Props) {
           saveMembershipToken(data.token);
         }
         setStatus("success");
-        setMessage("会員トークンを保存しました。AIコンシェルジュを開いてみてください。");
-        setTimeout(() => router.push("/members"), 1200);
+        setMessage("会員トークンを保存しました。会員ページへ移動します...");
+        router.replace("/members");
       } catch (error) {
         console.error("Billing success error", error);
         setStatus("error");

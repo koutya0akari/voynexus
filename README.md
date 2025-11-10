@@ -71,7 +71,7 @@ AI機能は課金済み会員のみ利用できるように、`MEMBERSHIP_API_UR
 - `scripts/build-embeddings.ts` をCI/CDで日次実行し、Supabase/Cloudflare Vectorizeへ同期
 - AIチャットはNGワード検知後に施設連絡先を返す実装を追加予定 (`generateChatResponse` 内でTODOコメント)
 - 施設向けウィジェット: `public/widget.js` を各施設サイトに貼り付ける。許可ドメインのみ`X-Frame-Options`の例外を設定
-- 課金: `/api/billing/checkout` に `customerId` または `email` をPOSTするとStripe Checkout SessionのURLを返します。`NEXT_PUBLIC_SITE_URL` を自分のドメインに設定しておくと、デフォルトの `success`/`cancel` 先も自動的に `https://<site>/billing/success` に変わります。ローカルで手早く動作を確かめたい場合は `GET /api/billing/checkout?email=test@example.com` にアクセスすると即座にStripeの決済画面へリダイレクトされます。決済後は `/billing/success` で署名付きトークンが自動作成され、HTTP-onlyクッキーとローカルストレージへ保存されたのち `/members` へ遷移します。AIコンシェルジュ/旅程生成はこのトークンを `Authorization: Bearer <token>` として利用します。既存会員は `/api/billing/portal` へ `customerId` を送るとStripe Billing Portalへ遷移できます。
+- 課金: `/api/billing/checkout` に `customerId` または `email` をPOSTするとStripe Checkout SessionのURLを返します。`NEXT_PUBLIC_SITE_URL` を自分のドメインに設定しておくと、デフォルトの `success`/`cancel` 先も自動的に `https://<site>/billing/success?session_id={CHECKOUT_SESSION_ID}` になります。独自の `STRIPE_SUCCESS_URL` を指定する場合も `{CHECKOUT_SESSION_ID}` をクエリに含めてください。ローカルで手早く動作を確かめたい場合は `GET /api/billing/checkout?email=test@example.com` にアクセスすると即座にStripeの決済画面へリダイレクトされます。決済後は `/billing/success` で署名付きトークンが自動作成され、HTTP-onlyクッキーとローカルストレージへ保存されたのち `/members` へ遷移します。AIコンシェルジュ/旅程生成はこのトークンを `Authorization: Bearer <token>` として利用します。既存会員は `/api/billing/portal` へ `customerId` を送るとStripe Billing Portalへ遷移できます。
 
 ## 追加ドキュメント
 

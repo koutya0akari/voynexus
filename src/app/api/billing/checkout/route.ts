@@ -11,8 +11,14 @@ const schema = z.object({
 
 const priceId = process.env.STRIPE_PRICE_ID;
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
-const defaultSuccess = process.env.STRIPE_SUCCESS_URL ?? `${siteUrl}/billing/success`;
+const defaultSuccess = ensureSuccessUrl(process.env.STRIPE_SUCCESS_URL ?? `${siteUrl}/billing/success`);
 const defaultCancel = process.env.STRIPE_CANCEL_URL ?? `${siteUrl}/`;
+
+function ensureSuccessUrl(url: string) {
+  if (url.includes("{CHECKOUT_SESSION_ID}")) return url;
+  const separator = url.includes("?") ? "&" : "?";
+  return `${url}${separator}session_id={CHECKOUT_SESSION_ID}`;
+}
 
 export async function POST(request: Request) {
   if (!priceId) {
@@ -36,7 +42,7 @@ export async function POST(request: Request) {
       line_items: [{ price: priceId, quantity: 1 }],
       customer: parsed.data.customerId,
       customer_email: parsed.data.customerId ? undefined : parsed.data.email,
-      success_url: parsed.data.successUrl ?? defaultSuccess,
+      success_url: parsed.data.successUrl ? ensureSuccessUrl(parsed.data.successUrl) : defaultSuccess,
       cancel_url: parsed.data.cancelUrl ?? defaultCancel,
       allow_promotion_codes: true
     });
@@ -71,7 +77,7 @@ export async function GET(request: Request) {
       line_items: [{ price: priceId, quantity: 1 }],
       customer: customerId,
       customer_email: customerId ? undefined : email,
-      success_url: successUrl,
+      success_url: ensureSuccessUrl(successUrl),
       cancel_url: cancelUrl,
       allow_promotion_codes: true
     });
