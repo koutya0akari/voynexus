@@ -12,7 +12,7 @@ export default function LocaleBillingSuccessPage({
   searchParams: { [key: string]: string | string[] | undefined };
 }) {
   const sessionIdParam = typeof searchParams.session_id === "string" ? searchParams.session_id : undefined;
-  const homeHref = `/${params.lang}`;
+  const homeHref = `/${params.lang}` as const;
 
   return (
     <div className="mx-auto max-w-2xl space-y-6 px-4 py-16">

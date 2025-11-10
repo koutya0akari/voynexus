@@ -1,8 +1,14 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { Suspense } from "react";
 import { BillingSuccessContent } from "./content";
 
 export const dynamic = "force-dynamic";
+
+export const generateMetadata = async (): Promise<Metadata> => ({
+  title: "Billing Success | Voynex",
+  description: "Stripe決済が完了しました。会員トークンを保存しています。"
+});
 
 export default function BillingSuccessPage({ searchParams }: { searchParams: { [key: string]: string | string[] | undefined } }) {
   const sessionIdParam = typeof searchParams.session_id === "string" ? searchParams.session_id : undefined;
