@@ -21,6 +21,10 @@ export default async function MembersPage() {
     );
   }
 
+  if (!membership.ok || !("memberId" in membership)) {
+    return null;
+  }
+
   return (
     <div className="mx-auto max-w-4xl space-y-6 px-4 py-16">
       <p className="text-sm uppercase text-brand">Voynex Membership</p>
