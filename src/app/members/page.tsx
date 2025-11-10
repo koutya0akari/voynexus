@@ -14,7 +14,7 @@ export default async function MembersPage() {
         <div className="rounded-3xl border border-rose-200 bg-white p-6 text-rose-700">
           <p>会員トークンが確認できませんでした。決済完了ページのリンクまたは会員トークン欄を利用してサインインしてください。</p>
         </div>
-        <Link href={("/" as const)} className="inline-flex rounded-full bg-brand px-6 py-3 text-sm font-semibold text-white">
+        <Link href="/ja" className="inline-flex rounded-full bg-brand px-6 py-3 text-sm font-semibold text-white">
           トップに戻る
         </Link>
       </div>
@@ -33,7 +33,7 @@ export default async function MembersPage() {
           <li>Stripeポータルからいつでも支払い方法を更新できます。</li>
         </ol>
       </div>
-      <Link href={("/" as const)} className="inline-flex rounded-full bg-brand px-6 py-3 text-sm font-semibold text-white">
+      <Link href="/ja" className="inline-flex rounded-full bg-brand px-6 py-3 text-sm font-semibold text-white">
         ホームへ
       </Link>
     </div>
