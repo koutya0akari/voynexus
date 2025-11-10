@@ -7,7 +7,7 @@ export default function TermsPage() {
       sections={[
         {
           heading: "第1条 (適用)",
-          body: "本規約はTokushima Travel PWA（以下、本サービス）に関する利用条件を定めるものです。利用者は本規約に同意した上で本サービスを利用するものとします。"
+          body: "本規約はVoynex（以下、本サービス）に関する利用条件を定めるものです。利用者は本規約に同意した上で本サービスを利用するものとします。"
         },
         {
           heading: "第2条 (禁止事項)",

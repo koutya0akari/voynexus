@@ -10,11 +10,11 @@ const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://tokushima.example.c
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {
-    default: "徳島観光PWA | Local Discovery",
-    template: "%s | 徳島観光PWA"
+    default: "Voynex | 徳島トラベルOS",
+    template: "%s | Voynex"
   },
   description:
-    "徳島に特化した観光・モデルコース・AIコンシェルジュを提供するPWA。microCMS連携で最新のスポットや記事を配信。",
+    "Voynexは徳島に特化したトラベルOS。microCMSで管理するスポット/記事/モデルコースとAIコンシェルジュを一つのPWAに統合。",
   alternates: {
     canonical: "/",
     languages: {
@@ -24,10 +24,10 @@ export const metadata: Metadata = {
     }
   },
   openGraph: {
-    title: "徳島観光PWA",
-    description: "旅程生成・多言語記事・AIチャットで徳島の旅をアップデート。",
+    title: "Voynex",
+    description: "旅程生成・多言語記事・AIチャットを備えた徳島向けトラベルOS。",
     url: siteUrl,
-    siteName: "Tokushima Travel PWA",
+    siteName: "Voynex",
     images: [`${siteUrl}/og/default.svg`],
     locale: "ja_JP",
     type: "website"

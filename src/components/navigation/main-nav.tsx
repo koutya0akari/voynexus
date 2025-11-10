@@ -34,9 +34,9 @@ export function MainNav({ locale }: Props) {
         <div className="flex items-center justify-between gap-4">
           <div>
             <Link href={`/${locale}`} className="font-semibold">
-              Tokushima Travel
+              Voynex
             </Link>
-            <p className="hidden text-xs text-slate-500 md:block">Local picks · AI concierge · Blog</p>
+            <p className="hidden text-xs text-slate-500 md:block">Voynex Travel OS · Local data · AI concierge</p>
           </div>
 
           <nav className="hidden items-center gap-4 text-sm md:flex">

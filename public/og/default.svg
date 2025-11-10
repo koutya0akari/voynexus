@@ -7,10 +7,10 @@
   </defs>
   <rect width="1200" height="630" fill="url(#g)"/>
   <text x="80" y="200" fill="#fff" font-size="64" font-family="sans-serif" font-weight="bold">
-    Tokushima Travel PWA
+    Voynex Travel OS
   </text>
   <text x="80" y="280" fill="#d1f2ff" font-size="32" font-family="sans-serif">
-    AI itinerary / multi-lingual articles / facility widget
+    AI itineraries · multi-lingual articles · local data graph
   </text>
   <text x="80" y="360" fill="#fff" font-size="24" font-family="sans-serif">
     microCMS • PWA • Supabase Vector • OpenAI

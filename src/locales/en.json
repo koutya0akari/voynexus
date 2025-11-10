@@ -1,7 +1,7 @@
 {
   "hero": {
-    "title": "A smarter way to travel Tokushima",
-    "description": "Discover weather-ready highlights, student articles, and AI-generated itineraries inside one installable PWA."
+    "title": "Voynex: travel intelligence for Tokushima",
+    "description": "Monitor verified spots, editorial dispatches, and AI itineraries from one adaptive dashboard."
   },
   "cta": {
     "planTrip": "Plan itinerary",
@@ -12,7 +12,8 @@
     "latestArticles": "Latest articles",
     "modelCourses": "Model courses",
     "events": "Event spotlight",
-    "blog": "Travel blog"
+    "blog": "Travel blog",
+    "navigator": "Voynex guide"
   },
   "filters": {
     "title": "Filter",
@@ -38,6 +39,31 @@
   },
   "footer": {
     "disclaimer": "Times and fees may change. Always confirm with the official source."
+  },
+  "stats": {
+    "title": "Voynex dashboard",
+    "subtitle": "Live sync with microCMS",
+    "description": "Every card is editable in microCMS and refreshed via ISR.",
+    "spots": "Verified spots",
+    "spotsNote": "curated by local editors",
+    "articles": "Editorial posts",
+    "articlesNote": "story updates this week",
+    "itineraries": "Smart itineraries",
+    "itinerariesNote": "AI-personalized routes",
+    "events": "Live events",
+    "eventsNote": "rain-ready happenings"
+  },
+  "feed": {
+    "title": "Voynex feed",
+    "subtitle": "Today’s cross-channel snapshot",
+    "spotCard": "Feature spot",
+    "itineraryCard": "Signature itinerary",
+    "eventCard": "Next event",
+    "ctaArticle": "Read article",
+    "ctaSpot": "View spot",
+    "ctaItinerary": "See itinerary",
+    "ctaEvent": "Event details",
+    "empty": "No editorial content yet. Create an article in microCMS."
   },
   "blog": {
     "spotlightTitle": "Travel blog",

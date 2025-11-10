@@ -1,7 +1,7 @@
 {
   "hero": {
-    "title": "徳島をもっと身近にする旅アプリ",
-    "description": "天候や移動手段に合わせたおすすめスポット、学生ライターの記事、AI旅程生成を1つのPWAで。"
+    "title": "Voynexで徳島の旅データを一元管理",
+    "description": "現地で検証したスポット、編集記事、AI旅程をひとつのダッシュボードでチェックできます。"
   },
   "cta": {
     "planTrip": "旅程を作成",
@@ -12,7 +12,8 @@
     "latestArticles": "最新の記事",
     "modelCourses": "モデルコース",
     "events": "イベント特集",
-    "blog": "トラベルブログ"
+    "blog": "トラベルブログ",
+    "navigator": "Voynexナビ"
   },
   "filters": {
     "title": "条件で探す",
@@ -38,6 +39,31 @@
   },
   "footer": {
     "disclaimer": "表示の料金・営業時間は変更になる可能性があります。最新情報は公式サイトをご確認ください。"
+  },
+  "stats": {
+    "title": "Voynex ダッシュボード",
+    "subtitle": "microCMSとリアルタイム連携",
+    "description": "すべてのカードはmicroCMS上で編集するとISRですぐに更新されます。",
+    "spots": "検証済みスポット",
+    "spotsNote": "ローカルエディター監修",
+    "articles": "編集記事",
+    "articlesNote": "今週の更新",
+    "itineraries": "スマート旅程",
+    "itinerariesNote": "AIが条件に合わせて最適化",
+    "events": "ライブイベント",
+    "eventsNote": "雨天対応の催し"
+  },
+  "feed": {
+    "title": "Voynex Feed",
+    "subtitle": "本日のクロスチャンネル・サマリー",
+    "spotCard": "注目スポット",
+    "itineraryCard": "代表コース",
+    "eventCard": "直近のイベント",
+    "ctaArticle": "記事を読む",
+    "ctaSpot": "スポットを見る",
+    "ctaItinerary": "コース詳細",
+    "ctaEvent": "イベント詳細",
+    "empty": "編集記事がまだありません。microCMSで記事を作成してください。"
   },
   "blog": {
     "spotlightTitle": "トラベルブログ",

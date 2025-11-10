@@ -1,6 +1,6 @@
-# Tokushima Travel PWA
+# Voynex Travel PWA
 
-徳島観光に特化した多言語PWA。microCMSで管理するコンテンツをNext.js 14 (App Router) で配信し、AIチャット・旅程生成・施設向けウィジェットを備えています。
+徳島観光に特化した多言語ダッシュボード「Voynex」。microCMSで管理するコンテンツをNext.js 14 (App Router) で配信し、AIチャット・旅程生成・施設向けウィジェットを備えています。
 
 ## アーキテクチャ概要
 

@@ -1,7 +1,7 @@
 {
   "hero": {
-    "title": "用一個 PWA 探索德島",
-    "description": "依照天氣與交通推薦景點、學生文章與 AI 旅程生成功能，一切盡在指尖。"
+    "title": "Voynex 統整德島旅遊情報",
+    "description": "在同一個面板上檢視實地驗證的景點、編輯文章與 AI 旅程建議。"
   },
   "cta": {
     "planTrip": "產生行程",
@@ -12,7 +12,8 @@
     "latestArticles": "最新文章",
     "modelCourses": "經典行程",
     "events": "活動特輯",
-    "blog": "旅遊部落格"
+    "blog": "旅遊部落格",
+    "navigator": "Voynex 導覽"
   },
   "filters": {
     "title": "條件篩選",
@@ -38,6 +39,31 @@
   },
   "footer": {
     "disclaimer": "資訊可能變更，請以官方公告為準。"
+  },
+  "stats": {
+    "title": "Voynex 儀表板",
+    "subtitle": "與 microCMS 即時同步",
+    "description": "所有卡片都可以在 microCMS 編輯並透過 ISR 立即更新。",
+    "spots": "已驗證景點",
+    "spotsNote": "在地編輯審核",
+    "articles": "專欄文章",
+    "articlesNote": "本週更新",
+    "itineraries": "智慧行程",
+    "itinerariesNote": "AI 量身打造",
+    "events": "最新活動",
+    "eventsNote": "含雨天備案"
+  },
+  "feed": {
+    "title": "Voynex Feed",
+    "subtitle": "今日重點一覽",
+    "spotCard": "焦點景點",
+    "itineraryCard": "代表行程",
+    "eventCard": "下一個活動",
+    "ctaArticle": "閱讀文章",
+    "ctaSpot": "查看景點",
+    "ctaItinerary": "查看行程",
+    "ctaEvent": "活動詳情",
+    "empty": "尚無文章，請先在 microCMS 建立。"
   },
   "blog": {
     "spotlightTitle": "旅遊部落格",

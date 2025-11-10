@@ -1,12 +1,12 @@
 {
-  "name": "Tokushima Travel PWA",
-  "short_name": "Tokushima",
+  "name": "Voynex Travel PWA",
+  "short_name": "Voynex",
   "start_url": "/ja",
   "display": "standalone",
   "background_color": "#ffffff",
   "theme_color": "#1f8ea8",
   "lang": "ja",
-  "description": "徳島観光向けAI旅程・コンテンツ配信PWA",
+  "description": "Voynexは徳島向けに記事・スポット・AI旅程を届けるトラベルOS",
   "icons": [
     {
       "src": "/icons/icon-192.png",

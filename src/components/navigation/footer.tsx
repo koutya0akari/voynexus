@@ -11,7 +11,7 @@ export async function Footer({ locale }: Props) {
     <footer className="border-t border-slate-200 bg-slate-50">
       <div className="mx-auto grid max-w-6xl gap-4 px-4 py-6 text-sm text-slate-600 md:grid-cols-3">
         <div>
-          <p className="font-semibold text-slate-900">Tokushima Travel Lab</p>
+          <p className="font-semibold text-slate-900">Voynex Lab</p>
           <p>{t("footer.disclaimer")}</p>
         </div>
         <div className="flex flex-col gap-2">
@@ -20,7 +20,7 @@ export async function Footer({ locale }: Props) {
           <Link href={`/${locale}/disclaimer`}>免責事項</Link>
         </div>
         <div className="flex flex-col gap-2">
-          <Link href="mailto:info@tokushima.jp">info@tokushima.jp</Link>
+          <Link href="mailto:team@voynex.jp">team@voynex.jp</Link>
           <Link href={`/${locale}/contact`}>Contact</Link>
           <Link href="/api/status">Status</Link>
         </div>

@@ -7,7 +7,7 @@ type Props = {
 };
 
 export const metadata: Metadata = {
-  title: "旅程生成 | Tokushima Travel"
+  title: "旅程生成 | Voynex"
 };
 
 export default function PlanPage({ params }: Props) {
