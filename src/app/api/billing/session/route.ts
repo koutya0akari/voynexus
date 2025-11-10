@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { requireStripe } from "@/lib/stripe";
+import { getStripeForSession } from "@/lib/stripe";
 import { createMembershipToken } from "@/lib/membership-token";
 
 export async function GET(request: Request) {
@@ -8,7 +8,10 @@ export async function GET(request: Request) {
     return NextResponse.json({ error: "session_id query param is required" }, { status: 400 });
   }
 
-  const stripe = requireStripe();
+  const stripe = getStripeForSession(sessionId);
+  if (!stripe) {
+    return NextResponse.json({ error: "Stripe not configured" }, { status: 500 });
+  }
   try {
     const session = await stripe.checkout.sessions.retrieve(sessionId, { expand: ["line_items"] });
     const customer = session.customer;
