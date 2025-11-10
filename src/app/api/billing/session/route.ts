@@ -10,14 +10,28 @@ export async function GET(request: Request) {
 
   const stripe = requireStripe();
   try {
-    const session = await stripe.checkout.sessions.retrieve(sessionId);
+    const session = await stripe.checkout.sessions.retrieve(sessionId, { expand: ["line_items"] });
     const customer = session.customer;
     if (!customer) {
       return NextResponse.json({ error: "Customer not found" }, { status: 404 });
     }
     const customerId = typeof customer === "string" ? customer : customer.id;
+    const lineItems = session.line_items?.data?.map((item) => ({
+      description: item.description,
+      quantity: item.quantity,
+      amountSubtotal: item.amount_subtotal,
+      amountTotal: item.amount_total,
+      currency: item.currency
+    }));
+
     const token = createMembershipToken(customerId);
-    const response = NextResponse.json({ customerId, token });
+    const response = NextResponse.json({
+      customerId,
+      token,
+      amountTotal: session.amount_total,
+      currency: session.currency,
+      lineItems
+    });
     response.cookies.set({
       name: "membership_token",
       value: token,
