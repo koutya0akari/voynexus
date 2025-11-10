@@ -41,6 +41,8 @@ pnpm dev
 
 `MICROCMS_SERVICE_DOMAIN`, `MICROCMS_API_KEY`, `PREVIEW_SECRET`, `REVALIDATE_SECRET`, `NEXT_PUBLIC_SITE_URL`, `OPENAI_API_KEY`, `SUPABASE_URL`, `SUPABASE_ANON_KEY`, `MAPBOX_ACCESS_TOKEN`, `OPENWEATHER_API_KEY`, `GA_MEASUREMENT_ID` (詳細は `.env.example`)
 
+AI機能は課金済み会員のみ利用できるように、`MEMBERSHIP_API_URL` / `MEMBERSHIP_API_KEY` で会員サイトの検証APIを設定します。会員サイトがまだ無い場合は `MEMBERSHIP_TEST_TOKEN` を設定し、開発中は `Authorization: Bearer <token>` あるいは `X-Membership-Token: <token>` を付与して `/api/ai/chat` / `/api/ai/itinerary` を呼び出してください。本番では会員サイト側で発行したセッション/トークンを同じヘッダーで付与するだけでゲートが機能します。
+
 ## スクリプト
 
 | コマンド | 説明 |
@@ -69,6 +71,7 @@ pnpm dev
 - `scripts/build-embeddings.ts` をCI/CDで日次実行し、Supabase/Cloudflare Vectorizeへ同期
 - AIチャットはNGワード検知後に施設連絡先を返す実装を追加予定 (`generateChatResponse` 内でTODOコメント)
 - 施設向けウィジェット: `public/widget.js` を各施設サイトに貼り付ける。許可ドメインのみ`X-Frame-Options`の例外を設定
+- 課金: `/api/billing/checkout` に `customerId` または `email` をPOSTするとStripe Checkout SessionのURLを返します。決済完了後の `customer` ID を `X-Membership-Token` として保存し、AI API 呼び出し時に同じトークンを渡してください。既存会員は `/api/billing/portal` へ `customerId` を送るとStripe Billing Portalへ遷移できます。
 
 ## 追加ドキュメント
 

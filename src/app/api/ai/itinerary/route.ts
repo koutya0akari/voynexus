@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { z } from "zod";
 import { generateItinerary } from "@/lib/ai";
 import { defaultLocale, isSupportedLocale } from "@/lib/i18n";
+import { verifyMembership } from "@/lib/membership";
 
 const schema = z.object({
   lang: z.string().default(defaultLocale),
@@ -16,6 +17,11 @@ const schema = z.object({
 });
 
 export async function POST(request: Request) {
+  const membership = await verifyMembership(request);
+  if (!membership.ok) {
+    return NextResponse.json({ error: membership.message }, { status: membership.status });
+  }
+
   let body: unknown;
   try {
     body = await request.json();

@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { z } from "zod";
 import { generateChatResponse } from "@/lib/ai";
 import { defaultLocale, isSupportedLocale } from "@/lib/i18n";
+import { verifyMembership } from "@/lib/membership";
 
 const bodySchema = z.object({
   lang: z.string().default(defaultLocale),
@@ -10,6 +11,11 @@ const bodySchema = z.object({
 });
 
 export async function POST(request: Request) {
+  const membership = await verifyMembership(request);
+  if (!membership.ok) {
+    return NextResponse.json({ error: membership.message }, { status: membership.status });
+  }
+
   const json = await request.json();
   const parsed = bodySchema.safeParse(json);
 
