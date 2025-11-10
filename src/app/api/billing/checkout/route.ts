@@ -25,6 +25,10 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: parsed.error.flatten() }, { status: 400 });
   }
 
+  if (!parsed.data.customerId && !parsed.data.email) {
+    return NextResponse.json({ error: "email or customerId is required" }, { status: 400 });
+  }
+
   try {
     const session = await stripe.checkout.sessions.create({
       mode: "subscription",
