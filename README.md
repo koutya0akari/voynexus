@@ -73,5 +73,6 @@ pnpm dev
 ## 追加ドキュメント
 
 - `docs/data-model.md`: microCMSスキーマ、バリデーション、RAG対象
+- `docs/microcms-setup.md`: spots/articles/itineraries/blog の microCMS 設定と翻訳Webhook手順
 - `docs/operations.md`: 運用/監視/CIフロー
 - `docs/testing.md`: 受入テストとPlaywrightシナリオ

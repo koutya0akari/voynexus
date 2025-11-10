@@ -7,6 +7,9 @@ const apiKey = process.env.MICROCMS_API_KEY;
 
 const client = serviceDomain && apiKey ? createClient({ serviceDomain, apiKey }) : null;
 const blogEndpoint = process.env.MICROCMS_BLOG_ENDPOINT || "blogs";
+const spotEndpoint = process.env.MICROCMS_SPOTS_ENDPOINT || "spots";
+const articleEndpoint = process.env.MICROCMS_ARTICLES_ENDPOINT || "articles";
+const itineraryEndpoint = process.env.MICROCMS_ITINERARIES_ENDPOINT || "itineraries";
 
 const fallbackSpots: Spot[] = [
   {
@@ -118,11 +121,16 @@ const fallbackSponsors: Sponsor[] = [
 
 function getFallbackList<T>(endpoint: string, queries?: MicroCMSQueries) {
   switch (endpoint) {
-    case "spots":
+    case spotEndpoint:
       return { contents: fallbackSpots as T[], totalCount: fallbackSpots.length, offset: 0, limit: fallbackSpots.length };
-    case "itineraries":
-      return { contents: fallbackItineraries as T[], totalCount: fallbackItineraries.length, offset: 0, limit: fallbackItineraries.length };
-    case "articles":
+    case itineraryEndpoint:
+      return {
+        contents: fallbackItineraries as T[],
+        totalCount: fallbackItineraries.length,
+        offset: 0,
+        limit: fallbackItineraries.length
+      };
+    case articleEndpoint:
       return { contents: fallbackArticles as T[], totalCount: fallbackArticles.length, offset: 0, limit: fallbackArticles.length };
     case blogEndpoint:
       return { contents: fallbackBlogs as T[], totalCount: fallbackBlogs.length, offset: 0, limit: fallbackBlogs.length };
@@ -151,9 +159,9 @@ function normalizeBlogEntry(entry: BlogLike): Blog {
 
 function getFallbackDetail<T>(endpoint: string, contentId: string) {
   const fallbackMap: Record<string, FallbackEntity[]> = {
-    spots: fallbackSpots,
-    itineraries: fallbackItineraries,
-    articles: fallbackArticles,
+    [spotEndpoint]: fallbackSpots,
+    [itineraryEndpoint]: fallbackItineraries,
+    [articleEndpoint]: fallbackArticles,
     [blogEndpoint]: fallbackBlogs
   };
   const match = fallbackMap[endpoint]?.find((item) => item.id === contentId || item.slug === contentId);
@@ -198,7 +206,7 @@ export async function getSpots(params: { lang?: Locale; area?: string; tags?: st
     .filter(Boolean)
     .join("[and]");
 
-  return safeGetList<Spot>("spots", {
+  return safeGetList<Spot>(spotEndpoint, {
     filters: filters || undefined,
     limit: params.limit ?? 24,
     orders: "-updatedAt"
@@ -207,12 +215,12 @@ export async function getSpots(params: { lang?: Locale; area?: string; tags?: st
 
 export async function getSpotDetail(slug: string, lang: Locale, draftKey?: string): Promise<Spot | undefined> {
   if (!client) {
-    return safeGetDetail<Spot>("spots", slug);
+    return safeGetDetail<Spot>(spotEndpoint, slug);
   }
 
   try {
     const data = await client.getList<Spot>({
-      endpoint: "spots",
+      endpoint: spotEndpoint,
       queries: {
         filters: `slug[equals]${slug}[and]lang[equals]${lang}`,
         limit: 1,
@@ -223,7 +231,7 @@ export async function getSpotDetail(slug: string, lang: Locale, draftKey?: strin
     return data.contents[0];
   } catch (error) {
     console.warn(`[microCMS] Falling back to mock spot detail for slug=${slug}`, error);
-    return safeGetDetail<Spot>("spots", slug);
+    return safeGetDetail<Spot>(spotEndpoint, slug);
   }
 }
 
@@ -235,7 +243,7 @@ export async function getItineraries(params: { lang?: Locale; audienceTag?: stri
     .filter(Boolean)
     .join("[and]");
 
-  return safeGetList<Itinerary>("itineraries", {
+  return safeGetList<Itinerary>(itineraryEndpoint, {
     filters: filters || undefined,
     limit: params.limit ?? 5,
     orders: "-updatedAt"
@@ -250,7 +258,7 @@ export async function getArticles(params: { lang?: Locale; type?: string; limit?
     .filter(Boolean)
     .join("[and]");
 
-  return safeGetList<Article>("articles", {
+  return safeGetList<Article>(articleEndpoint, {
     filters: filters || undefined,
     limit: params.limit ?? 12,
     q: params.q,
