@@ -43,7 +43,8 @@ export async function POST(request: Request) {
     return NextResponse.json({ url: session.url, sessionId: session.id });
   } catch (error) {
     console.error("Stripe checkout session error", error);
-    return NextResponse.json({ error: "Failed to create checkout session" }, { status: 500 });
+    const message = error instanceof Error ? error.message : "Failed to create checkout session";
+    return NextResponse.json({ error: message }, { status: 500 });
   }
 }
 
@@ -81,6 +82,7 @@ export async function GET(request: Request) {
     return NextResponse.redirect(session.url, { status: 303 });
   } catch (error) {
     console.error("Stripe checkout redirect error", error);
-    return NextResponse.json({ error: "Failed to create checkout session" }, { status: 500 });
+    const message = error instanceof Error ? error.message : "Failed to create checkout session";
+    return NextResponse.json({ error: message }, { status: 500 });
   }
 }

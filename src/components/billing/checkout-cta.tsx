@@ -19,17 +19,17 @@ export function BillingCheckoutCTA() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email: email.trim() })
       });
+      const data = await res.json().catch(() => ({}));
       if (!res.ok) {
-        throw new Error("Failed to create checkout session");
+        throw new Error((data as { error?: string }).error ?? "Failed to create checkout session");
       }
-      const data = await res.json();
       if (!data.url) {
         throw new Error("Missing checkout URL");
       }
       window.location.href = data.url as string;
     } catch (error) {
       console.error("Checkout start failed", error);
-      toast("決済ページの生成に失敗しました");
+      toast(error instanceof Error ? error.message : "決済ページの生成に失敗しました");
     } finally {
       setLoading(false);
     }
