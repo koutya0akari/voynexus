@@ -1,6 +1,14 @@
 import { createClient, type MicroCMSQueries } from "microcms-js-sdk";
 import type { Locale } from "@/lib/i18n";
-import type { Article, Blog, EventContent, GlobalSettings, Itinerary, Spot, Sponsor } from "@/lib/types/cms";
+import type {
+  Article,
+  Blog,
+  EventContent,
+  GlobalSettings,
+  Itinerary,
+  Spot,
+  Sponsor,
+} from "@/lib/types/cms";
 
 const serviceDomain = process.env.MICROCMS_SERVICE_DOMAIN;
 const apiKey = process.env.MICROCMS_API_KEY;
@@ -30,16 +38,16 @@ const fallbackSpots: Spot[] = [
     access: {
       busLine: "徳島バス",
       stop: "鳴門公園",
-      lastBusTime: "18:10"
+      lastBusTime: "18:10",
     },
     accessibility: {
       stepFree: true,
-      stroller: true
+      stroller: true,
     },
     mapLink: "https://maps.google.com/?q=naruto+whirlpool",
     images: [{ url: "/sample/naruto.png", alt: "鳴門の渦潮" }],
-    lastVerifiedAt: new Date().toISOString()
-  }
+    lastVerifiedAt: new Date().toISOString(),
+  },
 ];
 
 const fallbackItineraries: Itinerary[] = [
@@ -60,14 +68,14 @@ const fallbackItineraries: Itinerary[] = [
     transport: "bus",
     timeline: [
       { time: "09:00", spotRef: "museum", stayMin: 60, moveMin: 20, note: "ワークショップ参加" },
-      { time: "11:00", spotRef: "naruto-whirlpool", stayMin: 90, moveMin: 30 }
+      { time: "11:00", spotRef: "naruto-whirlpool", stayMin: 90, moveMin: 30 },
     ],
     alternatives: ["屋外公園"],
     foodToiletNotes: "館内に授乳室あり",
     warnings: ["最終バス 17:30 までに帰路へ"],
     links: [{ label: "PDF", url: "/sample/sample.pdf" }],
-    mapLink: "https://maps.google.com/?q=tokushima"
-  }
+    mapLink: "https://maps.google.com/?q=tokushima",
+  },
 ];
 
 const fallbackArticles: Article[] = [
@@ -84,8 +92,8 @@ const fallbackArticles: Article[] = [
     type: "guide",
     body: "<p>本文リッチテキスト</p>",
     heroImage: "/sample/awa.png",
-    related: ["naruto-whirlpool"]
-  }
+    related: ["naruto-whirlpool"],
+  },
 ];
 
 const fallbackBlogs: Blog[] = [
@@ -95,8 +103,8 @@ const fallbackBlogs: Blog[] = [
     title: "徳島トラベルブログを公開しました",
     publishedAt: new Date().toISOString(),
     category: { name: "お知らせ" },
-    body: "<p>徳島での旅のヒントやイベント情報を発信するブログをスタートしました。microCMSのブログAPIを有効化すれば、ここにCMSで管理した本文が表示されます。</p>"
-  }
+    body: "<p>徳島での旅のヒントやイベント情報を発信するブログをスタートしました。microCMSのブログAPIを有効化すれば、ここにCMSで管理した本文が表示されます。</p>",
+  },
 ];
 
 const fallbackSponsors: Sponsor[] = [
@@ -112,30 +120,50 @@ const fallbackSponsors: Sponsor[] = [
     publishedAt: new Date().toISOString(),
     tier: "A",
     asset: { url: "/sample/hotel.png", alt: "ホテルバナー" },
-  destinationUrl: "https://hotel.example.com?utm_source=voynexus_app&utm_medium=referral",
+    destinationUrl: "https://hotel.example.com?utm_source=voynexus_app&utm_medium=referral",
     positions: ["top", "spots"],
     activeFrom: new Date().toISOString(),
-    activeTo: new Date(new Date().setMonth(new Date().getMonth() + 1)).toISOString()
-  }
+    activeTo: new Date(new Date().setMonth(new Date().getMonth() + 1)).toISOString(),
+  },
 ];
 
 function getFallbackList<T>(endpoint: string, queries?: MicroCMSQueries) {
   switch (endpoint) {
     case spotEndpoint:
-      return { contents: fallbackSpots as T[], totalCount: fallbackSpots.length, offset: 0, limit: fallbackSpots.length };
+      return {
+        contents: fallbackSpots as T[],
+        totalCount: fallbackSpots.length,
+        offset: 0,
+        limit: fallbackSpots.length,
+      };
     case itineraryEndpoint:
       return {
         contents: fallbackItineraries as T[],
         totalCount: fallbackItineraries.length,
         offset: 0,
-        limit: fallbackItineraries.length
+        limit: fallbackItineraries.length,
       };
     case articleEndpoint:
-      return { contents: fallbackArticles as T[], totalCount: fallbackArticles.length, offset: 0, limit: fallbackArticles.length };
+      return {
+        contents: fallbackArticles as T[],
+        totalCount: fallbackArticles.length,
+        offset: 0,
+        limit: fallbackArticles.length,
+      };
     case blogEndpoint:
-      return { contents: fallbackBlogs as T[], totalCount: fallbackBlogs.length, offset: 0, limit: fallbackBlogs.length };
+      return {
+        contents: fallbackBlogs as T[],
+        totalCount: fallbackBlogs.length,
+        offset: 0,
+        limit: fallbackBlogs.length,
+      };
     case "sponsors":
-      return { contents: fallbackSponsors as T[], totalCount: fallbackSponsors.length, offset: 0, limit: fallbackSponsors.length };
+      return {
+        contents: fallbackSponsors as T[],
+        totalCount: fallbackSponsors.length,
+        offset: 0,
+        limit: fallbackSponsors.length,
+      };
     default:
       return { contents: [] as T[], totalCount: 0, offset: 0, limit: queries?.limit ?? 0 };
   }
@@ -153,7 +181,7 @@ function normalizeBlogEntry(entry: BlogLike): Blog {
   return {
     ...entry,
     body: entry.body ?? entry.content ?? "",
-    category: entry.category ? { ...entry.category, name: categoryName } : undefined
+    category: entry.category ? { ...entry.category, name: categoryName } : undefined,
   };
 }
 
@@ -162,14 +190,25 @@ function getFallbackDetail<T>(endpoint: string, contentId: string) {
     [spotEndpoint]: fallbackSpots,
     [itineraryEndpoint]: fallbackItineraries,
     [articleEndpoint]: fallbackArticles,
-    [blogEndpoint]: fallbackBlogs
+    [blogEndpoint]: fallbackBlogs,
   };
-  const match = fallbackMap[endpoint]?.find((item) => item.id === contentId || item.slug === contentId);
+  const match = fallbackMap[endpoint]?.find(
+    (item) => item.id === contentId || item.slug === contentId
+  );
   if (!match) {
     throw new Error(`Fallback ${endpoint} not found: ${contentId}`);
   }
   return match as T;
 }
+
+const cmsRevalidateSeconds = Number(process.env.MICROCMS_REVALIDATE_SECONDS ?? "60");
+const normalizedRevalidate =
+  Number.isFinite(cmsRevalidateSeconds) && cmsRevalidateSeconds > 0 ? cmsRevalidateSeconds : 60;
+const microCmsRequestInit = {
+  next: {
+    revalidate: normalizedRevalidate,
+  },
+};
 
 async function safeGetList<T>(endpoint: string, queries?: MicroCMSQueries) {
   if (!client) {
@@ -177,7 +216,7 @@ async function safeGetList<T>(endpoint: string, queries?: MicroCMSQueries) {
   }
 
   try {
-    return await client.getList<T>({ endpoint, queries });
+    return await client.getList<T>({ endpoint, queries, customRequestInit: microCmsRequestInit });
   } catch (error) {
     console.warn(`[microCMS] Falling back to mock data for ${endpoint}`, error);
     return getFallbackList<T>(endpoint, queries);
@@ -190,18 +229,28 @@ async function safeGetDetail<T>(endpoint: string, contentId: string, queries?: M
   }
 
   try {
-    return await client.getListDetail<T>({ endpoint, contentId, queries });
+    return await client.getListDetail<T>({
+      endpoint,
+      contentId,
+      queries,
+      customRequestInit: microCmsRequestInit,
+    });
   } catch (error) {
     console.warn(`[microCMS] Falling back to mock detail for ${endpoint}:${contentId}`, error);
     return getFallbackDetail<T>(endpoint, contentId);
   }
 }
 
-export async function getSpots(params: { lang?: Locale; area?: string; tags?: string[]; limit?: number }) {
+export async function getSpots(params: {
+  lang?: Locale;
+  area?: string;
+  tags?: string[];
+  limit?: number;
+}) {
   const filters = [
     params.lang ? `lang[equals]${params.lang}` : null,
     params.area ? `area[equals]${params.area}` : null,
-    params.tags?.length ? params.tags.map((tag) => `tags[contains]${tag}`).join("[and]") : null
+    params.tags?.length ? params.tags.map((tag) => `tags[contains]${tag}`).join("[and]") : null,
   ]
     .filter(Boolean)
     .join("[and]");
@@ -209,11 +258,15 @@ export async function getSpots(params: { lang?: Locale; area?: string; tags?: st
   return safeGetList<Spot>(spotEndpoint, {
     filters: filters || undefined,
     limit: params.limit ?? 24,
-    orders: "-updatedAt"
+    orders: "-updatedAt",
   });
 }
 
-export async function getSpotDetail(slug: string, lang: Locale, draftKey?: string): Promise<Spot | undefined> {
+export async function getSpotDetail(
+  slug: string,
+  lang: Locale,
+  draftKey?: string
+): Promise<Spot | undefined> {
   if (!client) {
     return safeGetDetail<Spot>(spotEndpoint, slug);
   }
@@ -224,8 +277,8 @@ export async function getSpotDetail(slug: string, lang: Locale, draftKey?: strin
       queries: {
         filters: `slug[equals]${slug}[and]lang[equals]${lang}`,
         limit: 1,
-        draftKey
-      }
+        draftKey,
+      },
     });
 
     return data.contents[0];
@@ -235,7 +288,11 @@ export async function getSpotDetail(slug: string, lang: Locale, draftKey?: strin
   }
 }
 
-export async function getArticleDetail(slug: string, lang: Locale, draftKey?: string): Promise<Article | undefined> {
+export async function getArticleDetail(
+  slug: string,
+  lang: Locale,
+  draftKey?: string
+): Promise<Article | undefined> {
   if (!client) {
     return safeGetDetail<Article>(articleEndpoint, slug);
   }
@@ -246,8 +303,8 @@ export async function getArticleDetail(slug: string, lang: Locale, draftKey?: st
       queries: {
         filters: `slug[equals]${slug}[and]lang[equals]${lang}`,
         limit: 1,
-        draftKey
-      }
+        draftKey,
+      },
     });
 
     return data.contents[0];
@@ -257,10 +314,14 @@ export async function getArticleDetail(slug: string, lang: Locale, draftKey?: st
   }
 }
 
-export async function getItineraries(params: { lang?: Locale; audienceTag?: string; limit?: number }) {
+export async function getItineraries(params: {
+  lang?: Locale;
+  audienceTag?: string;
+  limit?: number;
+}) {
   const filters = [
     params.lang ? `lang[equals]${params.lang}` : null,
-    params.audienceTag ? `audience_tags[contains]${params.audienceTag}` : null
+    params.audienceTag ? `audience_tags[contains]${params.audienceTag}` : null,
   ]
     .filter(Boolean)
     .join("[and]");
@@ -268,14 +329,19 @@ export async function getItineraries(params: { lang?: Locale; audienceTag?: stri
   return safeGetList<Itinerary>(itineraryEndpoint, {
     filters: filters || undefined,
     limit: params.limit ?? 5,
-    orders: "-updatedAt"
+    orders: "-updatedAt",
   });
 }
 
-export async function getArticles(params: { lang?: Locale; type?: string; limit?: number; q?: string }) {
+export async function getArticles(params: {
+  lang?: Locale;
+  type?: string;
+  limit?: number;
+  q?: string;
+}) {
   const filters = [
     params.lang ? `lang[equals]${params.lang}` : null,
-    params.type ? `type[equals]${params.type}` : null
+    params.type ? `type[equals]${params.type}` : null,
   ]
     .filter(Boolean)
     .join("[and]");
@@ -284,7 +350,7 @@ export async function getArticles(params: { lang?: Locale; type?: string; limit?
     filters: filters || undefined,
     limit: params.limit ?? 12,
     q: params.q,
-    orders: "-updatedAt"
+    orders: "-updatedAt",
   });
 }
 
@@ -292,11 +358,11 @@ export async function getBlogs(params?: { limit?: number; q?: string; order?: st
   const response = await safeGetList<Blog>(blogEndpoint, {
     limit: params?.limit ?? 10,
     q: params?.q,
-    orders: params?.order ?? "-publishedAt"
+    orders: params?.order ?? "-publishedAt",
   });
   return {
     ...response,
-    contents: response.contents.map((entry) => normalizeBlogEntry(entry as BlogLike))
+    contents: response.contents.map((entry) => normalizeBlogEntry(entry as BlogLike)),
   };
 }
 
@@ -313,21 +379,21 @@ export async function getBlogPost(contentId: string): Promise<Blog | null> {
 export async function getEvents(params: { lang?: Locale }) {
   return safeGetList<EventContent>("events", {
     filters: params.lang ? `lang[equals]${params.lang}` : undefined,
-    orders: "-updatedAt"
+    orders: "-updatedAt",
   });
 }
 
 export async function getSponsors(params: { position?: string; lang?: Locale }) {
   const filters = [
     params.lang ? `lang[equals]${params.lang}` : null,
-    params.position ? `positions[contains]${params.position}` : null
+    params.position ? `positions[contains]${params.position}` : null,
   ]
     .filter(Boolean)
     .join("[and]");
 
   return safeGetList<Sponsor>("sponsors", {
     filters: filters || undefined,
-    orders: "tier"
+    orders: "tier",
   });
 }
 
@@ -335,7 +401,7 @@ export async function getGlobals(): Promise<GlobalSettings | null> {
   if (!client) {
     return {
       disclaimer: "表示の料金等は変更になる場合があります。",
-      warnings: ["最終バスにはご注意ください"]
+      warnings: ["最終バスにはご注意ください"],
     };
   }
 
