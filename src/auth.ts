@@ -1,16 +1,26 @@
+import { createHash } from "node:crypto";
 import NextAuth from "next-auth";
 import { getServerSession, type NextAuthOptions, type Session } from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 import type { JWT } from "next-auth/jwt";
 
 const nextAuthSecret = process.env.NEXTAUTH_SECRET ?? process.env.MEMBERSHIP_TOKEN_SECRET;
-const resolvedSecret =
-  nextAuthSecret ??
-  (process.env.NODE_ENV === "development" ? "development-nextauth-secret" : undefined);
-
 const hasGoogleCredentials = Boolean(
   process.env.GOOGLE_CLIENT_ID && process.env.GOOGLE_CLIENT_SECRET
 );
+
+const derivedSecret =
+  !nextAuthSecret && hasGoogleCredentials
+    ? createHash("sha256")
+        .update(`${process.env.GOOGLE_CLIENT_ID}:${process.env.GOOGLE_CLIENT_SECRET}`)
+        .digest("hex")
+    : undefined;
+
+const resolvedSecret =
+  nextAuthSecret ??
+  derivedSecret ??
+  (process.env.NODE_ENV === "development" ? "development-nextauth-secret" : undefined);
+
 const authEnabled = Boolean(resolvedSecret && hasGoogleCredentials);
 
 if (!authEnabled) {
@@ -27,6 +37,8 @@ if (!authEnabled) {
   );
 } else if (!process.env.NEXTAUTH_SECRET && process.env.MEMBERSHIP_TOKEN_SECRET) {
   console.warn("NEXTAUTH_SECRET is missing; falling back to MEMBERSHIP_TOKEN_SECRET for NextAuth.");
+} else if (!process.env.NEXTAUTH_SECRET && derivedSecret) {
+  console.warn("NEXTAUTH_SECRET is missing; deriving a secret from the Google OAuth credentials.");
 }
 
 export const authOptions: NextAuthOptions | null = authEnabled
