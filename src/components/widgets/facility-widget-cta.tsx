@@ -9,7 +9,7 @@ type Props = {
 
 export function FacilityWidgetCTA({ locale }: Props) {
   const [copied, setCopied] = useState(false);
-  const snippet = `<script src="${process.env.NEXT_PUBLIC_SITE_URL ?? "https://tokushima.example.com"}/widget.js" data-lang="${locale}" async></script>`;
+  const snippet = `<script src="${process.env.NEXT_PUBLIC_SITE_URL ?? "https://voynexus.com"}/widget.js" data-lang="${locale}" async></script>`;
 
   const copy = async () => {
     await navigator.clipboard.writeText(snippet);
@@ -38,7 +38,7 @@ export function FacilityWidgetCTA({ locale }: Props) {
             {copied ? "Copied!" : "コピー"}
           </button>
           <a
-            href="https://form.tokushima.example.com/widget-demo"
+            href="https://voynexus.com/widget-demo"
             target="_blank"
             rel="noreferrer"
             className="rounded-full border border-brand px-4 py-2 text-sm font-semibold text-brand"

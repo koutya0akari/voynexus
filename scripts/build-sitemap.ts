@@ -2,7 +2,7 @@ import fs from "node:fs/promises";
 import { getArticles, getItineraries, getSpots } from "../src/lib/cms";
 import { locales } from "../src/lib/i18n";
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://tokushima.example.com";
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://voynexus.com";
 
 async function main() {
   const chunks: string[] = [];

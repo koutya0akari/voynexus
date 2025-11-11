@@ -7,7 +7,7 @@ import { Toaster } from "@/components/toaster";
 import { ServiceWorkerRegister } from "@/components/pwa-register";
 import { AuthSessionProvider } from "@/components/providers/session-provider";
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://tokushima.example.com";
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://voynexus.com";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
@@ -36,8 +36,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    creator: "@tokushima_travel",
-    site: "@tokushima_travel"
+  creator: "@voynexus",
+  site: "@voynexus"
   },
   manifest: "/manifest.webmanifest",
   icons: {

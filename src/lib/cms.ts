@@ -112,7 +112,7 @@ const fallbackSponsors: Sponsor[] = [
     publishedAt: new Date().toISOString(),
     tier: "A",
     asset: { url: "/sample/hotel.png", alt: "ホテルバナー" },
-    destinationUrl: "https://hotel.example.com?utm_source=tokushima_app&utm_medium=referral",
+  destinationUrl: "https://hotel.example.com?utm_source=voynexus_app&utm_medium=referral",
     positions: ["top", "spots"],
     activeFrom: new Date().toISOString(),
     activeTo: new Date(new Date().setMonth(new Date().getMonth() + 1)).toISOString()

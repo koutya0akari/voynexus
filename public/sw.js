@@ -1,4 +1,4 @@
-const CACHE_NAME = "tokushima-pwa-v1";
+const CACHE_NAME = "voynexus-pwa-v1";
 const OFFLINE_ASSETS = ["/", "/manifest.webmanifest"];
 
 self.addEventListener("install", (event) => {
