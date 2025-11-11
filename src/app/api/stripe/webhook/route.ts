@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import type Stripe from "stripe";
-import { stripe } from "@/lib/stripe";
+import { getStripeForLivemode, stripe } from "@/lib/stripe";
 
 const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
 
@@ -33,9 +33,15 @@ export async function POST(request: Request) {
   if (event.type === "customer.subscription.created") {
     const subscription = event.data.object as Stripe.Subscription;
     const customerId = typeof subscription.customer === "string" ? subscription.customer : subscription.customer.id;
+    const client = getStripeForLivemode(event.livemode);
+
+    if (!client) {
+      console.error("Stripe client not available for webhook", { livemode: event.livemode });
+      return NextResponse.json({ error: "Stripe not configured" }, { status: 500 });
+    }
 
     try {
-      const customer = await stripe.customers.retrieve(customerId, { expand: ["subscriptions"] });
+      const customer = await client.customers.retrieve(customerId, { expand: ["subscriptions"] });
       return NextResponse.json({
         ok: true,
         eventId: event.id,
