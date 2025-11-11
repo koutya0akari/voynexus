@@ -5,11 +5,16 @@ import { toast } from "@/components/toaster";
 
 type Props = {
   locale: string;
+  widgetOrigin: string;
 };
 
-export function FacilityWidgetCTA({ locale }: Props) {
+export function FacilityWidgetCTA({ locale, widgetOrigin }: Props) {
   const [copied, setCopied] = useState(false);
-  const snippet = `<script src="${process.env.NEXT_PUBLIC_SITE_URL ?? "https://voynexus.com"}/widget.js" data-lang="${locale}" async></script>`;
+  const baseOrigin =
+    widgetOrigin && widgetOrigin.trim().length > 0 ? widgetOrigin : "https://voynexus.com";
+  const normalizedOrigin = baseOrigin.replace(/\/+$/, "");
+  const scriptSrc = `${normalizedOrigin}/widget.js`;
+  const snippet = `<script src="${scriptSrc}" data-lang="${locale}" async></script>`;
 
   const copy = async () => {
     await navigator.clipboard.writeText(snippet);
@@ -23,10 +28,13 @@ export function FacilityWidgetCTA({ locale }: Props) {
       <div className="flex flex-col gap-3">
         <div>
           <p className="text-sm uppercase text-brand">Facility Widget</p>
-          <h3 className="text-xl font-semibold text-slate-900">多言語AIウィジェットで問い合わせ削減</h3>
+          <h3 className="text-xl font-semibold text-slate-900">
+            多言語AIウィジェットで問い合わせ削減
+          </h3>
         </div>
         <p className="text-sm text-slate-600">
-          FAQ優先回答 / 予約リンク誘導 / NGワード検知→スタッフ連絡先表示 のフローを1つのスクリプトで。
+          FAQ優先回答 / 予約リンク誘導 / NGワード検知→スタッフ連絡先表示
+          のフローを1つのスクリプトで。
         </p>
         <code className="rounded-xl bg-slate-900/90 p-3 text-xs text-slate-100">{snippet}</code>
         <div className="flex gap-3">
