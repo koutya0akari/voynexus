@@ -13,8 +13,8 @@ const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://voynexus.com";
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {
-    default: "Voynex | 徳島トラベルOS",
-    template: "%s | Voynex",
+    default: "Voynexus | 徳島トラベルOS",
+    template: "%s | Voynexus",
   },
   description:
     "Voynexは徳島に特化したトラベルOS。microCMSで管理するスポット/記事/モデルコースとAIコンシェルジュを一つのPWAに統合。",
@@ -27,10 +27,10 @@ export const metadata: Metadata = {
     },
   },
   openGraph: {
-    title: "Voynex",
+    title: "Voynexus",
     description: "旅程生成・多言語記事・AIチャットを備えた徳島向けトラベルOS。",
     url: siteUrl,
-    siteName: "Voynex",
+    siteName: "Voynexus",
     images: [`${siteUrl}/og/default.svg`],
     locale: "ja_JP",
     type: "website",
