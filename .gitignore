@@ -8,7 +8,6 @@ node_modules
 dist
 coverage
 reports
-pnpm-lock.yaml
 data/embeddings.json
 *.log
 playwright-report
