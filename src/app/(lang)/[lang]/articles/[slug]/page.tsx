@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { getTranslations } from "next-intl/server";
-import { getArticles } from "@/lib/cms";
+import { getArticleDetail } from "@/lib/cms";
 import type { Locale } from "@/lib/i18n";
 import { sanitizeRichText } from "@/lib/sanitize";
 
@@ -10,8 +10,7 @@ type Props = {
 };
 
 async function fetchArticle(lang: Locale, slug: string) {
-  const { contents } = await getArticles({ lang, limit: 1, q: slug });
-  return contents.find((item) => item.slug === slug);
+  return getArticleDetail(slug, lang);
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {

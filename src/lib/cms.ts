@@ -235,6 +235,28 @@ export async function getSpotDetail(slug: string, lang: Locale, draftKey?: strin
   }
 }
 
+export async function getArticleDetail(slug: string, lang: Locale, draftKey?: string): Promise<Article | undefined> {
+  if (!client) {
+    return safeGetDetail<Article>(articleEndpoint, slug);
+  }
+
+  try {
+    const data = await client.getList<Article>({
+      endpoint: articleEndpoint,
+      queries: {
+        filters: `slug[equals]${slug}[and]lang[equals]${lang}`,
+        limit: 1,
+        draftKey
+      }
+    });
+
+    return data.contents[0];
+  } catch (error) {
+    console.warn(`[microCMS] Falling back to mock article detail for slug=${slug}`, error);
+    return safeGetDetail<Article>(articleEndpoint, slug);
+  }
+}
+
 export async function getItineraries(params: { lang?: Locale; audienceTag?: string; limit?: number }) {
   const filters = [
     params.lang ? `lang[equals]${params.lang}` : null,
