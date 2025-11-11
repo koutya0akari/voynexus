@@ -1,3 +1,5 @@
+export const revalidate = 300;
+
 import Link from "next/link";
 import type { Route } from "next";
 import { getTranslations } from "next-intl/server";
