@@ -3,7 +3,6 @@
 import { useState } from "react";
 import { toast } from "@/components/toaster";
 import { MembershipTokenBanner } from "@/components/membership/token-banner";
-import { getMembershipTokenFromStorage } from "@/lib/membership-client";
 import { locales } from "@/lib/i18n";
 
 type Message = {
@@ -33,10 +32,18 @@ export function AiChatPanel({ locale }: Props) {
     try {
       const response = await fetch("/api/ai/chat", {
         method: "POST",
-        headers: buildHeaders(),
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
         body: JSON.stringify({ lang: aiLang, userQuery: pending.content })
       });
-      if (!response.ok) throw new Error("failed");
+      if (!response.ok) {
+        if (response.status === 401) {
+          toast("GoogleアカウントでログインするとAIチャットを利用できます。");
+        } else if (response.status === 403) {
+          toast("この会員情報は別のGoogleアカウントに紐付いています。");
+        }
+        throw new Error("failed");
+      }
       const data = await response.json();
       setMessages((prev) => [
         ...prev,
@@ -134,15 +141,6 @@ export function AiChatPanel({ locale }: Props) {
       </div>
     </div>
   );
-}
-
-function buildHeaders(): HeadersInit {
-  const headers: HeadersInit = { "Content-Type": "application/json" };
-  const token = getMembershipTokenFromStorage();
-  if (token) {
-    headers.Authorization = `Bearer ${token}`;
-  }
-  return headers;
 }
 
 function saveConversation(messages: Message[], lang: string) {

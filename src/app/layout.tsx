@@ -1,9 +1,11 @@
 import type { Metadata, Viewport } from "next";
 import { Suspense } from "react";
 import "./globals.css";
+import { auth } from "@/auth";
 import { TrackingScript } from "@/components/tracking-script";
 import { Toaster } from "@/components/toaster";
 import { ServiceWorkerRegister } from "@/components/pwa-register";
+import { AuthSessionProvider } from "@/components/providers/session-provider";
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://tokushima.example.com";
 
@@ -48,7 +50,8 @@ export const viewport: Viewport = {
   themeColor: "#1f8ea8"
 };
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default async function RootLayout({ children }: { children: React.ReactNode }) {
+  const session = await auth();
   return (
     <html lang="ja">
       <body>
@@ -56,7 +59,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <TrackingScript />
         </Suspense>
         <ServiceWorkerRegister />
-        {children}
+        <AuthSessionProvider session={session}>{children}</AuthSessionProvider>
         <Toaster />
       </body>
     </html>

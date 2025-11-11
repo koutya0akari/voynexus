@@ -3,17 +3,34 @@
 import { useEffect, useState } from "react";
 import { clearMembershipToken, getMembershipTokenFromStorage, saveMembershipToken } from "@/lib/membership-client";
 
+const debugEnabled = process.env.NEXT_PUBLIC_MEMBERSHIP_DEBUG === "1";
+
 export function MembershipTokenBanner() {
   const [token, setToken] = useState("");
   const [status, setStatus] = useState<string | null>(null);
 
   useEffect(() => {
+    if (!debugEnabled) return;
     const existing = getMembershipTokenFromStorage();
     if (existing) {
       setToken(existing);
       setStatus("token-loaded");
     }
+    // debugEnabled is a build-time flag; safe to ignore exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  if (!debugEnabled) {
+    return (
+      <div className="mb-4 rounded-2xl border border-dashed border-brand/40 bg-white/80 p-4 text-sm text-slate-600">
+        <p className="font-semibold text-slate-900">会員ステータス</p>
+        <p className="text-xs text-slate-500">
+          会員トークンはサーバー側で安全に管理されています。Stripe決済が完了すると自動的に会員機能が有効化されます。
+        </p>
+        <p className="mt-2 text-xs text-slate-500">問題が発生した場合はサポートまでご連絡ください。</p>
+      </div>
+    );
+  }
 
   const handleSave = () => {
     if (!token.trim()) {
@@ -31,9 +48,9 @@ export function MembershipTokenBanner() {
   };
 
   return (
-    <div className="mb-4 rounded-2xl border border-dashed border-brand/40 bg-white/80 p-4 text-sm text-slate-600">
-      <p className="font-semibold text-slate-900">会員トークン</p>
-      <p className="text-xs text-slate-500">Stripe決済後に表示されるカスタマーIDを貼り付けるとAI機能を解放できます。</p>
+    <div className="mb-4 rounded-2xl border border-dashed border-emerald-300 bg-emerald-50/80 p-4 text-sm text-slate-600">
+      <p className="font-semibold text-slate-900">管理者用: 会員トークン管理</p>
+      <p className="text-xs text-slate-500">開発・検証のためにのみ使用してください。エンドユーザーには表示されません。</p>
       <div className="mt-3 flex flex-col gap-2 sm:flex-row">
         <input
           type="password"

@@ -40,7 +40,7 @@ export async function retrieveSessionWithFallback(sessionId: string) {
   let lastError: unknown;
   for (const client of clients) {
     try {
-      return await client.checkout.sessions.retrieve(sessionId, { expand: ["line_items"] });
+      return await client.checkout.sessions.retrieve(sessionId, { expand: ["line_items", "subscription"] });
     } catch (error) {
       lastError = error;
     }

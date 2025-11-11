@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import type Stripe from "stripe";
+import { updateMembershipPeriod } from "@/lib/membership-store";
 import { getStripeForLivemode, stripe } from "@/lib/stripe";
 
 const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
@@ -42,6 +43,17 @@ export async function POST(request: Request) {
 
     try {
       const customer = await client.customers.retrieve(customerId, { expand: ["subscriptions"] });
+      const periodStart = (subscription as Stripe.Subscription & { current_period_start?: number | null })
+        .current_period_start;
+      const periodEnd = (subscription as Stripe.Subscription & { current_period_end?: number | null })
+        .current_period_end;
+      if (periodStart && periodEnd) {
+        await updateMembershipPeriod(
+          customerId,
+          new Date(periodStart * 1000),
+          new Date(periodEnd * 1000)
+        );
+      }
       return NextResponse.json({
         ok: true,
         eventId: event.id,
@@ -53,6 +65,20 @@ export async function POST(request: Request) {
       console.error("Failed to fetch customer for subscription", error);
       return NextResponse.json({ error: "Failed to fetch customer" }, { status: 500 });
     }
+  }
+
+  if (event.type === "invoice.payment_succeeded") {
+    const invoice = event.data.object as Stripe.Invoice;
+    const customerId = typeof invoice.customer === "string" ? invoice.customer : invoice.customer?.id;
+    if (customerId) {
+      const period = invoice.lines.data[0]?.period ?? (invoice.period_start && invoice.period_end
+        ? { start: invoice.period_start, end: invoice.period_end }
+        : undefined);
+      if (period?.start && period?.end) {
+        await updateMembershipPeriod(customerId, new Date(period.start * 1000), new Date(period.end * 1000));
+      }
+    }
+    return NextResponse.json({ ok: true, received: event.type });
   }
 
   return NextResponse.json({ ok: true, received: event.type });

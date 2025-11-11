@@ -5,6 +5,7 @@ import { useTranslations } from "next-intl";
 import type { Route } from "next";
 import type { Locale } from "@/lib/i18n";
 import { LangSwitcher } from "./lang-switcher";
+import { UserMenu } from "./user-menu";
 
 type Props = {
   locale: Locale;
@@ -55,6 +56,7 @@ export function MainNav({ locale }: Props) {
               {t("cta.planTrip")}
             </Link>
             <LangSwitcher current={locale} />
+            <UserMenu />
           </div>
         </div>
         <div className="mt-2 hidden items-center gap-3 text-xs text-slate-500 md:flex">

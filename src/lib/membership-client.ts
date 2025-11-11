@@ -1,15 +1,15 @@
 const STORAGE_KEY = "voynex_membership_token";
-const publicFallback = process.env.NEXT_PUBLIC_MEMBERSHIP_TOKEN ?? null;
+const DEBUG_ENABLED = process.env.NEXT_PUBLIC_MEMBERSHIP_DEBUG === "1";
 
 export function getMembershipTokenFromStorage(): string | null {
-  if (typeof window === "undefined") {
-    return publicFallback;
+  if (!DEBUG_ENABLED || typeof window === "undefined") {
+    return null;
   }
-  return localStorage.getItem(STORAGE_KEY) ?? publicFallback;
+  return localStorage.getItem(STORAGE_KEY);
 }
 
 export function saveMembershipToken(token: string) {
-  if (typeof window === "undefined") return;
+  if (!DEBUG_ENABLED || typeof window === "undefined") return;
   localStorage.setItem(STORAGE_KEY, token);
   fetch("/api/membership/token", {
     method: "POST",
@@ -19,6 +19,6 @@ export function saveMembershipToken(token: string) {
 }
 
 export function clearMembershipToken() {
-  if (typeof window === "undefined") return;
+  if (!DEBUG_ENABLED || typeof window === "undefined") return;
   localStorage.removeItem(STORAGE_KEY);
 }

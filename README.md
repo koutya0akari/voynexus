@@ -39,9 +39,9 @@ pnpm dev
 
 ### 必須環境変数
 
-`MICROCMS_SERVICE_DOMAIN`, `MICROCMS_API_KEY`, `PREVIEW_SECRET`, `REVALIDATE_SECRET`, `NEXT_PUBLIC_SITE_URL`, `OPENAI_API_KEY`, `SUPABASE_URL`, `SUPABASE_ANON_KEY`, `MAPBOX_ACCESS_TOKEN`, `OPENWEATHER_API_KEY`, `GA_MEASUREMENT_ID`, `MEMBERSHIP_TOKEN_SECRET`, `STRIPE_WEBHOOK_SECRET`, `STRIPE_SECRET_KEY` (本番), `STRIPE_TEST_SECRET_KEY` (テスト) (詳細は `.env.example`)
+`MICROCMS_SERVICE_DOMAIN`, `MICROCMS_API_KEY`, `PREVIEW_SECRET`, `REVALIDATE_SECRET`, `NEXT_PUBLIC_SITE_URL`, `OPENAI_API_KEY`, `SUPABASE_URL`, `SUPABASE_ANON_KEY`, `SUPABASE_SERVICE_ROLE_KEY`, `MAPBOX_ACCESS_TOKEN`, `OPENWEATHER_API_KEY`, `GA_MEASUREMENT_ID`, `MEMBERSHIP_TOKEN_SECRET`, `MEMBERSHIP_TEST_TOKEN`, `STRIPE_WEBHOOK_SECRET`, `STRIPE_SECRET_KEY` (本番), `STRIPE_TEST_SECRET_KEY` (テスト), `NEXTAUTH_SECRET`, `NEXTAUTH_URL`, `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET` (詳細は `.env.example`)
 
-AI機能は課金済み会員のみ利用できるように、`MEMBERSHIP_API_URL` / `MEMBERSHIP_API_KEY` で会員サイトの検証APIを設定します。会員サイトがまだ無い場合は `MEMBERSHIP_TEST_TOKEN` を設定し、開発中は `Authorization: Bearer <token>` あるいは `X-Membership-Token: <token>` を付与して `/api/ai/chat` / `/api/ai/itinerary` を呼び出してください。本番では会員サイト側で発行したセッション/トークンを同じヘッダーで付与するだけでゲートが機能します。
+AI機能はStripeサブスクリプションに加えてGoogleログイン済みであることを条件に解放されます。`pnpm dev` 前に Supabase に `memberships` テーブル（`google_user_id`, `stripe_customer_id`, `last_payment_at`, `membership_expires_at` など）を作成し、`SUPABASE_SERVICE_ROLE_KEY` を設定してください。Stripe決済完了ページ `/billing/success` ではログイン中のGoogleアカウントとStripeカスタマーIDが自動的にリンクされ、会員トークンはHTTP-onlyクッキーとして保存されます。AIチャット・旅程生成はログイン状態で `fetch(..., { credentials: "include" })` を行うだけで会員判定が通ります。ローカル開発でStripe連携をスキップしたい場合は `MEMBERSHIP_TEST_TOKEN` を設定し、`NEXT_PUBLIC_MEMBERSHIP_DEBUG=1` を付与すると管理者用の手動入力UIを表示できます。
 
 ## スクリプト
 

@@ -3,7 +3,6 @@
 import { useState } from "react";
 import { toast } from "@/components/toaster";
 import { MembershipTokenBanner } from "@/components/membership/token-banner";
-import { getMembershipTokenFromStorage } from "@/lib/membership-client";
 import { locales } from "@/lib/i18n";
 
 type PlannerInput = {
@@ -55,10 +54,16 @@ export function ItineraryPlanner({ locale }: { locale: string }) {
     try {
       const response = await fetch("/api/ai/itinerary", {
         method: "POST",
-        headers: buildHeaders(),
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
         body: JSON.stringify({ lang: aiLang, ...input })
       });
       if (!response.ok) {
+        if (response.status === 401) {
+          toast("Googleアカウントでログインすると旅程生成を利用できます。");
+        } else if (response.status === 403) {
+          toast("この会員情報は別のGoogleアカウントに紐付いています。");
+        }
         throw new Error("Failed to generate");
       }
       const data = await response.json();
@@ -225,15 +230,6 @@ export function ItineraryPlanner({ locale }: { locale: string }) {
       </div>
     </div>
   );
-}
-
-function buildHeaders(): HeadersInit {
-  const headers: HeadersInit = { "Content-Type": "application/json" };
-  const token = getMembershipTokenFromStorage();
-  if (token) {
-    headers.Authorization = `Bearer ${token}`;
-  }
-  return headers;
 }
 
 function saveItineraryResult(result: GeneratedItinerary, input: PlannerInput, lang: string) {
