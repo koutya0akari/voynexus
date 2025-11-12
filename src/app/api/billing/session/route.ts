@@ -15,10 +15,27 @@ export async function GET(request: Request) {
   try {
     const session = await retrieveSessionWithFallback(sessionId);
     const customer = session.customer;
-    const completed = session.status === "complete" && session.payment_status === "paid";
+    const paymentStatus = session.payment_status ?? "unpaid";
+    const paymentSettled = paymentStatus === "paid" || paymentStatus === "no_payment_required";
+    const completed = session.status === "complete" && paymentSettled;
 
     if (!completed || !customer) {
-      return NextResponse.json({ pending: true }, { status: 202 });
+      const pendingReason = !customer
+        ? "missing-customer"
+        : paymentSettled
+          ? "session-incomplete"
+          : "payment-incomplete";
+      return NextResponse.json(
+        {
+          pending: true,
+          pendingReason,
+          sessionStatus: session.status,
+          paymentStatus,
+          customerPresent: Boolean(customer),
+          sessionId,
+        },
+        { status: 202 }
+      );
     }
     const customerId = typeof customer === "string" ? customer : customer.id;
     const lineItems = session.line_items?.data?.map((item) => ({
@@ -26,7 +43,7 @@ export async function GET(request: Request) {
       quantity: item.quantity,
       amountSubtotal: item.amount_subtotal,
       amountTotal: item.amount_total,
-      currency: item.currency
+      currency: item.currency,
     }));
 
     const token = createMembershipToken(customerId);
@@ -43,10 +60,12 @@ export async function GET(request: Request) {
             ? (session.subscription as Stripe.Subscription)
             : null;
         if (subscription) {
-          const periodStart = (subscription as Stripe.Subscription & { current_period_start?: number | null })
-            .current_period_start;
-          const periodEnd = (subscription as Stripe.Subscription & { current_period_end?: number | null })
-            .current_period_end;
+          const periodStart = (
+            subscription as Stripe.Subscription & { current_period_start?: number | null }
+          ).current_period_start;
+          const periodEnd = (
+            subscription as Stripe.Subscription & { current_period_end?: number | null }
+          ).current_period_end;
           if (periodStart) {
             lastPaymentAt = new Date(periodStart * 1000);
           }
@@ -60,7 +79,7 @@ export async function GET(request: Request) {
           email: sessionUser.user.email,
           stripeCustomerId: customerId,
           lastPaymentAt,
-          membershipExpiresAt
+          membershipExpiresAt,
         });
         linkStatus = result;
       } else {
@@ -75,7 +94,10 @@ export async function GET(request: Request) {
       amountTotal: session.amount_total,
       currency: session.currency,
       lineItems,
-      linkStatus
+      linkStatus,
+      sessionStatus: session.status,
+      paymentStatus,
+      livemode: session.livemode,
     });
     response.cookies.set({
       name: "membership_token",
@@ -84,7 +106,7 @@ export async function GET(request: Request) {
       secure: secureCookie,
       sameSite: "lax",
       path: "/",
-      maxAge: 60 * 60 * 24 * 90
+      maxAge: 60 * 60 * 24 * 90,
     });
     return response;
   } catch (error) {
@@ -95,7 +117,7 @@ export async function GET(request: Request) {
       const response = NextResponse.json({
         customerId: "test-customer",
         fallback: true,
-        linkStatus: "skipped"
+        linkStatus: "skipped",
       });
       response.cookies.set({
         name: "membership_token",
@@ -104,10 +126,15 @@ export async function GET(request: Request) {
         secure: secureCookie,
         sameSite: "lax",
         path: "/",
-        maxAge: 60 * 60 * 24 * 30
+        maxAge: 60 * 60 * 24 * 30,
       });
       return response;
     }
-    return NextResponse.json({ error: "Failed to fetch session" }, { status: 500 });
+    const detail = error instanceof Error ? error.message : "Unknown error";
+    const code =
+      typeof error === "object" && error && "code" in error
+        ? String((error as { code?: unknown }).code)
+        : undefined;
+    return NextResponse.json({ error: "Failed to fetch session", detail, code }, { status: 500 });
   }
 }
