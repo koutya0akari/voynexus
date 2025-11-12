@@ -3,7 +3,6 @@ module.exports = {
   root: true,
   parser: "@typescript-eslint/parser",
   parserOptions: {
-    project: "./tsconfig.json",
     tsconfigRootDir: __dirname
   },
   plugins: ["@typescript-eslint"],
@@ -17,5 +16,20 @@ module.exports = {
       }
     ],
     "@typescript-eslint/explicit-function-return-type": "off"
-  }
+  },
+  overrides: [
+    {
+      files: ["**/*.{ts,tsx,mts,cts}"],
+      parserOptions: {
+        project: "./tsconfig.json"
+      }
+    },
+    {
+      files: ["public/**/*.js"],
+      env: {
+        browser: true,
+        worker: true
+      }
+    }
+  ]
 };
