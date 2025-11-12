@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef } from "react";
 import { signIn, signOut, useSession } from "next-auth/react";
 import clsx from "clsx";
 
@@ -12,42 +12,21 @@ type Props = {
 
 export function UserMenu({ variant = "inline" }: Props) {
   const { data, status } = useSession();
-  const [syncState, setSyncState] = useState<"idle" | "syncing" | "done" | "error">("idle");
-  const [syncMessage, setSyncMessage] = useState<string | null>(null);
+  const syncAttemptedRef = useRef(false);
 
   useEffect(() => {
     if (!data?.user?.id) {
-      setSyncState("idle");
-      setSyncMessage(null);
+      syncAttemptedRef.current = false;
       return;
     }
-    if (syncState !== "idle") {
+    if (syncAttemptedRef.current) {
       return;
     }
-    let cancelled = false;
-    setSyncState("syncing");
-    fetch("/api/membership/sync", { method: "POST", credentials: "include" })
-      .then(async (res) => {
-        if (!res.ok) {
-          const body = await res.json().catch(() => null);
-          const message = body?.error ?? "会員情報の同期に失敗しました。";
-          throw new Error(message);
-        }
-        if (!cancelled) {
-          setSyncState("done");
-          setSyncMessage(null);
-        }
-      })
-      .catch((error) => {
-        if (!cancelled) {
-          setSyncState("error");
-          setSyncMessage(error instanceof Error ? error.message : "会員情報の同期に失敗しました。");
-        }
-      });
-    return () => {
-      cancelled = true;
-    };
-  }, [data?.user?.id, syncState]);
+    syncAttemptedRef.current = true;
+    fetch("/api/membership/sync", { method: "POST", credentials: "include" }).catch((error) => {
+      console.warn("membership sync failed (non-blocking)", error);
+    });
+  }, [data?.user?.id]);
 
   if (status === "loading") {
     return (
@@ -85,12 +64,6 @@ export function UserMenu({ variant = "inline" }: Props) {
             {data.user.email ?? data.user.name ?? "Signed in"}
           </p>
         </div>
-        {syncState === "syncing" && (
-          <p className="text-xs text-slate-500">会員情報を同期しています...</p>
-        )}
-        {syncState === "error" && syncMessage ? (
-          <p className="text-xs text-rose-500">{syncMessage}</p>
-        ) : null}
         <button
           type="button"
           onClick={() => signOut({ callbackUrl: "/" })}
@@ -107,10 +80,6 @@ export function UserMenu({ variant = "inline" }: Props) {
       <span className="hidden text-xs text-slate-500 sm:inline">
         {data.user.email ?? "ログイン中"}
       </span>
-      {syncState === "syncing" && <span className="text-[10px] text-slate-500">会員同期中...</span>}
-      {syncState === "error" && syncMessage ? (
-        <span className="text-[10px] text-rose-500">{syncMessage}</span>
-      ) : null}
       <button
         type="button"
         onClick={() => signOut({ callbackUrl: "/" })}
