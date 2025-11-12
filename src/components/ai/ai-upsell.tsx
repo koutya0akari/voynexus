@@ -1,4 +1,5 @@
 import Link from "next/link";
+import type { Route } from "next";
 import type { Locale } from "@/lib/i18n";
 import type { AiAccessDenied, AiAccessDeniedReason } from "@/lib/ai-access";
 import { BillingCheckoutCTA } from "@/components/billing/checkout-cta";
@@ -50,7 +51,7 @@ const benefits = [
 ];
 
 export function AiUpsell({ locale, denied }: Props) {
-  const membersHref = `/${locale}/members`;
+  const membersHref = `/${locale}/members` as Route;
   const loginReason = denied ? reasonCopy[denied.reason] : null;
 
   return (
