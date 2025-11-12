@@ -1,7 +1,7 @@
 {
   "hero": {
-    "title": "Voynezus 統整德島旅遊情報",
-    "description": "在同一個面板上檢視實地驗證的景點、編輯文章與 AI 旅程建議。"
+    "title": "用 Voynezus 規劃德島旅程",
+    "description": "旅客可在單一面板查看實地驗證的景點、AI 行程與 FAQ；品牌與設施能在路線上投放標註清楚的贊助內容。"
   },
   "cta": {
     "planTrip": "產生行程",
@@ -34,16 +34,16 @@
     "timeline": "時間表"
   },
   "widget": {
-    "title": "給設施使用的 AI 小工具",
-    "cta": "取得嵌入碼"
+    "title": "設施／廣告主 AI 小工具",
+    "cta": "索取投放資訊"
   },
   "footer": {
-    "disclaimer": "資訊可能變更，請以官方公告為準。"
+    "disclaimer": "Voynezus 提供旅遊資訊並清楚標示贊助內容。票價與營業時間仍以官方公告為準。"
   },
   "stats": {
     "title": "Voynezus 儀表板",
     "subtitle": "與 microCMS 即時同步",
-    "description": "所有卡片都可以在 microCMS 編輯並透過 ISR 立即更新。",
+    "description": "在同一個控制台管理旅客資訊與贊助內容，並即時發布到網站。",
     "spots": "已驗證景點",
     "spotsNote": "在地編輯審核",
     "articles": "專欄文章",

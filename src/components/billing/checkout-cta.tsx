@@ -38,10 +38,16 @@ export function BillingCheckoutCTA() {
   return (
     <div className="rounded-3xl border border-brand/40 bg-white/80 p-6 shadow-sm">
       <p className="text-xs uppercase text-brand">Voynezus Membership</p>
-      <h2 className="text-2xl font-semibold text-slate-900">AIコンシェルジュを開放</h2>
+      <h2 className="text-2xl font-semibold text-slate-900">旅人のためのAIパス</h2>
       <p className="text-sm text-slate-600">
-        メールを入力し決済に進むと、完了後に会員トークンが自動保存されます。
+        メールを入力して決済すると、AIチャット・旅程生成・オフラインPDFが解放されます。現地の混雑情報や
+        FAQもスポンサー表示を明示したうえで受け取れます。
       </p>
+      <ul className="mt-3 list-disc space-y-1 pl-5 text-sm text-slate-600">
+        <li>天候・潮汐・最終バスを考慮したAI旅程</li>
+        <li>スポットごとのオフラインメモ＆PDF</li>
+        <li>スポンサー特集や限定クーポンも一括管理</li>
+      </ul>
       <div className="mt-4 flex flex-col gap-3 sm:flex-row">
         <input
           type="email"
@@ -59,7 +65,9 @@ export function BillingCheckoutCTA() {
           {loading ? "処理中..." : "決済に進む"}
         </button>
       </div>
-      <p className="mt-2 text-xs text-slate-500">テスト中はStripeのテストカードで決済できます。</p>
+      <p className="mt-2 text-xs text-slate-500">
+        テスト中はStripeのテストカードを利用できます。広告掲載やタイアップのご相談はフッターからお問い合わせください。
+      </p>
     </div>
   );
 }

@@ -38,11 +38,11 @@ export function HeroSection({ locale, title, description, ctaPlan, ctaChat, clas
         </div>
       </div>
       <div className="flex-1 rounded-2xl bg-white/10 p-4 text-sm text-white/80">
-        <p className="font-semibold">Context-aware AI concierge</p>
+        <p className="font-semibold">Travel-ready AI concierge</p>
         <ul className="list-disc space-y-1 pl-5">
-          <li>Weather-aware itinerary generator</li>
-          <li>Offline-ready PDF & bookmarks</li>
-          <li>Facility widgets with escalation rules</li>
+          <li>Seasonal routes that react to weather, tides, and events</li>
+          <li>One-tap PDF packs with offline taxi / bus tips</li>
+          <li>Clearly labeled sponsor stories & facility widgets</li>
         </ul>
       </div>
     </section>

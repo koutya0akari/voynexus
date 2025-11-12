@@ -1,7 +1,7 @@
 {
   "hero": {
-    "title": "Voynezus: travel intelligence for Tokushima",
-    "description": "Monitor verified spots, editorial dispatches, and AI itineraries from one adaptive dashboard."
+    "title": "Design your Tokushima journey with Voynezus",
+    "description": "Travelers get vetted spots, AI itineraries, and FAQ answers in one dashboard while partners place clearly labeled sponsor content along every route."
   },
   "cta": {
     "planTrip": "Plan itinerary",
@@ -34,16 +34,16 @@
     "timeline": "Timeline"
   },
   "widget": {
-    "title": "AI widget for facilities",
-    "cta": "Get embed code"
+    "title": "AI widget for facilities & sponsors",
+    "cta": "Request ad placement kit"
   },
   "footer": {
-    "disclaimer": "Times and fees may change. Always confirm with the official source."
+    "disclaimer": "Voynezus shares traveler updates and clearly labeled sponsor content. Confirm prices and hours with official sources."
   },
   "stats": {
     "title": "Voynezus dashboard",
     "subtitle": "Live sync with microCMS",
-    "description": "Every card is editable in microCMS and refreshed via ISR.",
+    "description": "Manage traveler data and sponsored placements in one CMS-driven dashboard with instant publishing.",
     "spots": "Verified spots",
     "spotsNote": "curated by local editors",
     "articles": "Editorial posts",
