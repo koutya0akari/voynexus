@@ -1,8 +1,10 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
 import type { Route } from "next";
+import clsx from "clsx";
 import type { Locale } from "@/lib/i18n";
 import { LangSwitcher } from "./lang-switcher";
 import { UserMenu } from "./user-menu";
@@ -13,6 +15,7 @@ type Props = {
 
 export function MainNav({ locale }: Props) {
   const t = useTranslations();
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const primaryLinks: { href: Route; label: string }[] = [
     { href: `/${locale}` as Route, label: "Home" },
@@ -27,8 +30,16 @@ export function MainNav({ locale }: Props) {
     { href: `/${locale}/chat` as Route, label: t("cta.chat") },
     { href: `/${locale}/upgrade` as Route, label: "Membership" },
     { href: `/${locale}/contact` as Route, label: "Contact" },
-    { href: `/${locale}/blog` as Route, label: "Blog" },
   ];
+
+  const navItems: { href: Route; label: string }[] = [...primaryLinks];
+  secondaryLinks.forEach((item) => {
+    if (!navItems.find((entry) => entry.href === item.href)) {
+      navItems.push(item);
+    }
+  });
+
+  const handleMobileNavigate = () => setMobileMenuOpen(false);
 
   return (
     <header className="sticky top-0 z-40 border-b border-slate-100 bg-white/90 backdrop-blur">
@@ -62,8 +73,21 @@ export function MainNav({ locale }: Props) {
             >
               {t("cta.planTrip")}
             </Link>
-            <LangSwitcher current={locale} />
-            <UserMenu />
+            <div className="hidden md:block">
+              <LangSwitcher current={locale} />
+            </div>
+            <button
+              type="button"
+              onClick={() => setMobileMenuOpen((prev) => !prev)}
+              className="inline-flex items-center rounded-full border border-slate-200 px-3 py-1 text-xs font-semibold text-slate-600 md:hidden"
+              aria-expanded={mobileMenuOpen}
+              aria-label="Toggle navigation menu"
+            >
+              {mobileMenuOpen ? "メニューを閉じる" : "メニュー"}
+            </button>
+            <div className="hidden md:block">
+              <UserMenu />
+            </div>
           </div>
         </div>
         <div className="mt-2 hidden items-center gap-3 text-xs text-slate-500 md:flex">
@@ -78,16 +102,31 @@ export function MainNav({ locale }: Props) {
             </Link>
           ))}
         </div>
-        <div className="mt-3 flex flex-wrap gap-2 text-xs text-slate-500 md:hidden">
-          {[...primaryLinks, ...secondaryLinks].map((item) => (
-            <Link
-              key={item.href}
-              href={item.href}
-              className="rounded-full border border-slate-200 px-3 py-1"
-            >
-              {item.label}
-            </Link>
-          ))}
+        <div className={clsx("mt-4 flex-col gap-3 md:hidden", mobileMenuOpen ? "flex" : "hidden")}>
+          <div className="rounded-2xl border border-slate-200 bg-white p-3">
+            <p className="text-xs uppercase tracking-wide text-slate-400">Languages</p>
+            <div className="mt-2">
+              <LangSwitcher current={locale} />
+            </div>
+          </div>
+          <div className="space-y-2">
+            {navItems.map((item) => (
+              <Link
+                key={item.href}
+                href={item.href}
+                onClick={handleMobileNavigate}
+                className="block rounded-2xl border border-slate-200 px-4 py-3 text-sm font-semibold text-slate-700 shadow-sm"
+              >
+                {item.label}
+              </Link>
+            ))}
+          </div>
+          <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
+            <p className="text-xs uppercase tracking-wide text-slate-400">Account</p>
+            <div className="mt-3">
+              <UserMenu variant="block" />
+            </div>
+          </div>
         </div>
       </div>
     </header>
