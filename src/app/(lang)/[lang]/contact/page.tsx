@@ -6,9 +6,9 @@ export default function ContactPage() {
         AIの回答品質に関する通報、スポンサーに関するお問い合わせ、学生ライター応募は以下の連絡先までお願いいたします。
       </p>
       <ul className="space-y-2 text-sm text-slate-700">
-  <li>メール: info@voynexus.com</li>
-  <li>スポンサー: sponsor@voynexus.com</li>
-  <li>学生ライター: students@voynexus.com</li>
+        <li>メール: info@voynezusus.com</li>
+        <li>スポンサー: sponsor@voynezusus.com</li>
+        <li>学生ライター: students@voynezusus.com</li>
       </ul>
     </div>
   );

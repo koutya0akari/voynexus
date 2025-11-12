@@ -76,31 +76,31 @@ export async function generateChatResponse(payload: ChatPayload): Promise<ChatRe
     return {
       answer: `- ${docs[0]?.summary ?? "準備中"}`,
       references: docs.map((doc) => ({ title: doc.title, url: doc.url })),
-      warnings: ["OPENAI_API_KEY not configured. Returning fallback answer."]
+      warnings: ["OPENAI_API_KEY not configured. Returning fallback answer."],
     };
   }
 
   const prompt = [
-    "You are Voynex, a Tokushima tourism concierge.",
+    "You are Voynezus, a Tokushima tourism concierge.",
     "Follow safety rules: highlight official links, avoid speculation.",
     "Prioritize bullet answers and mention if data is unavailable.",
     `User context: ${payload.userContext ?? "N/A"}`,
-    `Documents: ${docs.map((doc) => `${doc.title}: ${doc.summary} (${doc.url})`).join("\n")}`
+    `Documents: ${docs.map((doc) => `${doc.title}: ${doc.summary} (${doc.url})`).join("\n")}`,
   ].join("\n\n");
 
   const completion = await client.responses.create({
     model: "gpt-4o-mini",
     input: [
       { role: "system", content: prompt },
-      { role: "user", content: payload.userQuery }
-    ]
+      { role: "user", content: payload.userQuery },
+    ],
   });
 
   const answer = extractOutputText(completion.output?.[0]) ?? "情報を取得できませんでした。";
 
   return {
     answer,
-    references: docs.map((doc) => ({ title: doc.title, url: doc.url }))
+    references: docs.map((doc) => ({ title: doc.title, url: doc.url })),
   };
 }
 
@@ -111,15 +111,15 @@ export async function generateItinerary(payload: ItineraryPayload) {
     return {
       timeline: [
         { time: payload.start, title: "徳島駅集合", duration: 30, note: "待ち合わせと注意事項" },
-        { time: "10:00", title: "鳴門の渦潮", duration: 120, note: "最終バス 17:30" }
+        { time: "10:00", title: "鳴門の渦潮", duration: 120, note: "最終バス 17:30" },
       ],
       warnings: ["OPENAI_API_KEY not configured. Returning mock itinerary."],
-      references: docs
+      references: docs,
     };
   }
 
   const prompt = [
-    "You are Voynex itineraries, a planner that only outputs strict JSON.",
+    "You are Voynezus itineraries, a planner that only outputs strict JSON.",
     "Return an object with 'timeline' (array of {time,title,duration,note}) and 'warnings' (array of strings).",
     "Durations are minutes, note is optional. Mention last bus / weather constraints in warnings if relevant.",
     `Travel window: ${payload.start} - ${payload.end}`,
@@ -128,7 +128,7 @@ export async function generateItinerary(payload: ItineraryPayload) {
     `Party: ${payload.party}`,
     `Weather: ${payload.weather}`,
     payload.tidesHint ? `Tides: ${payload.tidesHint}` : "",
-    `Docs: ${docs.map((doc) => `${doc.title}:${doc.summary}`).join("|")}`
+    `Docs: ${docs.map((doc) => `${doc.title}:${doc.summary}`).join("|")}`,
   ]
     .filter(Boolean)
     .join("\n");
@@ -140,14 +140,15 @@ export async function generateItinerary(payload: ItineraryPayload) {
       {
         role: "user",
         content:
-          "Respond with valid JSON only. Example: {\"timeline\":[{\"time\":\"09:00\",\"title\":\"Naruto Whirlpool\",\"duration\":120,\"note\":\"catch 11:30 bus\"}],\"warnings\":[\"Last bus 17:30\"]}."
-      }
-    ]
+          'Respond with valid JSON only. Example: {"timeline":[{"time":"09:00","title":"Naruto Whirlpool","duration":120,"note":"catch 11:30 bus"}],"warnings":["Last bus 17:30"]}.',
+      },
+    ],
   });
 
   const embeddedContent = extractOutputText(completion.output?.[0])?.trim();
   if (embeddedContent) {
-    const parsed = tryParseJson(embeddedContent) ?? tryParseJson(extractJsonPayload(embeddedContent));
+    const parsed =
+      tryParseJson(embeddedContent) ?? tryParseJson(extractJsonPayload(embeddedContent));
     if (parsed) {
       return { ...parsed, references: docs };
     }
@@ -157,6 +158,6 @@ export async function generateItinerary(payload: ItineraryPayload) {
   return {
     timeline: [],
     warnings: ["AI出力の解析に失敗しました。再試行してください。"],
-    references: docs
+    references: docs,
   };
 }

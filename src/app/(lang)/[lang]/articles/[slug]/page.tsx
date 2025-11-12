@@ -25,8 +25,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       title: article.title,
       description: article.summary,
       type: "article",
-      images: article.heroImage ? [article.heroImage] : undefined
-    }
+      images: article.heroImage ? [article.heroImage] : undefined,
+    },
   };
 }
 
@@ -53,14 +53,14 @@ export default async function ArticleDetailPage({ params }: Props) {
       <section className="prose max-w-none" dangerouslySetInnerHTML={{ __html: sanitizedBody }} />
       <aside className="rounded-2xl bg-slate-50 p-4 text-sm text-slate-600">
         <p className="font-semibold">UTM付与規約</p>
-  <p>utm_source=voynexus_app / utm_medium=referral / utm_campaign={article.slug}</p>
+        <p>utm_source=voynezusus_app / utm_medium=referral / utm_campaign={article.slug}</p>
       </aside>
       {article.ctaLinks?.length ? (
         <div className="flex flex-wrap gap-3">
           {article.ctaLinks.map((cta) => (
             <a
               key={cta.url}
-              href={`${cta.url}?utm_source=voynexus_app&utm_medium=referral&utm_campaign=${article.slug}`}
+              href={`${cta.url}?utm_source=voynezusus_app&utm_medium=referral&utm_campaign=${article.slug}`}
               className="rounded-full border border-brand px-4 py-2 text-sm font-semibold text-brand"
             >
               {cta.label}

@@ -9,16 +9,16 @@ import { ServiceWorkerRegister } from "@/components/pwa-register";
 import { AuthSessionProvider } from "@/components/providers/session-provider";
 import { ensureMembershipCookie } from "@/lib/membership-sync";
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://voynexus.com";
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://voynezusus.com";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {
-    default: "Voynexus | 徳島トラベルOS",
-    template: "%s | Voynexus",
+    default: "Voynezusus | 徳島トラベルOS",
+    template: "%s | Voynezusus",
   },
   description:
-    "Voynexは徳島に特化したトラベルOS。microCMSで管理するスポット/記事/モデルコースとAIコンシェルジュを一つのPWAに統合。",
+    "Voynezusは徳島に特化したトラベルOS。microCMSで管理するスポット/記事/モデルコースとAIコンシェルジュを一つのPWAに統合。",
   alternates: {
     canonical: "/",
     languages: {
@@ -28,18 +28,18 @@ export const metadata: Metadata = {
     },
   },
   openGraph: {
-    title: "Voynexus",
+    title: "Voynezusus",
     description: "旅程生成・多言語記事・AIチャットを備えた徳島向けトラベルOS。",
     url: siteUrl,
-    siteName: "Voynexus",
+    siteName: "Voynezusus",
     images: [`${siteUrl}/og/default.svg`],
     locale: "ja_JP",
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    creator: "@voynexus",
-    site: "@voynexus",
+    creator: "@voynezusus",
+    site: "@voynezusus",
   },
   manifest: "/manifest.webmanifest",
   icons: {

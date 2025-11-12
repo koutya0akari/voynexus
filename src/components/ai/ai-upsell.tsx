@@ -14,7 +14,7 @@ const reasonCopy: Record<AiAccessDeniedReason, { badge: string; description: str
   "not-logged-in": {
     badge: "ログインが必要です",
     description:
-      "VoynexのAI機能はGoogleアカウントでログインした状態でのみ利用できます。右上のログインボタン、もしくは下のボタンからサインインしてください。",
+      "VoynezusのAI機能はGoogleアカウントでログインした状態でのみ利用できます。右上のログインボタン、もしくは下のボタンからサインインしてください。",
   },
   "missing-token": {
     badge: "決済が未完了です",
@@ -57,7 +57,7 @@ export function AiUpsell({ locale, denied }: Props) {
   return (
     <div className="mx-auto max-w-5xl space-y-8 px-4 py-12">
       <section className="space-y-3 rounded-3xl border border-slate-200 bg-white/90 p-6 shadow-sm">
-        <p className="text-xs uppercase tracking-wide text-brand">Voynex Membership</p>
+        <p className="text-xs uppercase tracking-wide text-brand">Voynezus Membership</p>
         <h1 className="text-3xl font-semibold text-slate-900">AIコンシェルジュは会員限定です</h1>
         <p className="text-sm text-slate-600">
           {loginReason?.description ??

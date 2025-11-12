@@ -11,7 +11,7 @@ type Props = {
 export function FacilityWidgetCTA({ locale, widgetOrigin }: Props) {
   const [copied, setCopied] = useState(false);
   const baseOrigin =
-    widgetOrigin && widgetOrigin.trim().length > 0 ? widgetOrigin : "https://voynexus.com";
+    widgetOrigin && widgetOrigin.trim().length > 0 ? widgetOrigin : "https://voynezusus.com";
   const normalizedOrigin = baseOrigin.replace(/\/+$/, "");
   const scriptSrc = `${normalizedOrigin}/widget.js`;
   const snippet = `<script src="${scriptSrc}" data-lang="${locale}" async></script>`;
@@ -46,7 +46,7 @@ export function FacilityWidgetCTA({ locale, widgetOrigin }: Props) {
             {copied ? "Copied!" : "コピー"}
           </button>
           <a
-            href="https://voynexus.com/widget-demo"
+            href="https://voynezusus.com/widget-demo"
             target="_blank"
             rel="noreferrer"
             className="rounded-full border border-brand px-4 py-2 text-sm font-semibold text-brand"

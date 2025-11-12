@@ -2,7 +2,7 @@ import fs from "node:fs/promises";
 import { getArticles, getItineraries, getSpots } from "../src/lib/cms";
 import { locales } from "../src/lib/i18n";
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://voynexus.com";
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://voynezusus.com";
 
 async function main() {
   const chunks: string[] = [];
@@ -11,7 +11,7 @@ async function main() {
     const [spots, articles, itineraries] = await Promise.all([
       getSpots({ lang: locale, limit: 100 }),
       getArticles({ lang: locale, limit: 100 }),
-      getItineraries({ lang: locale, limit: 100 })
+      getItineraries({ lang: locale, limit: 100 }),
     ]);
     spots.contents.forEach((spot) =>
       chunks.push(`<url><loc>${siteUrl}/${locale}/spots/${spot.slug}</loc></url>`)

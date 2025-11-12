@@ -243,7 +243,7 @@ export default async function LocaleHome({ params }: Props) {
             </div>
             <div className="space-y-4">
               <div className="rounded-3xl border border-slate-200 bg-white/90 p-6 shadow-sm">
-                <p className="text-xs uppercase text-amber-600">Voynex Journey Desk</p>
+                <p className="text-xs uppercase text-amber-600">Voynezus Journey Desk</p>
                 <h3 className="text-2xl font-semibold text-slate-900">{t("cta.planTrip")}</h3>
                 <p className="mt-2 text-sm text-slate-600">{copy.plan}</p>
                 <div className="mt-4 flex flex-wrap gap-3">

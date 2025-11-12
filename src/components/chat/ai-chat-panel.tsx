@@ -34,7 +34,7 @@ export function AiChatPanel({ locale }: Props) {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         credentials: "include",
-        body: JSON.stringify({ lang: aiLang, userQuery: pending.content })
+        body: JSON.stringify({ lang: aiLang, userQuery: pending.content }),
       });
       if (!response.ok) {
         if (response.status === 401) {
@@ -47,7 +47,7 @@ export function AiChatPanel({ locale }: Props) {
       const data = await response.json();
       setMessages((prev) => [
         ...prev,
-        { id: crypto.randomUUID(), role: "assistant", content: data.answer as string }
+        { id: crypto.randomUUID(), role: "assistant", content: data.answer as string },
       ]);
       setReferences(data.references ?? []);
     } catch (error) {
@@ -78,18 +78,15 @@ export function AiChatPanel({ locale }: Props) {
         </div>
         <div className="space-y-3 overflow-auto rounded-2xl border border-slate-100 bg-white/50 p-4">
           {messages.map((message) => (
-            <div
-              key={message.id}
-              className={message.role === "user" ? "text-right" : "text-left"}
-            >
-            <p
-              className={`inline-block rounded-2xl px-3 py-2 text-sm ${
-                message.role === "user" ? "bg-brand text-white" : "bg-slate-100 text-slate-900"
-              }`}
-            >
-              {message.content}
-            </p>
-          </div>
+            <div key={message.id} className={message.role === "user" ? "text-right" : "text-left"}>
+              <p
+                className={`inline-block rounded-2xl px-3 py-2 text-sm ${
+                  message.role === "user" ? "bg-brand text-white" : "bg-slate-100 text-slate-900"
+                }`}
+              >
+                {message.content}
+              </p>
+            </div>
           ))}
           {loading && <p className="text-sm text-slate-400">AIが回答を生成中...</p>}
         </div>
@@ -132,7 +129,13 @@ export function AiChatPanel({ locale }: Props) {
           <div className="mt-4 space-y-1 text-xs text-slate-500">
             <p>参照した情報源</p>
             {references.map((ref) => (
-              <a key={ref.url} href={ref.url} target="_blank" rel="noreferrer" className="text-brand">
+              <a
+                key={ref.url}
+                href={ref.url}
+                target="_blank"
+                rel="noreferrer"
+                className="text-brand"
+              >
                 {ref.title}
               </a>
             ))}
@@ -146,10 +149,15 @@ export function AiChatPanel({ locale }: Props) {
 function saveConversation(messages: Message[], lang: string) {
   return () => {
     try {
-      const key = "voynex_chat_history";
+      const key = "voynezus_chat_history";
       const existingRaw = typeof window === "undefined" ? null : localStorage.getItem(key);
       const existing = existingRaw ? JSON.parse(existingRaw) : [];
-      existing.unshift({ id: crypto.randomUUID(), createdAt: new Date().toISOString(), lang, messages });
+      existing.unshift({
+        id: crypto.randomUUID(),
+        createdAt: new Date().toISOString(),
+        lang,
+        messages,
+      });
       if (existing.length > 30) existing.pop();
       localStorage.setItem(key, JSON.stringify(existing));
       toast("会話を保存しました");
@@ -167,14 +175,14 @@ async function downloadConversation(
 ) {
   setDownloading(true);
   try {
-    const content = [`Voynex Chat (${lang.toUpperCase()})`, ""].concat(
+    const content = [`Voynezus Chat (${lang.toUpperCase()})`, ""].concat(
       messages.map((message) => `${message.role === "user" ? "User" : "AI"}: ${message.content}`)
     );
     const blob = new Blob([content.join("\n")], { type: "text/plain" });
     const url = URL.createObjectURL(blob);
     const link = document.createElement("a");
     link.href = url;
-    link.download = "voynex-chat.txt";
+    link.download = "voynezus-chat.txt";
     link.click();
     URL.revokeObjectURL(url);
   } catch (error) {

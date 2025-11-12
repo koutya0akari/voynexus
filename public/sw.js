@@ -1,4 +1,4 @@
-const CACHE_NAME = "voynexus-pwa-v2";
+const CACHE_NAME = "voynezusus-pwa-v2";
 const OFFLINE_PAGE = "/";
 const OFFLINE_ASSETS = [OFFLINE_PAGE, "/manifest.webmanifest"];
 

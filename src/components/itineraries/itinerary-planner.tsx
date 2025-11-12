@@ -34,7 +34,7 @@ const defaultInput: PlannerInput = {
   budget: 5000,
   party: "family",
   interests: "culture,nature",
-  weather: "sunny"
+  weather: "sunny",
 };
 
 export function ItineraryPlanner({ locale }: { locale: string }) {
@@ -56,7 +56,7 @@ export function ItineraryPlanner({ locale }: { locale: string }) {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         credentials: "include",
-        body: JSON.stringify({ lang: aiLang, ...input })
+        body: JSON.stringify({ lang: aiLang, ...input }),
       });
       if (!response.ok) {
         if (response.status === 401) {
@@ -169,30 +169,30 @@ export function ItineraryPlanner({ locale }: { locale: string }) {
           type="button"
           className="mt-6 w-full rounded-full bg-brand px-4 py-3 font-semibold text-white disabled:opacity-60"
           onClick={generate}
-            disabled={loading}
-          >
-            {loading ? "生成中..." : "AIで旅程を生成"}
-          </button>
-          {result?.timeline?.length ? (
-            <div className="mt-4 flex flex-wrap gap-2 text-xs">
-              <button
-                type="button"
-                onClick={saveItineraryResult(result, input, aiLang)}
-                className="rounded-full border border-slate-200 px-4 py-2 font-semibold text-slate-600"
-              >
-                保存
-              </button>
-              <button
-                type="button"
-                onClick={() => downloadItineraryPdf(result, input, aiLang, setDownloading)}
-                className="rounded-full bg-slate-900 px-4 py-2 font-semibold text-white disabled:opacity-60"
-                disabled={downloading}
-              >
-                {downloading ? "生成中..." : "PDFとして保存"}
-              </button>
-            </div>
-          ) : null}
-        </div>
+          disabled={loading}
+        >
+          {loading ? "生成中..." : "AIで旅程を生成"}
+        </button>
+        {result?.timeline?.length ? (
+          <div className="mt-4 flex flex-wrap gap-2 text-xs">
+            <button
+              type="button"
+              onClick={saveItineraryResult(result, input, aiLang)}
+              className="rounded-full border border-slate-200 px-4 py-2 font-semibold text-slate-600"
+            >
+              保存
+            </button>
+            <button
+              type="button"
+              onClick={() => downloadItineraryPdf(result, input, aiLang, setDownloading)}
+              className="rounded-full bg-slate-900 px-4 py-2 font-semibold text-white disabled:opacity-60"
+              disabled={downloading}
+            >
+              {downloading ? "生成中..." : "PDFとして保存"}
+            </button>
+          </div>
+        ) : null}
+      </div>
       <div className="rounded-2xl border border-dashed border-brand/40 bg-slate-50/50 p-5">
         {loading && <p className="text-sm text-slate-500">AIが制約をチェック中...</p>}
         {!loading && !result && (
@@ -200,11 +200,11 @@ export function ItineraryPlanner({ locale }: { locale: string }) {
             営業時間・移動時間・最終バス・潮汐を考慮した旅程をここに表示します。生成後はPDF保存やURL共有が可能です。
           </p>
         )}
-            {result && (
-              <div className="space-y-3">
-                <h3 className="text-lg font-semibold text-slate-900">生成結果</h3>
-                <ul className="space-y-2 text-sm text-slate-700">
-                  {result.timeline?.map((item) => (
+        {result && (
+          <div className="space-y-3">
+            <h3 className="text-lg font-semibold text-slate-900">生成結果</h3>
+            <ul className="space-y-2 text-sm text-slate-700">
+              {result.timeline?.map((item) => (
                 <li key={item.time} className="rounded-xl bg-white p-3 shadow-sm">
                   <div className="flex items-center justify-between text-xs text-slate-500">
                     <span>{item.time}</span>
@@ -235,10 +235,16 @@ export function ItineraryPlanner({ locale }: { locale: string }) {
 function saveItineraryResult(result: GeneratedItinerary, input: PlannerInput, lang: string) {
   return () => {
     try {
-      const key = "voynex_itinerary_history";
+      const key = "voynezus_itinerary_history";
       const existingRaw = typeof window === "undefined" ? null : localStorage.getItem(key);
       const existing = existingRaw ? JSON.parse(existingRaw) : [];
-      existing.unshift({ id: crypto.randomUUID(), createdAt: new Date().toISOString(), lang, input, result });
+      existing.unshift({
+        id: crypto.randomUUID(),
+        createdAt: new Date().toISOString(),
+        lang,
+        input,
+        result,
+      });
       if (existing.length > 20) existing.pop();
       localStorage.setItem(key, JSON.stringify(existing));
       toast("ローカルに保存しました");
@@ -261,18 +267,18 @@ async function downloadItineraryPdf(
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        title: `Voynex itinerary (${lang.toUpperCase()})`,
+        title: `Voynezus itinerary (${lang.toUpperCase()})`,
         summary: `Transport: ${input.transport} / Party: ${input.party} / Budget: ¥${input.budget}`,
         timeline: result.timeline ?? [],
-        warnings: result.warnings ?? []
-      })
+        warnings: result.warnings ?? [],
+      }),
     });
     if (!response.ok) throw new Error("pdf");
     const blob = await response.blob();
     const url = URL.createObjectURL(blob);
     const link = document.createElement("a");
     link.href = url;
-    link.download = "voynex-itinerary.pdf";
+    link.download = "voynezus-itinerary.pdf";
     link.click();
     URL.revokeObjectURL(url);
   } catch (error) {

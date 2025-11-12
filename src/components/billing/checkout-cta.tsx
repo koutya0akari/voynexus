@@ -17,7 +17,7 @@ export function BillingCheckoutCTA() {
       const res = await fetch("/api/billing/checkout", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email: email.trim() })
+        body: JSON.stringify({ email: email.trim() }),
       });
       const data = await res.json().catch(() => ({}));
       if (!res.ok) {
@@ -37,9 +37,11 @@ export function BillingCheckoutCTA() {
 
   return (
     <div className="rounded-3xl border border-brand/40 bg-white/80 p-6 shadow-sm">
-      <p className="text-xs uppercase text-brand">Voynex Membership</p>
+      <p className="text-xs uppercase text-brand">Voynezus Membership</p>
       <h2 className="text-2xl font-semibold text-slate-900">AIコンシェルジュを開放</h2>
-      <p className="text-sm text-slate-600">メールを入力し決済に進むと、完了後に会員トークンが自動保存されます。</p>
+      <p className="text-sm text-slate-600">
+        メールを入力し決済に進むと、完了後に会員トークンが自動保存されます。
+      </p>
       <div className="mt-4 flex flex-col gap-3 sm:flex-row">
         <input
           type="email"

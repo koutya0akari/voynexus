@@ -1,6 +1,6 @@
 {
   "hero": {
-    "title": "Voynex 統整德島旅遊情報",
+    "title": "Voynezus 統整德島旅遊情報",
     "description": "在同一個面板上檢視實地驗證的景點、編輯文章與 AI 旅程建議。"
   },
   "cta": {
@@ -13,7 +13,7 @@
     "modelCourses": "經典行程",
     "events": "活動特輯",
     "blog": "旅遊部落格",
-    "navigator": "Voynex 導覽"
+    "navigator": "Voynezus 導覽"
   },
   "filters": {
     "title": "條件篩選",
@@ -41,7 +41,7 @@
     "disclaimer": "資訊可能變更，請以官方公告為準。"
   },
   "stats": {
-    "title": "Voynex 儀表板",
+    "title": "Voynezus 儀表板",
     "subtitle": "與 microCMS 即時同步",
     "description": "所有卡片都可以在 microCMS 編輯並透過 ISR 立即更新。",
     "spots": "已驗證景點",
@@ -54,7 +54,7 @@
     "eventsNote": "含雨天備案"
   },
   "feed": {
-    "title": "Voynex Feed",
+    "title": "Voynezus Feed",
     "subtitle": "今日重點一覽",
     "spotCard": "焦點景點",
     "itineraryCard": "代表行程",

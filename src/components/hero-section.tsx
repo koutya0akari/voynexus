@@ -19,7 +19,7 @@ export function HeroSection({ locale, title, description, ctaPlan, ctaChat, clas
       )}
     >
       <div className="flex-1 space-y-4">
-        <p className="text-sm uppercase tracking-wide">Voynex</p>
+        <p className="text-sm uppercase tracking-wide">Voynezus</p>
         <h1 className="text-3xl font-semibold md:text-4xl">{title}</h1>
         <p className="text-lg text-white/80">{description}</p>
         <div className="flex flex-wrap gap-3">

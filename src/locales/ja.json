@@ -1,6 +1,6 @@
 {
   "hero": {
-    "title": "Voynexで徳島の旅データを一元管理",
+    "title": "Voynezusで徳島の旅データを一元管理",
     "description": "現地で検証したスポット、編集記事、AI旅程をひとつのダッシュボードでチェックできます。"
   },
   "cta": {
@@ -13,7 +13,7 @@
     "modelCourses": "モデルコース",
     "events": "イベント特集",
     "blog": "トラベルブログ",
-    "navigator": "Voynexナビ"
+    "navigator": "Voynezusナビ"
   },
   "filters": {
     "title": "条件で探す",
@@ -41,7 +41,7 @@
     "disclaimer": "表示の料金・営業時間は変更になる可能性があります。最新情報は公式サイトをご確認ください。"
   },
   "stats": {
-    "title": "Voynex ダッシュボード",
+    "title": "Voynezus ダッシュボード",
     "subtitle": "microCMSとリアルタイム連携",
     "description": "すべてのカードはmicroCMS上で編集するとISRですぐに更新されます。",
     "spots": "検証済みスポット",
@@ -54,7 +54,7 @@
     "eventsNote": "雨天対応の催し"
   },
   "feed": {
-    "title": "Voynex Feed",
+    "title": "Voynezus Feed",
     "subtitle": "本日のクロスチャンネル・サマリー",
     "spotCard": "注目スポット",
     "itineraryCard": "代表コース",

@@ -2,7 +2,7 @@ import type { MetadataRoute } from "next";
 import { getArticles, getItineraries, getSpots } from "@/lib/cms";
 import { locales } from "@/lib/i18n";
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://voynexus.com";
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://voynezusus.com";
 
 const toDate = (value?: string) => (value ? new Date(value) : undefined);
 

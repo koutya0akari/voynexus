@@ -1,4 +1,4 @@
-const STORAGE_KEY = "voynex_membership_token";
+const STORAGE_KEY = "voynezus_membership_token";
 const DEBUG_ENABLED = process.env.NEXT_PUBLIC_MEMBERSHIP_DEBUG === "1";
 
 export function getMembershipTokenFromStorage(): string | null {
@@ -14,7 +14,7 @@ export function saveMembershipToken(token: string) {
   fetch("/api/membership/token", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ token })
+    body: JSON.stringify({ token }),
   }).catch((error) => console.error("Failed to sync membership cookie", error));
 }
 

@@ -1,6 +1,6 @@
 {
   "hero": {
-    "title": "Voynex: travel intelligence for Tokushima",
+    "title": "Voynezus: travel intelligence for Tokushima",
     "description": "Monitor verified spots, editorial dispatches, and AI itineraries from one adaptive dashboard."
   },
   "cta": {
@@ -13,7 +13,7 @@
     "modelCourses": "Model courses",
     "events": "Event spotlight",
     "blog": "Travel blog",
-    "navigator": "Voynex guide"
+    "navigator": "Voynezus guide"
   },
   "filters": {
     "title": "Filter",
@@ -41,7 +41,7 @@
     "disclaimer": "Times and fees may change. Always confirm with the official source."
   },
   "stats": {
-    "title": "Voynex dashboard",
+    "title": "Voynezus dashboard",
     "subtitle": "Live sync with microCMS",
     "description": "Every card is editable in microCMS and refreshed via ISR.",
     "spots": "Verified spots",
@@ -54,7 +54,7 @@
     "eventsNote": "rain-ready happenings"
   },
   "feed": {
-    "title": "Voynex feed",
+    "title": "Voynezus feed",
     "subtitle": "Today’s cross-channel snapshot",
     "spotCard": "Feature spot",
     "itineraryCard": "Signature itinerary",
