@@ -1,16 +1,33 @@
 import crypto from "crypto";
 
 const explicitSecret = process.env.MEMBERSHIP_TOKEN_SECRET;
-const fallbackSecret = !explicitSecret ? process.env.NEXTAUTH_SECRET : undefined;
-export const membershipTokenSecret = explicitSecret ?? fallbackSecret;
+const nextAuthSecret = process.env.NEXTAUTH_SECRET;
+const googleClientId = process.env.GOOGLE_CLIENT_ID;
+const googleClientSecret = process.env.GOOGLE_CLIENT_SECRET;
+const canDeriveFromGoogle = Boolean(googleClientId && googleClientSecret);
 
-if (!explicitSecret && fallbackSecret) {
+const derivedSecret =
+  !explicitSecret && !nextAuthSecret && canDeriveFromGoogle
+    ? crypto.createHash("sha256").update(`${googleClientId}:${googleClientSecret}`).digest("hex")
+    : undefined;
+
+const devFallback =
+  !explicitSecret && !nextAuthSecret && !derivedSecret && process.env.NODE_ENV !== "production"
+    ? "development-membership-token-secret"
+    : undefined;
+
+export const membershipTokenSecret =
+  explicitSecret ?? nextAuthSecret ?? derivedSecret ?? devFallback;
+
+if (!explicitSecret && nextAuthSecret) {
   console.warn(
     "MEMBERSHIP_TOKEN_SECRET is missing; falling back to NEXTAUTH_SECRET for membership tokens."
   );
-}
-
-if (!membershipTokenSecret) {
+} else if (!explicitSecret && derivedSecret) {
+  console.warn(
+    "MEMBERSHIP_TOKEN_SECRET/NEXTAUTH_SECRET are missing; deriving membership secret from Google OAuth credentials."
+  );
+} else if (!membershipTokenSecret) {
   console.error("MEMBERSHIP_TOKEN_SECRET is not configured and no fallback secret is available.");
 }
 
