@@ -1,20 +1,25 @@
 import type { Locale } from "@/lib/i18n";
 import { AiChatPanel } from "@/components/chat/ai-chat-panel";
+import { AiUpsell } from "@/components/ai/ai-upsell";
+import { getAiAccessStatus } from "@/lib/ai-access";
 
 type Props = {
   params: { lang: Locale };
   searchParams: { mode?: string };
 };
 
-export default function ChatPage({ params, searchParams }: Props) {
+export default async function ChatPage({ params, searchParams }: Props) {
   const isWidget = searchParams.mode === "widget";
+  const access = await getAiAccessStatus();
+
+  if (!access.ok) {
+    return <AiUpsell locale={params.lang} denied={access} />;
+  }
 
   return (
     <div
       className={
-        isWidget
-          ? "h-full w-full bg-transparent"
-          : "mx-auto max-w-4xl space-y-6 px-4 py-8"
+        isWidget ? "h-full w-full bg-transparent" : "mx-auto max-w-4xl space-y-6 px-4 py-8"
       }
     >
       {!isWidget && (

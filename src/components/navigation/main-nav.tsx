@@ -20,13 +20,14 @@ export function MainNav({ locale }: Props) {
     { href: `/${locale}/articles` as Route, label: "Articles" },
     { href: `/${locale}/events` as Route, label: "Events" },
     { href: `/${locale}/plan` as Route, label: "Plan" },
-    { href: `/${locale}/blog` as Route, label: "Blog" }
+    { href: `/${locale}/blog` as Route, label: "Blog" },
   ];
 
   const secondaryLinks: { href: Route; label: string }[] = [
     { href: `/${locale}/chat` as Route, label: t("cta.chat") },
+    { href: `/${locale}/upgrade` as Route, label: "Membership" },
     { href: `/${locale}/contact` as Route, label: "Contact" },
-    { href: `/${locale}/blog` as Route, label: "Blog" }
+    { href: `/${locale}/blog` as Route, label: "Blog" },
   ];
 
   return (
@@ -37,12 +38,18 @@ export function MainNav({ locale }: Props) {
             <Link href={`/${locale}`} className="font-semibold">
               Voynex
             </Link>
-            <p className="hidden text-xs text-slate-500 md:block">Voynex Travel OS · Local data · AI concierge</p>
+            <p className="hidden text-xs text-slate-500 md:block">
+              Voynex Travel OS · Local data · AI concierge
+            </p>
           </div>
 
           <nav className="hidden items-center gap-4 text-sm md:flex">
             {primaryLinks.map((item) => (
-              <Link key={item.href} href={item.href} className="text-slate-700 transition hover:text-brand">
+              <Link
+                key={item.href}
+                href={item.href}
+                className="text-slate-700 transition hover:text-brand"
+              >
                 {item.label}
               </Link>
             ))}
@@ -61,7 +68,11 @@ export function MainNav({ locale }: Props) {
         </div>
         <div className="mt-2 hidden items-center gap-3 text-xs text-slate-500 md:flex">
           {secondaryLinks.map((item) => (
-            <Link key={item.href} href={item.href} className="inline-flex items-center gap-1 text-slate-500 hover:text-brand">
+            <Link
+              key={item.href}
+              href={item.href}
+              className="inline-flex items-center gap-1 text-slate-500 hover:text-brand"
+            >
               <span className="h-2 w-2 rounded-full bg-slate-200" />
               {item.label}
             </Link>
@@ -69,7 +80,11 @@ export function MainNav({ locale }: Props) {
         </div>
         <div className="mt-3 flex flex-wrap gap-2 text-xs text-slate-500 md:hidden">
           {[...primaryLinks, ...secondaryLinks].map((item) => (
-            <Link key={item.href} href={item.href} className="rounded-full border border-slate-200 px-3 py-1">
+            <Link
+              key={item.href}
+              href={item.href}
+              className="rounded-full border border-slate-200 px-3 py-1"
+            >
               {item.label}
             </Link>
           ))}

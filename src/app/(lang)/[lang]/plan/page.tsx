@@ -1,16 +1,24 @@
 import type { Metadata } from "next";
 import { ItineraryPlanner } from "@/components/itineraries/itinerary-planner";
+import { AiUpsell } from "@/components/ai/ai-upsell";
 import type { Locale } from "@/lib/i18n";
+import { getAiAccessStatus } from "@/lib/ai-access";
 
 type Props = {
   params: { lang: Locale };
 };
 
 export const metadata: Metadata = {
-  title: "旅程生成 | Voynex"
+  title: "旅程生成 | Voynex",
 };
 
-export default function PlanPage({ params }: Props) {
+export default async function PlanPage({ params }: Props) {
+  const access = await getAiAccessStatus();
+
+  if (!access.ok) {
+    return <AiUpsell locale={params.lang} denied={access} />;
+  }
+
   return (
     <div className="mx-auto max-w-6xl space-y-6 px-4 py-10">
       <header>
