@@ -26,7 +26,7 @@ export function UserMenu({ variant = "inline" }: Props) {
     }
     let cancelled = false;
     setSyncState("syncing");
-    fetch("/api/membership/sync", { method: "POST" })
+    fetch("/api/membership/sync", { method: "POST", credentials: "include" })
       .then(async (res) => {
         if (!res.ok) {
           const body = await res.json().catch(() => null);

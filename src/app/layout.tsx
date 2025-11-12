@@ -7,6 +7,7 @@ import { TrackingScript } from "@/components/tracking-script";
 import { Toaster } from "@/components/toaster";
 import { ServiceWorkerRegister } from "@/components/pwa-register";
 import { AuthSessionProvider } from "@/components/providers/session-provider";
+import { ensureMembershipCookie } from "@/lib/membership-sync";
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://voynexus.com";
 
@@ -53,6 +54,7 @@ export const viewport: Viewport = {
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
   const session = await auth();
+  await ensureMembershipCookie(session?.user?.id);
   return (
     <html lang="ja">
       <head>
