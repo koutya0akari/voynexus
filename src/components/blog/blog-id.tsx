@@ -10,7 +10,10 @@ type Props = {
 
 export default function BlogId({ blog }: Props) {
   const safeBody = sanitizeRichText(blog.body ?? "");
-  const paragraphs = safeBody.match(/<p[\s\S]*?<\/p>/g);
+  const segments = safeBody
+    .split(/(?=<(?:p|figure|img|blockquote|h2|h3|h4|ul|ol|pre|code))/gi)
+    .map((segment) => segment.trim())
+    .filter(Boolean);
   const sponsorBlock = (
     <aside className={styles.sponsor}>
       <p className={styles.sponsorBadge}>Sponsored</p>
@@ -30,8 +33,7 @@ export default function BlogId({ blog }: Props) {
     </aside>
   );
 
-  const sponsorInsertIndex =
-    paragraphs && paragraphs.length > 1 ? Math.floor(paragraphs.length / 2) : 0;
+  const sponsorInsertIndex = segments.length > 1 ? Math.floor(segments.length / 2) : 0;
 
   return (
     <main className={styles.main}>
@@ -49,10 +51,10 @@ export default function BlogId({ blog }: Props) {
       ) : null}
       {blog.category?.name ? <p className={styles.category}>{blog.category.name}</p> : null}
       <div className={styles.post}>
-        {paragraphs ? (
-          paragraphs.map((paragraph, index) => (
-            <Fragment key={`paragraph-${index}`}>
-              <div dangerouslySetInnerHTML={{ __html: paragraph }} />
+        {segments.length ? (
+          segments.map((segment, index) => (
+            <Fragment key={`segment-${index}`}>
+              <div dangerouslySetInnerHTML={{ __html: segment }} />
               {index === sponsorInsertIndex ? sponsorBlock : null}
             </Fragment>
           ))
