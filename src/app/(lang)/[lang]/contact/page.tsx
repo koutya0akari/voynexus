@@ -8,8 +8,6 @@ export default function ContactPage() {
       </p>
       <ul className="space-y-2 text-sm text-slate-700">
         <li>メール: info@voynexus.com</li>
-        <li>スポンサー: sponsor@voynexus.com</li>
-        <li>学生ライター: students@voynexus.com</li>
       </ul>
       <div className="mt-8 rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
         <h2 className="text-xl font-semibold text-slate-900">フォームから送る</h2>
