@@ -23,6 +23,19 @@
   margin-bottom: 1.5rem;
 }
 
+.hero {
+  margin-bottom: 2rem;
+  border-radius: 1.5rem;
+  overflow: hidden;
+  box-shadow: 0 20px 40px rgba(15, 23, 42, 0.15);
+}
+
+.hero :global(img) {
+  width: 100%;
+  display: block;
+  object-fit: cover;
+}
+
 .post {
   border-top: 1px solid #e2e8f0;
   padding-top: 1.5rem;

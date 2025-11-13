@@ -35,6 +35,12 @@ export default function BlogId({ blog }: Props) {
 
   return (
     <main className={styles.main}>
+      {blog.eyecatch?.url ? (
+        <div className={styles.hero}>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src={blog.eyecatch.url} alt={blog.title} />
+        </div>
+      ) : null}
       <h1 className={styles.title}>{blog.title}</h1>
       {blog.publishedAt ? (
         <p className={styles.publishedAt}>

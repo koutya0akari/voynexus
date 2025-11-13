@@ -27,7 +27,7 @@ export function BlogSpotlight({
   ctaLabel,
   emptyMessage,
   tip,
-  variant = "default"
+  variant = "default",
 }: Props) {
   const isCompact = variant === "compact";
   const visiblePosts = posts.slice(0, isCompact ? 2 : 3);
@@ -44,14 +44,21 @@ export function BlogSpotlight({
     <aside className={containerClasses}>
       <div className="flex items-start justify-between gap-3">
         <div>
-          <h2 className={clsx("font-semibold text-slate-900", isCompact ? "text-base" : "text-lg")}>{title}</h2>
+          <h2 className={clsx("font-semibold text-slate-900", isCompact ? "text-base" : "text-lg")}>
+            {title}
+          </h2>
           {description ? (
-            <p className={clsx("text-slate-500", isCompact ? "text-xs" : "text-sm")}>{description}</p>
+            <p className={clsx("text-slate-500", isCompact ? "text-xs" : "text-sm")}>
+              {description}
+            </p>
           ) : null}
         </div>
         <Link
           href={`/${locale}/blog` as Route}
-          className={clsx("text-brand", isCompact ? "text-xs font-semibold" : "text-sm font-semibold")}
+          className={clsx(
+            "text-brand",
+            isCompact ? "text-xs font-semibold" : "text-sm font-semibold"
+          )}
         >
           {ctaLabel} →
         </Link>
@@ -60,6 +67,16 @@ export function BlogSpotlight({
         <div className={clsx("space-y-3", !isCompact && "space-y-4")}>
           {visiblePosts.map((post) => (
             <article key={post.id} className={cardClasses}>
+              {post.eyecatch?.url ? (
+                <div className="mb-2 overflow-hidden rounded-xl">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src={post.eyecatch.url}
+                    alt={post.title}
+                    className="h-32 w-full object-cover"
+                  />
+                </div>
+              ) : null}
               <p className="text-[10px] uppercase text-slate-400">
                 {post.publishedAt ? new Date(post.publishedAt).toLocaleDateString(locale) : "New"}
               </p>
@@ -73,7 +90,9 @@ export function BlogSpotlight({
                 {post.title}
               </Link>
               {post.category?.name ? (
-                <p className={clsx("text-slate-500", isCompact ? "text-[11px]" : "text-xs")}>{post.category.name}</p>
+                <p className={clsx("text-slate-500", isCompact ? "text-[11px]" : "text-xs")}>
+                  {post.category.name}
+                </p>
               ) : null}
               {post.body ? (
                 <p className={clsx("text-slate-600", isCompact ? "mt-1 text-xs" : "mt-2 text-sm")}>

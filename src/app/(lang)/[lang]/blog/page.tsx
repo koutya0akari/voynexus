@@ -31,9 +31,21 @@ export default async function LocaleBlogIndexPage({ params }: Props) {
         {posts.map((post) => (
           <li key={post.id} className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
             <div className="flex flex-col gap-2">
+              {post.eyecatch?.url ? (
+                <div className="overflow-hidden rounded-xl">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src={post.eyecatch.url}
+                    alt={post.title}
+                    className="h-48 w-full object-cover"
+                  />
+                </div>
+              ) : null}
               <div className="flex items-center justify-between text-xs uppercase text-slate-500">
                 <span>{post.category?.name ?? t("sections.blog")}</span>
-                {post.publishedAt ? <span>{new Date(post.publishedAt).toLocaleDateString(locale)}</span> : null}
+                {post.publishedAt ? (
+                  <span>{new Date(post.publishedAt).toLocaleDateString(locale)}</span>
+                ) : null}
               </div>
               <Link
                 href={`/${locale}/blog/${post.id}` as Route}
