@@ -66,7 +66,7 @@ export function BillingCheckoutCTA() {
         </button>
       </div>
       <p className="mt-2 text-xs text-slate-500">
-        テスト中はStripeのテストカードを利用できます。広告掲載やタイアップのご相談はフッターからお問い合わせください。
+        決済完了後は確認メールに領収書と会員ポータルへのリンクが届きます。ご不明点はフッターの問い合わせ先までご連絡ください。
       </p>
     </div>
   );

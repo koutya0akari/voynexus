@@ -29,10 +29,15 @@ export default async function ItineraryDetailPage({ params }: Props) {
       </header>
       <section className="space-y-3">
         {itinerary.timeline.map((block) => (
-          <div key={block.time} className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
+          <div
+            key={block.time}
+            className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm"
+          >
             <div className="flex items-center justify-between text-xs text-slate-500">
               <span>{block.time}</span>
-              <span>{block.stayMin}min + 移動 {block.moveMin}min</span>
+              <span>
+                {block.stayMin}min + 移動 {block.moveMin}min
+              </span>
             </div>
             <p className="text-lg font-semibold text-slate-900">{block.spotRef}</p>
             <p className="text-sm text-slate-600">{block.note}</p>
@@ -51,10 +56,10 @@ export default async function ItineraryDetailPage({ params }: Props) {
       ) : null}
       <div className="flex flex-wrap gap-3">
         <button className="rounded-full border border-slate-900 px-4 py-2 text-sm font-semibold text-slate-900">
-          PWAに保存
+          アプリに保存
         </button>
         <button className="rounded-full border border-brand px-4 py-2 text-sm font-semibold text-brand">
-          PDF出力
+          PDFでシェア
         </button>
       </div>
     </article>

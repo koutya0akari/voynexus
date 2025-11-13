@@ -12,7 +12,7 @@ export default async function ArticlesPage({ params, searchParams }: Props) {
     lang: params.lang,
     q: searchParams.q,
     type: searchParams.type,
-    limit: 24
+    limit: 24,
   });
 
   return (
@@ -21,7 +21,7 @@ export default async function ArticlesPage({ params, searchParams }: Props) {
         <p className="text-sm uppercase text-slate-500">Articles</p>
         <h1 className="text-3xl font-semibold text-slate-900">学生ライターと連携した現地記事</h1>
         <p className="text-sm text-slate-500">
-          microCMS上のドラフトは`/api/preview`経由で確認できます。公開後はISRで30分キャッシュ。
+          現地で取材した混雑状況や持ち物、ルートのコツを学生ライターと編集チームがリアルタイムで共有しています。
         </p>
       </header>
       <ArticleList locale={params.lang} articles={contents} title="記事一覧" />

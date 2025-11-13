@@ -20,7 +20,7 @@ export async function Footer({ locale }: Props) {
           <Link href={`/${locale}/disclaimer`}>免責事項</Link>
         </div>
         <div className="flex flex-col gap-2">
-          <Link href="mailto:team@voynezus.jp">team@voynezus.jp</Link>
+          <Link href="mailto:team@voynexus.jp">team@voynexus.jp</Link>
           <Link href={`/${locale}/contact`}>Contact</Link>
           <Link href={`/${locale}/contact#ads`}>広告掲載・タイアップのご相談</Link>
           <Link href="/api/status">Status</Link>

@@ -1,7 +1,7 @@
 {
   "hero": {
     "title": "用 Voynezus 規劃德島旅程",
-    "description": "旅客可在單一面板查看實地驗證的景點、AI 行程與 FAQ；品牌與設施能在路線上投放標註清楚的贊助內容。"
+    "description": "AI 行程會依天氣、交通與人潮調整，編輯團隊同步提供最新提醒與小眾景點靈感。"
   },
   "cta": {
     "planTrip": "產生行程",
@@ -34,28 +34,28 @@
     "timeline": "時間表"
   },
   "widget": {
-    "title": "設施／廣告主 AI 小工具",
-    "cta": "索取投放資訊"
+    "title": "設施支援",
+    "cta": "索取安裝指南"
   },
   "footer": {
     "disclaimer": "Voynezus 提供旅遊資訊並清楚標示贊助內容。票價與營業時間仍以官方公告為準。"
   },
   "stats": {
-    "title": "Voynezus 儀表板",
-    "subtitle": "與 microCMS 即時同步",
-    "description": "在同一個控制台管理旅客資訊與贊助內容，並即時發布到網站。",
-    "spots": "已驗證景點",
-    "spotsNote": "在地編輯審核",
-    "articles": "專欄文章",
-    "articlesNote": "本週更新",
+    "title": "旅遊更新",
+    "subtitle": "由在地團隊每日確認",
+    "description": "我們追蹤營業時間異動、活動訊息與可能的壅擠時段，讓旅人可以安心調整行程。",
+    "spots": "景點更新",
+    "spotsNote": "在地編輯驗證",
+    "articles": "實地報導",
+    "articlesNote": "學生作者撰寫",
     "itineraries": "智慧行程",
-    "itinerariesNote": "AI 量身打造",
-    "events": "最新活動",
-    "eventsNote": "含雨天備案"
+    "itinerariesNote": "自動調整天氣與交通",
+    "events": "活動快訊",
+    "eventsNote": "週末與雨天備案"
   },
   "feed": {
-    "title": "Voynezus Feed",
-    "subtitle": "今日重點一覽",
+    "title": "今日摘要",
+    "subtitle": "依天氣、潮汐與交通即時推薦",
     "spotCard": "焦點景點",
     "itineraryCard": "代表行程",
     "eventCard": "下一個活動",
@@ -63,15 +63,15 @@
     "ctaSpot": "查看景點",
     "ctaItinerary": "查看行程",
     "ctaEvent": "活動詳情",
-    "empty": "尚無文章，請先在 microCMS 建立。"
+    "empty": "特輯內容準備中，很快就會更新。"
   },
   "blog": {
     "spotlightTitle": "旅遊部落格",
-    "spotlightDescription": "長篇故事、專訪與編輯手記都在這裡。",
+    "spotlightDescription": "收錄在地團隊、學生與旅人的觀察。",
     "spotlightCta": "查看全部文章",
-    "spotlightEmpty": "在 microCMS 發布文章後就會顯示於此。",
-    "spotlightTip": "只要在 microCMS 儲存，即可立刻同步到 PWA。",
-    "listDescription": "由學生與在地團隊撰寫的文章，完全在 microCMS 裡維護。",
+    "spotlightEmpty": "文章編輯中，敬請期待。",
+    "spotlightTip": "分享天氣變化、人潮提醒及幕後小故事。",
+    "listDescription": "由學生與在地編輯輪流撰寫。",
     "empty": "目前還沒有部落格文章。"
   }
 }

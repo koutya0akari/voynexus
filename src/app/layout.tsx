@@ -9,7 +9,7 @@ import { ServiceWorkerRegister } from "@/components/pwa-register";
 import { AuthSessionProvider } from "@/components/providers/session-provider";
 import { ensureMembershipCookie } from "@/lib/membership-sync";
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://voynezusus.com";
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://voynexusus.com";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
@@ -18,7 +18,7 @@ export const metadata: Metadata = {
     template: "%s | Voynezusus",
   },
   description:
-    "Voynezusは徳島に特化したトラベルOS。microCMSで管理するスポット/記事/モデルコースとAIコンシェルジュを一つのPWAに統合。",
+    "Voynezusは徳島に特化したトラベルOS。天候と交通に合わせたAI旅程、現地レポート、多言語コンシェルジュをまとめて提供します。",
   alternates: {
     canonical: "/",
     languages: {
@@ -38,8 +38,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    creator: "@voynezusus",
-    site: "@voynezusus",
+    creator: "@voynexusus",
+    site: "@voynexusus",
   },
   manifest: "/manifest.webmanifest",
   icons: {

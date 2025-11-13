@@ -12,7 +12,7 @@ export function SpotGrid({ locale, spots, title }: Props) {
     <section className="mx-auto mt-10 max-w-6xl">
       <div className="mb-4 flex items-center justify-between">
         <h2 className="text-xl font-semibold text-slate-900">{title}</h2>
-        <p className="text-sm text-slate-500">LCP cached / ISR every 30min</p>
+        <p className="text-sm text-slate-500">最終訪問日と注意点を現地スタッフが確認済み</p>
       </div>
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {spots.map((spot) => (

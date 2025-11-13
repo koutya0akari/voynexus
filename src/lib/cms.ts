@@ -103,7 +103,7 @@ const fallbackBlogs: Blog[] = [
     title: "徳島トラベルブログを公開しました",
     publishedAt: new Date().toISOString(),
     category: { name: "お知らせ" },
-    body: "<p>徳島での旅のヒントやイベント情報を発信するブログをスタートしました。microCMSのブログAPIを有効化すれば、ここにCMSで管理した本文が表示されます。</p>",
+    body: "<p>徳島での旅のヒントやイベント情報を発信するブログをスタートしました。現地スタッフや学生ライターのリポートを順次公開していきます。</p>",
   },
 ];
 
@@ -120,7 +120,7 @@ const fallbackSponsors: Sponsor[] = [
     publishedAt: new Date().toISOString(),
     tier: "A",
     asset: { url: "/sample/hotel.png", alt: "ホテルバナー" },
-    destinationUrl: "https://hotel.example.com?utm_source=voynezusus_app&utm_medium=referral",
+    destinationUrl: "https://hotel.example.com?utm_source=voynexusus_app&utm_medium=referral",
     positions: ["top", "spots"],
     activeFrom: new Date().toISOString(),
     activeTo: new Date(new Date().setMonth(new Date().getMonth() + 1)).toISOString(),

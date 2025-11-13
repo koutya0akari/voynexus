@@ -16,15 +16,6 @@ import { FacilityWidgetCTA } from "@/components/widgets/facility-widget-cta";
 import { BlogSpotlight } from "@/components/blog/blog-spotlight";
 import { BillingCheckoutCTA } from "@/components/billing/checkout-cta";
 
-function resolveWidgetOrigin() {
-  const envValue =
-    process.env.NEXT_PUBLIC_WIDGET_ORIGIN ??
-    process.env.NEXT_PUBLIC_SITE_URL ??
-    (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : undefined) ??
-    "http://localhost:3000";
-  return envValue.replace(/\/+$/, "");
-}
-
 type Props = {
   params: {
     lang: Locale;
@@ -88,7 +79,7 @@ export default async function LocaleHome({ params }: Props) {
       spots: "旬のスポットと現地Tips",
       plan: "AIが天気と所要時間を調整",
       articles: "学生ライターによる現地レポ",
-      blogDescription: "microCMSで更新できる特集",
+      blogDescription: "旅の裏話やスタッフ日記",
     },
     en: {
       spots: "Seasonal picks with on-site tips",
@@ -105,8 +96,6 @@ export default async function LocaleHome({ params }: Props) {
   };
 
   const copy = quickLinkCopy[locale] ?? quickLinkCopy.ja;
-
-  const widgetOrigin = resolveWidgetOrigin();
 
   const quickLinks: { title: string; body: string; href: Route; icon: string; accent: string }[] = [
     {
@@ -432,7 +421,7 @@ export default async function LocaleHome({ params }: Props) {
             <SponsorRail sponsors={sponsors} />
           </div>
           <div className="grid gap-6 lg:grid-cols-2">
-            <FacilityWidgetCTA locale={locale} widgetOrigin={widgetOrigin} />
+            <FacilityWidgetCTA locale={locale} />
             <BillingCheckoutCTA />
           </div>
         </div>

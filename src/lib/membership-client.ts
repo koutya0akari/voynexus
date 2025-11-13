@@ -1,4 +1,4 @@
-const STORAGE_KEY = "voynezus_membership_token";
+const STORAGE_KEY = "voynexus_membership_token";
 const DEBUG_ENABLED = process.env.NEXT_PUBLIC_MEMBERSHIP_DEBUG === "1";
 
 export function getMembershipTokenFromStorage(): string | null {

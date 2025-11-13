@@ -149,7 +149,7 @@ export function AiChatPanel({ locale }: Props) {
 function saveConversation(messages: Message[], lang: string) {
   return () => {
     try {
-      const key = "voynezus_chat_history";
+      const key = "voynexus_chat_history";
       const existingRaw = typeof window === "undefined" ? null : localStorage.getItem(key);
       const existing = existingRaw ? JSON.parse(existingRaw) : [];
       existing.unshift({
@@ -182,7 +182,7 @@ async function downloadConversation(
     const url = URL.createObjectURL(blob);
     const link = document.createElement("a");
     link.href = url;
-    link.download = "voynezus-chat.txt";
+    link.download = "voynexus-chat.txt";
     link.click();
     URL.revokeObjectURL(url);
   } catch (error) {

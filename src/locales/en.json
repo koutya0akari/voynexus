@@ -1,7 +1,7 @@
 {
   "hero": {
     "title": "Design your Tokushima journey with Voynezus",
-    "description": "Travelers get vetted spots, AI itineraries, and FAQ answers in one dashboard while partners place clearly labeled sponsor content along every route."
+    "description": "Weather-aware AI itineraries and local editors keep your Tokushima trip updated with fresh tips, alerts, and detours."
   },
   "cta": {
     "planTrip": "Plan itinerary",
@@ -34,28 +34,28 @@
     "timeline": "Timeline"
   },
   "widget": {
-    "title": "AI widget for facilities & sponsors",
-    "cta": "Request ad placement kit"
+    "title": "Facility support",
+    "cta": "Request placement guide"
   },
   "footer": {
     "disclaimer": "Voynezus shares traveler updates and clearly labeled sponsor content. Confirm prices and hours with official sources."
   },
   "stats": {
-    "title": "Voynezus dashboard",
-    "subtitle": "Live sync with microCMS",
-    "description": "Manage traveler data and sponsored placements in one CMS-driven dashboard with instant publishing.",
-    "spots": "Verified spots",
-    "spotsNote": "curated by local editors",
-    "articles": "Editorial posts",
-    "articlesNote": "story updates this week",
+    "title": "Travel updates",
+    "subtitle": "Verified daily by locals",
+    "description": "We track opening-hour changes, event news, and expected crowds so you can adjust plans with confidence.",
+    "spots": "Spot updates",
+    "spotsNote": "checked by local editors",
+    "articles": "Field reports",
+    "articlesNote": "written by student writers",
     "itineraries": "Smart itineraries",
-    "itinerariesNote": "AI-personalized routes",
-    "events": "Live events",
-    "eventsNote": "rain-ready happenings"
+    "itinerariesNote": "adapts to weather and transit",
+    "events": "Event alerts",
+    "eventsNote": "weekend & rainy-day picks"
   },
   "feed": {
-    "title": "Voynezus feed",
-    "subtitle": "Today’s cross-channel snapshot",
+    "title": "Daily digest",
+    "subtitle": "Recommendations that react to weather, tides, and traffic",
     "spotCard": "Feature spot",
     "itineraryCard": "Signature itinerary",
     "eventCard": "Next event",
@@ -63,15 +63,15 @@
     "ctaSpot": "View spot",
     "ctaItinerary": "See itinerary",
     "ctaEvent": "Event details",
-    "empty": "No editorial content yet. Create an article in microCMS."
+    "empty": "Feature stories are being prepared and will appear here soon."
   },
   "blog": {
     "spotlightTitle": "Travel blog",
-    "spotlightDescription": "Long-form stories, interviews, and student dispatches.",
+    "spotlightDescription": "Dispatches from locals, student writers, and returning travelers.",
     "spotlightCta": "See all posts",
-    "spotlightEmpty": "Publish a blog entry in microCMS to feature it here.",
-    "spotlightTip": "Blog entries update instantly after you publish from microCMS.",
-    "listDescription": "Stories from students and locals, managed entirely in microCMS.",
+    "spotlightEmpty": "Stories are on the way. Please check back shortly.",
+    "spotlightTip": "We share bite-size weather shifts, crowd alerts, and behind-the-scenes notes.",
+    "listDescription": "A rotating roster of students and local editors contribute to this journal.",
     "empty": "No blog posts yet."
   }
 }

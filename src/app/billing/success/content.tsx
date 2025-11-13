@@ -16,8 +16,8 @@ export function BillingSuccessContent({ fallbackSessionId }: Props) {
   const localParams = useSearchParams();
   const sessionId = localParams?.get("session_id") ?? fallbackSessionId ?? null;
   const [status, setStatus] = useState<"loading" | "pending" | "success" | "error">("loading");
-  const [message, setMessage] = useState("Stripe決済を確認しています...");
-  const [diagnostics, setDiagnostics] = useState<Diagnostics | null>(null);
+  const [message, setMessage] = useState("決済を確認しています...");
+  const [pendingAttempt, setPendingAttempt] = useState(0);
   const router = useRouter();
   const { data: authSession } = useSession();
 
@@ -30,9 +30,8 @@ export function BillingSuccessContent({ fallbackSessionId }: Props) {
         if (!cancelled) {
           setStatus("error");
           setMessage(
-            "session_id が見つかりませんでした。成功URLに {CHECKOUT_SESSION_ID} を含める必要があります。"
+            "決済情報を読み込めませんでした。決済完了メールからもう一度アクセスするかサポートまでご連絡ください。"
           );
-          setDiagnostics({ phase: "error", reason: "missing-session-id" });
         }
         return;
       }
@@ -51,15 +50,7 @@ export function BillingSuccessContent({ fallbackSessionId }: Props) {
             (payload as { pendingReason?: string } | null)?.pendingReason ?? "session-incomplete";
           if (!cancelled) {
             setStatus("pending");
-            setDiagnostics({
-              phase: "pending",
-              attempt,
-              pendingReason,
-              sessionStatus: (payload as { sessionStatus?: string } | null)?.sessionStatus,
-              paymentStatus: (payload as { paymentStatus?: string } | null)?.paymentStatus,
-              customerPresent: (payload as { customerPresent?: boolean } | null)?.customerPresent,
-              sessionId,
-            });
+            setPendingAttempt(attempt + 1);
             setMessage(describePendingReason(pendingReason));
           }
           if (attempt + 1 < MAX_ATTEMPTS) {
@@ -84,19 +75,8 @@ export function BillingSuccessContent({ fallbackSessionId }: Props) {
           throw new Error("missing customerId");
         }
         if (cancelled) return;
+        setPendingAttempt(0);
         setStatus("success");
-        setDiagnostics({
-          phase: "success",
-          sessionId,
-          customerId: data.customerId,
-          linkStatus: data.linkStatus,
-          sessionStatus: data.sessionStatus,
-          paymentStatus: data.paymentStatus,
-          livemode: data.livemode,
-          amountTotal: data.amountTotal,
-          currency: data.currency,
-          lineItems: data.lineItems,
-        });
         if (data.linkStatus === "conflict") {
           setMessage("決済が別のGoogleアカウントに紐付いています。サポートへご連絡ください。");
           return;
@@ -112,40 +92,20 @@ export function BillingSuccessContent({ fallbackSessionId }: Props) {
       } catch (error) {
         console.error("Billing success error", error);
         if (cancelled) return;
+        setPendingAttempt(0);
         setStatus("error");
         if (error instanceof ApiError && error.type === "login-required") {
           setMessage("Googleアカウントでログインすると会員情報のリンクが完了します。");
-          setDiagnostics(error.info ?? null);
         } else if (error instanceof ApiError && error.type === "link-mismatch") {
           setMessage("決済が別のGoogleアカウントに紐付いています。サポートへご連絡ください。");
-          setDiagnostics(error.info ?? null);
         } else if (error instanceof ApiError && error.type === "api-error") {
-          setMessage(
-            "Stripeセッションの取得でエラーが発生しました。下記の診断情報をサポートへ共有してください。"
-          );
-          setDiagnostics({
-            phase: "error",
-            status: error.status,
-            sessionId,
-            info: error.info,
-          });
+          setMessage("決済情報の確認でエラーが発生しました。時間を空けて再度お試しください。");
         } else if (error instanceof PendingTimeoutError) {
           setMessage(
-            "決済が完了ステータスになりません。Stripeダッシュボードで支払い状況をご確認ください。"
+            "カード会社での確認が完了していないか通信に時間がかかっています。決済完了メールを開き直すか、数分後に再読み込みしてください。"
           );
-          setDiagnostics({
-            phase: "timeout",
-            sessionId,
-            reason: error.reason,
-            info: error.info,
-          });
         } else {
           setMessage("決済情報の取得に失敗しました。サポートへご連絡ください。");
-          setDiagnostics({
-            phase: "error",
-            sessionId,
-            message: error instanceof Error ? error.message : String(error),
-          });
         }
       }
     }
@@ -175,7 +135,7 @@ export function BillingSuccessContent({ fallbackSessionId }: Props) {
       </p>
       {status === "pending" && (
         <p className="mt-2 text-xs text-amber-700">
-          {`セッションID: ${sessionId ?? "不明"} / 再試行 ${diagnostics && "attempt" in diagnostics ? (diagnostics.attempt as number) + 1 : 1} / ${MAX_ATTEMPTS}`}
+          {`確認を再試行中 (${Math.min(Math.max(pendingAttempt, 1), MAX_ATTEMPTS)}/${MAX_ATTEMPTS})`}
         </p>
       )}
       {status === "success" && (
@@ -184,15 +144,12 @@ export function BillingSuccessContent({ fallbackSessionId }: Props) {
           <p>メールに送付された領収書からStripeポータルを開くこともできます。</p>
         </div>
       )}
-      {diagnostics ? (
-        <details className="mt-4">
-          <summary className="cursor-pointer text-sm font-semibold text-slate-600">
-            診断情報を表示
-          </summary>
-          <pre className="mt-2 max-h-64 overflow-auto rounded-2xl bg-slate-900/90 p-4 text-[11px] leading-tight text-emerald-100">
-            {JSON.stringify(diagnostics, null, 2)}
-          </pre>
-        </details>
+      {sessionId && status !== "success" ? (
+        <div className="mt-4 rounded-2xl bg-slate-50 p-4 text-xs text-slate-600">
+          <p className="font-semibold text-slate-700">サポートコード</p>
+          <p className="mt-1 font-mono text-base text-slate-900">{sessionId}</p>
+          <p className="mt-1">お問い合わせの際は上記のコードをお伝えください。</p>
+        </div>
       ) : null}
     </div>
   );
@@ -222,11 +179,11 @@ class PendingTimeoutError extends Error {
 function describePendingReason(reason: string) {
   switch (reason) {
     case "missing-customer":
-      return "顧客IDがまだStripeセッションに紐付いていません。決済完了メールを確認するか数秒後に再読み込みしてください。";
+      return "決済サービスから会員情報を受け取っている途中です。決済完了メールを確認するか少し待ってから再読み込みしてください。";
     case "payment-incomplete":
-      return "決済が未確定のためStripeから完了通知が届いていません。カードの認証や3Dセキュアを完了してください。";
+      return "カード認証がまだ完了していない可能性があります。3Dセキュアの画面やカード会社アプリをご確認ください。";
     case "session-incomplete":
     default:
-      return "決済情報を確認しています…少々お待ちください。";
+      return "決済情報を確認しています。そのままお待ちください。";
   }
 }

@@ -235,7 +235,7 @@ export function ItineraryPlanner({ locale }: { locale: string }) {
 function saveItineraryResult(result: GeneratedItinerary, input: PlannerInput, lang: string) {
   return () => {
     try {
-      const key = "voynezus_itinerary_history";
+      const key = "voynexus_itinerary_history";
       const existingRaw = typeof window === "undefined" ? null : localStorage.getItem(key);
       const existing = existingRaw ? JSON.parse(existingRaw) : [];
       existing.unshift({
@@ -278,7 +278,7 @@ async function downloadItineraryPdf(
     const url = URL.createObjectURL(blob);
     const link = document.createElement("a");
     link.href = url;
-    link.download = "voynezus-itinerary.pdf";
+    link.download = "voynexus-itinerary.pdf";
     link.click();
     URL.revokeObjectURL(url);
   } catch (error) {
