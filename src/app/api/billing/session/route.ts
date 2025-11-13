@@ -3,7 +3,7 @@ import { NextResponse } from "next/server";
 import { auth } from "@/auth";
 import { createMembershipToken } from "@/lib/membership-token";
 import { upsertMembershipRecord } from "@/lib/membership-store";
-import { getMeteredPassSummary } from "@/lib/metered-pass-store";
+import { getMeteredPassSummary, grantMeteredPassCredits } from "@/lib/metered-pass-store";
 import { getPlanByProductCode } from "@/lib/billing-plan-utils";
 import { retrieveSessionWithFallback } from "@/lib/stripe";
 
@@ -64,6 +64,20 @@ export async function GET(request: Request) {
         : undefined;
       const creditsAdded = creditsFromMetadata ?? plan?.creditsPerPurchase ?? null;
       const googleUserId = session.metadata?.google_user_id;
+      if (googleUserId && creditsAdded && creditsAdded > 0) {
+        await grantMeteredPassCredits({
+          googleUserId,
+          planCode: planId ?? plan?.productCode ?? "unknown-plan",
+          credits: creditsAdded,
+          source: "stripe",
+          notes: "checkout session fallback",
+          stripeSessionId: session.id,
+          stripePaymentIntentId:
+            typeof session.payment_intent === "string"
+              ? session.payment_intent
+              : (session.payment_intent?.id ?? undefined),
+        });
+      }
       let totalRemaining: number | undefined;
       if (googleUserId) {
         const summary = await getMeteredPassSummary(googleUserId);

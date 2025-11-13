@@ -138,6 +138,13 @@ export default async function MembersPage() {
   }
 
   const daysSincePayment = activeMembership.daysSincePayment ?? 0;
+  const expiresAtDate = activeMembership.membershipExpiresAt
+    ? new Date(activeMembership.membershipExpiresAt)
+    : null;
+  const daysRemaining = expiresAtDate
+    ? Math.max(0, Math.ceil((expiresAtDate.getTime() - Date.now()) / (1000 * 60 * 60 * 24)))
+    : null;
+  const hasMeteredAddOn = meteredSummary.totalRemaining > 0;
 
   return (
     <div className="mx-auto max-w-4xl space-y-6 px-4 py-16">
@@ -150,14 +157,35 @@ export default async function MembersPage() {
             リンク済みGoogleアカウント: {session.user.email}
           </p>
         ) : null}
-        {activeMembership.membershipExpiresAt ? (
-          <p className="mt-2 text-xs text-slate-500">
-            最終決済から{daysSincePayment}日経過・有効期限:{" "}
-            {new Date(activeMembership.membershipExpiresAt).toLocaleString("ja-JP")}
-          </p>
-        ) : (
-          <p className="mt-2 text-xs text-slate-500">最終決済から{daysSincePayment}日経過</p>
-        )}
+        <p className="mt-2 text-xs text-slate-500">最終決済から{daysSincePayment}日経過</p>
+        <div className={`mt-4 grid gap-3 ${hasMeteredAddOn ? "sm:grid-cols-2" : "sm:grid-cols-1"}`}>
+          <div className="rounded-2xl border border-slate-100 bg-slate-50 p-4 text-sm text-slate-600">
+            <p className="text-xs font-semibold uppercase tracking-wide text-brand">定額パス</p>
+            <p className="mt-2 text-2xl font-semibold text-slate-900">
+              {daysRemaining !== null ? `${daysRemaining}日` : "更新待ち"}
+            </p>
+            {expiresAtDate ? (
+              <p className="mt-1 text-[11px] text-slate-500">
+                有効期限: {expiresAtDate.toLocaleString("ja-JP")}
+              </p>
+            ) : (
+              <p className="mt-1 text-[11px] text-slate-500">
+                次の決済が完了すると残日数が表示されます。
+              </p>
+            )}
+          </div>
+          {hasMeteredAddOn ? (
+            <div className="rounded-2xl border border-dashed border-brand/40 bg-brand/5 p-4 text-sm text-slate-700">
+              <p className="text-xs font-semibold uppercase tracking-wide text-brand">従量パス</p>
+              <p className="mt-2 text-2xl font-semibold text-slate-900">
+                {meteredSummary.totalRemaining}回
+              </p>
+              <p className="mt-1 text-[11px] text-slate-500">
+                AIチャット／旅程生成を実行すると1回ずつ減ります。
+              </p>
+            </div>
+          ) : null}
+        </div>
         <ol className="mt-4 list-decimal space-y-2 pl-5 text-sm text-slate-700">
           <li>トップページに戻り、AIチャットまたは旅程生成を開きます。</li>
           <li>「会員トークン」を確認しておくと別デバイスでも同期できます。</li>
