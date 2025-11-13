@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { UpgradePageContent } from "./upgrade-content";
 
 export const metadata: Metadata = {
-  title: "Voynezus Membership",
+  title: "voynexus Membership",
   description: "AIチャットと旅程生成を解放する会員登録ページ。",
 };
 

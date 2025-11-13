@@ -13,7 +13,7 @@ export function FacilityWidgetCTA({ locale }: Props) {
           <h3 className="text-xl font-semibold text-slate-900">施設・観光案内所のみなさまへ</h3>
         </div>
         <p className="text-sm text-slate-600">
-          Voynezusのチャット窓口とFAQボードを設置すると、多言語での問い合わせやクーポン案内を旅行者アプリと同じ品質で提供できます。導入方法やスポンサー掲載ルールをまとめた専用ページを公開しました。
+          voynexusのチャット窓口とFAQボードを設置すると、多言語での問い合わせやクーポン案内を旅行者アプリと同じ品質で提供できます。導入方法やスポンサー掲載ルールをまとめた専用ページを公開しました。
         </p>
         <ul className="list-disc space-y-1 pl-5 text-sm text-slate-600">
           <li>雨天時や時間外でも自動案内できる多言語チャット</li>

@@ -32,7 +32,7 @@ const content: Record<Locale, Copy> = {
   ja: {
     heroTitle: "施設・観光案内所向けサポート",
     heroDescription:
-      "Voynezusのチャット窓口とFAQボードは、現地スタッフの一次対応を支えながら旅行者の質問や予約希望を24時間カバーします。タグを一つ追加するだけで導入でき、スポンサー枠やクーポンも明示した形で掲載可能です。",
+      "voynexusのチャット窓口とFAQボードは、現地スタッフの一次対応を支えながら旅行者の質問や予約希望を24時間カバーします。タグを一つ追加するだけで導入でき、スポンサー枠やクーポンも明示した形で掲載可能です。",
     highlights: [
       "多言語チャットで営業時間外も対応",
       "雨天・満席時の代替プランを自動表示",
@@ -105,7 +105,7 @@ const content: Record<Locale, Copy> = {
   en: {
     heroTitle: "Support for facilities & visitor centers",
     heroDescription:
-      "Voynezus embeds a multilingual help desk into your website or kiosk so travelers get instant answers while your team only handles escalations. Installation is one script tag, and sponsor blocks remain clearly labeled.",
+      "voynexus embeds a multilingual help desk into your website or kiosk so travelers get instant answers while your team only handles escalations. Installation is one script tag, and sponsor blocks remain clearly labeled.",
     highlights: [
       "24/7 concierge across Japanese, English, Chinese",
       "Automatic rain/crowd rerouting suggestions",
@@ -130,7 +130,7 @@ const content: Record<Locale, Copy> = {
         bullets: [
           "Auto-applies tracking parameters to booking links",
           "Syncs coupon inventory and blackout dates",
-          "Follows the same review policy as the Voynezus app",
+          "Follows the same review policy as the voynexus app",
         ],
       },
       {
@@ -178,7 +178,7 @@ const content: Record<Locale, Copy> = {
   zh: {
     heroTitle: "設施與旅遊服務中心專區",
     heroDescription:
-      "只要加入一段程式碼，Voynezus 就能在網站或自助機上提供多語 FAQ 與即時聊天，協助旅客解答並把重要案件轉給工作人員。贊助資訊也會清楚標示來源。",
+      "只要加入一段程式碼，voynexus 就能在網站或自助機上提供多語 FAQ 與即時聊天，協助旅客解答並把重要案件轉給工作人員。贊助資訊也會清楚標示來源。",
     highlights: [
       "支援日／英／中三語的 24 小時客服",
       "下雨或滿位時自動推薦替代計畫",
@@ -203,7 +203,7 @@ const content: Record<Locale, Copy> = {
         bullets: [
           "自動附加追蹤參數到預約連結",
           "同步券量與停用日期",
-          "與 Voynezus App 相同的審核基準",
+          "與 voynexus App 相同的審核基準",
         ],
       },
       {
@@ -245,7 +245,7 @@ export default function PartnersPage({ params }: Props) {
   return (
     <div className="mx-auto max-w-5xl space-y-10 px-4 py-12">
       <section className="rounded-3xl border border-slate-200 bg-white p-8 shadow-sm">
-        <p className="text-xs uppercase text-brand">Voynezus Partners</p>
+        <p className="text-xs uppercase text-brand">voynexus Partners</p>
         <h1 className="mt-2 text-3xl font-semibold text-slate-900">{copy.heroTitle}</h1>
         <p className="mt-3 text-slate-600">{copy.heroDescription}</p>
         <ul className="mt-4 grid gap-3 sm:grid-cols-3">

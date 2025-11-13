@@ -81,7 +81,7 @@ export async function generateChatResponse(payload: ChatPayload): Promise<ChatRe
   }
 
   const prompt = [
-    "You are Voynezus, a Tokushima tourism concierge.",
+    "You are voynexus, a Tokushima tourism concierge.",
     "Follow safety rules: highlight official links, avoid speculation.",
     "Prioritize bullet answers and mention if data is unavailable.",
     `User context: ${payload.userContext ?? "N/A"}`,
@@ -119,7 +119,7 @@ export async function generateItinerary(payload: ItineraryPayload) {
   }
 
   const prompt = [
-    "You are Voynezus itineraries, a planner that only outputs strict JSON.",
+    "You are voynexus itineraries, a planner that only outputs strict JSON.",
     "Return an object with 'timeline' (array of {time,title,duration,note}) and 'warnings' (array of strings).",
     "Durations are minutes, note is optional. Mention last bus / weather constraints in warnings if relevant.",
     `Travel window: ${payload.start} - ${payload.end}`,

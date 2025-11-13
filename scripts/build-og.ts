@@ -1,7 +1,7 @@
 import fs from "node:fs/promises";
 import path from "node:path";
 
-const siteTitle = process.argv[2] ?? "Voynezus Travel PWA";
+const siteTitle = process.argv[2] ?? "voynexus Travel PWA";
 const siteDescription =
   process.argv[3] ?? "AI itinerary / multi-lingual articles / facility widget with microCMS.";
 

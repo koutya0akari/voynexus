@@ -1,6 +1,6 @@
 {
   "hero": {
-    "title": "用 Voynezus 規劃德島旅程",
+    "title": "用 voynexus 規劃德島旅程",
     "description": "AI 行程會依天氣、交通與人潮調整，編輯團隊同步提供最新提醒與小眾景點靈感。"
   },
   "cta": {
@@ -13,7 +13,7 @@
     "modelCourses": "經典行程",
     "events": "活動特輯",
     "blog": "旅遊部落格",
-    "navigator": "Voynezus 導覽"
+    "navigator": "voynexus 導覽"
   },
   "filters": {
     "title": "條件篩選",
@@ -38,7 +38,7 @@
     "cta": "索取安裝指南"
   },
   "footer": {
-    "disclaimer": "Voynezus 提供旅遊資訊並清楚標示贊助內容。票價與營業時間仍以官方公告為準。"
+    "disclaimer": "voynexus 提供旅遊資訊並清楚標示贊助內容。票價與營業時間仍以官方公告為準。"
   },
   "stats": {
     "title": "旅遊更新",

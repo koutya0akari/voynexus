@@ -1,6 +1,6 @@
 {
   "hero": {
-    "title": "Voynezusで徳島旅をデザイン",
+    "title": "voynexusで徳島旅をデザイン",
     "description": "AIコンシェルジュが天気・交通・混雑を見ながら旅程を整え、現地編集チームが最新の注意点や寄り道アイデアを届けます。"
   },
   "cta": {
@@ -13,7 +13,7 @@
     "modelCourses": "モデルコース",
     "events": "イベント特集",
     "blog": "トラベルブログ",
-    "navigator": "Voynezusナビ"
+    "navigator": "voynexusナビ"
   },
   "filters": {
     "title": "条件で探す",
@@ -38,7 +38,7 @@
     "cta": "設置ガイドを受け取る"
   },
   "footer": {
-    "disclaimer": "Voynezusは旅行者向け情報とスポンサー掲載を明示して配信します。料金や営業時間は変更になる場合がありますので最新情報をご確認ください。"
+    "disclaimer": "voynexusは旅行者向け情報とスポンサー掲載を明示して配信します。料金や営業時間は変更になる場合がありますので最新情報をご確認ください。"
   },
   "stats": {
     "title": "旅のアップデート",

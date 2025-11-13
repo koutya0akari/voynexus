@@ -280,7 +280,7 @@ async function downloadItineraryPdf(
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        title: `Voynezus itinerary (${lang.toUpperCase()})`,
+        title: `voynexus itinerary (${lang.toUpperCase()})`,
         summary: `Transport: ${input.transport} / Party: ${input.party} / Budget: ¥${input.budget}`,
         timeline: result.timeline ?? [],
         warnings: result.warnings ?? [],

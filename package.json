@@ -1,8 +1,8 @@
 {
-  "name": "voynexusus",
+  "name": "voynexus",
   "version": "0.1.0",
   "private": true,
-  "description": "Voynezus travel OS for Tokushima with microCMS integration, AI itinerary planner, and facility widget.",
+  "description": "voynexus travel OS for Tokushima with microCMS integration, AI itinerary planner, and facility widget.",
   "engines": {
     "node": ">=20.0.0"
   },

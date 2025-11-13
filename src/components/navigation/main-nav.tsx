@@ -47,10 +47,10 @@ export function MainNav({ locale }: Props) {
         <div className="flex items-center justify-between gap-4">
           <div>
             <Link href={`/${locale}`} className="font-semibold">
-              Voynezus
+              voynexus
             </Link>
             <p className="hidden text-xs text-slate-500 md:block">
-              Voynezus Travel OS · Local data · AI concierge
+              voynexus Travel OS · Local data · AI concierge
             </p>
           </div>
 

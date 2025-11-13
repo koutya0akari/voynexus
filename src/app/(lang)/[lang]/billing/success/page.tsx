@@ -17,7 +17,7 @@ export default function LocaleBillingSuccessPage({
 
   return (
     <div className="mx-auto max-w-2xl space-y-6 px-4 py-16">
-      <p className="text-sm uppercase text-brand">Voynezus Billing</p>
+      <p className="text-sm uppercase text-brand">voynexus Billing</p>
       <h1 className="text-3xl font-semibold text-slate-900">決済が完了しました</h1>
       <Suspense
         fallback={

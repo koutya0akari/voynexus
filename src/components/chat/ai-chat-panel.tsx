@@ -188,7 +188,7 @@ async function downloadConversation(
 ) {
   setDownloading(true);
   try {
-    const content = [`Voynezus Chat (${lang.toUpperCase()})`, ""].concat(
+    const content = [`voynexus Chat (${lang.toUpperCase()})`, ""].concat(
       messages.map((message) => `${message.role === "user" ? "User" : "AI"}: ${message.content}`)
     );
     const blob = new Blob([content.join("\n")], { type: "text/plain" });

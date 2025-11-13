@@ -6,7 +6,7 @@ import { BillingSuccessContent } from "./content";
 export const dynamic = "force-dynamic";
 
 export const generateMetadata = async (): Promise<Metadata> => ({
-  title: "Billing Success | Voynezus",
+  title: "Billing Success | voynexus",
   description: "Stripe決済が完了しました。会員トークンを保存しています。",
 });
 
@@ -20,7 +20,7 @@ export default function BillingSuccessPage({
 
   return (
     <div className="mx-auto max-w-2xl space-y-6 px-4 py-16">
-      <p className="text-sm uppercase text-brand">Voynezus Billing</p>
+      <p className="text-sm uppercase text-brand">voynexus Billing</p>
       <h1 className="text-3xl font-semibold text-slate-900">決済が完了しました</h1>
       <Suspense
         fallback={

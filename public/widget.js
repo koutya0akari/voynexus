@@ -5,7 +5,7 @@
   const origin = scriptTag.src.replace(/\/widget\.js.*/, "");
 
   const container = document.createElement("div");
-  container.id = "voynexusus-widget";
+  container.id = "voynexus-widget";
   container.style.position = "fixed";
   container.style.bottom = "16px";
   container.style.right = "16px";

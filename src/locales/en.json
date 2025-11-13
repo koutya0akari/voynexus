@@ -1,6 +1,6 @@
 {
   "hero": {
-    "title": "Design your Tokushima journey with Voynezus",
+    "title": "Design your Tokushima journey with voynexus",
     "description": "Weather-aware AI itineraries and local editors keep your Tokushima trip updated with fresh tips, alerts, and detours."
   },
   "cta": {
@@ -13,7 +13,7 @@
     "modelCourses": "Model courses",
     "events": "Event spotlight",
     "blog": "Travel blog",
-    "navigator": "Voynezus guide"
+    "navigator": "voynexus guide"
   },
   "filters": {
     "title": "Filter",
@@ -38,7 +38,7 @@
     "cta": "Request placement guide"
   },
   "footer": {
-    "disclaimer": "Voynezus shares traveler updates and clearly labeled sponsor content. Confirm prices and hours with official sources."
+    "disclaimer": "voynexus shares traveler updates and clearly labeled sponsor content. Confirm prices and hours with official sources."
   },
   "stats": {
     "title": "Travel updates",

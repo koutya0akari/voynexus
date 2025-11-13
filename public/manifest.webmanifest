@@ -1,12 +1,12 @@
 {
-  "name": "Voynezus Travel PWA",
-  "short_name": "Voynezus",
+  "name": "voynexus Travel PWA",
+  "short_name": "voynexus",
   "start_url": "/ja",
   "display": "standalone",
   "background_color": "#ffffff",
   "theme_color": "#1f8ea8",
   "lang": "ja",
-  "description": "Voynezusは徳島向けに記事・スポット・AI旅程を届けるトラベルOS",
+  "description": "voynexusは徳島向けに記事・スポット・AI旅程を届けるトラベルOS",
   "icons": [
     {
       "src": "/icons/icon-192.png",

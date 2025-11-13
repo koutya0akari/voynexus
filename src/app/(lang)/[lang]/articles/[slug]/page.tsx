@@ -54,7 +54,7 @@ export default async function ArticleDetailPage({ params }: Props) {
       <aside className="rounded-2xl bg-slate-50 p-4 text-sm text-slate-600">
         <p className="font-semibold">旅のメモ</p>
         <p>
-          紹介リンクにはVoynezus経由の目印が付きます。予約サイトでクーポンが表示されない場合は公式情報も併せてご確認ください。
+          紹介リンクにはvoynexus経由の目印が付きます。予約サイトでクーポンが表示されない場合は公式情報も併せてご確認ください。
         </p>
       </aside>
       {article.ctaLinks?.length ? (
@@ -62,7 +62,7 @@ export default async function ArticleDetailPage({ params }: Props) {
           {article.ctaLinks.map((cta) => (
             <a
               key={cta.url}
-              href={`${cta.url}?utm_source=voynexusus_app&utm_medium=referral&utm_campaign=${article.slug}`}
+              href={`${cta.url}?utm_source=voynexus_app&utm_medium=referral&utm_campaign=${article.slug}`}
               className="rounded-full border border-brand px-4 py-2 text-sm font-semibold text-brand"
             >
               {cta.label}
