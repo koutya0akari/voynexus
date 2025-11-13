@@ -3,6 +3,7 @@ import { auth } from "@/auth";
 import { verifyMembershipToken } from "@/lib/membership-token";
 import { getMembershipByCustomerId, getMembershipByGoogleUserId } from "@/lib/membership-store";
 import { stripe } from "@/lib/stripe";
+import { getMeteredPassSummary } from "@/lib/metered-pass-store";
 
 const fallbackToken = process.env.MEMBERSHIP_TEST_TOKEN;
 const allowedStatuses = new Set(["active", "trialing", "past_due"]);
@@ -14,6 +15,8 @@ export type MembershipSuccess = {
   daysSincePayment?: number;
   membershipExpiresAt?: string;
   linkedGoogleUserId?: string;
+  meteredUsesRemaining?: number;
+  accessType?: "subscription" | "metered" | "token" | "test";
 };
 
 export type MembershipFailure = {
@@ -56,17 +59,32 @@ export async function verifyMembership(
   const token = extractToken(request);
   if (token) {
     if (fallbackToken && token === fallbackToken) {
-      return { ok: true, memberId: "test", linkedGoogleUserId: session.user.id };
+      return {
+        ok: true,
+        memberId: "test",
+        linkedGoogleUserId: session.user.id,
+        accessType: "test",
+      };
     }
     return verifyMembershipTokenValue(token, session.user.id);
   }
 
   if (fallbackToken) {
-    return { ok: true, memberId: "test", linkedGoogleUserId: session.user.id };
+    return { ok: true, memberId: "test", linkedGoogleUserId: session.user.id, accessType: "test" };
   }
 
   const record = await getMembershipByGoogleUserId(session.user.id);
   if (!record) {
+    const meteredSummary = await getMeteredPassSummary(session.user.id);
+    if (meteredSummary.totalRemaining > 0) {
+      return {
+        ok: true,
+        memberId: `metered:${session.user.id}`,
+        linkedGoogleUserId: session.user.id,
+        meteredUsesRemaining: meteredSummary.totalRemaining,
+        accessType: "metered",
+      };
+    }
     return {
       ok: false,
       status: 401,
@@ -74,7 +92,28 @@ export async function verifyMembership(
     };
   }
 
-  return verifyActiveMembershipForCustomer(record.stripeCustomerId, session.user.id, record);
+  const subscriptionResult = await verifyActiveMembershipForCustomer(
+    record.stripeCustomerId,
+    session.user.id,
+    record
+  );
+
+  if (subscriptionResult.ok) {
+    return subscriptionResult;
+  }
+
+  const meteredSummary = await getMeteredPassSummary(session.user.id);
+  if (meteredSummary.totalRemaining > 0) {
+    return {
+      ok: true,
+      memberId: `metered:${session.user.id}`,
+      linkedGoogleUserId: session.user.id,
+      meteredUsesRemaining: meteredSummary.totalRemaining,
+      accessType: "metered",
+    };
+  }
+
+  return subscriptionResult;
 }
 
 export async function verifyMembershipTokenValue(
@@ -82,13 +121,26 @@ export async function verifyMembershipTokenValue(
   googleUserId?: string
 ): Promise<MembershipSuccess | MembershipFailure> {
   if (fallbackToken && token === fallbackToken) {
-    return { ok: true, memberId: "test", linkedGoogleUserId: googleUserId };
+    return { ok: true, memberId: "test", linkedGoogleUserId: googleUserId, accessType: "test" };
   }
 
   const tokenInfo = verifyMembershipToken(token);
   const customerId = tokenInfo?.customerId ?? token;
 
-  return verifyActiveMembershipForCustomer(customerId, googleUserId);
+  const verification = await verifyActiveMembershipForCustomer(customerId, googleUserId);
+  if (!verification.ok && googleUserId) {
+    const meteredSummary = await getMeteredPassSummary(googleUserId);
+    if (meteredSummary.totalRemaining > 0) {
+      return {
+        ok: true,
+        memberId: `metered:${googleUserId}`,
+        linkedGoogleUserId: googleUserId,
+        meteredUsesRemaining: meteredSummary.totalRemaining,
+        accessType: "metered",
+      };
+    }
+  }
+  return verification;
 }
 
 async function verifyActiveMembershipForCustomer(
@@ -155,6 +207,7 @@ async function verifyActiveMembershipForCustomer(
       daysSincePayment,
       membershipExpiresAt,
       linkedGoogleUserId: membershipRecord?.googleUserId ?? googleUserId,
+      accessType: "subscription",
     };
   } catch (error) {
     console.error("Stripe membership lookup failed", error);

@@ -4,6 +4,7 @@ import { useState } from "react";
 import { toast } from "@/components/toaster";
 import { MembershipTokenBanner } from "@/components/membership/token-banner";
 import { locales } from "@/lib/i18n";
+import { useMeteredUsage } from "@/hooks/use-metered-usage";
 
 type PlannerInput = {
   start: string;
@@ -43,6 +44,7 @@ export function ItineraryPlanner({ locale }: { locale: string }) {
   const [result, setResult] = useState<GeneratedItinerary | null>(null);
   const [aiLang, setAiLang] = useState(locale);
   const [downloading, setDownloading] = useState(false);
+  const { summary: meteredSummary, refresh: refreshMeteredUsage } = useMeteredUsage();
 
   const update = (key: keyof PlannerInput, value: string | number) => {
     setInput((prev) => ({ ...prev, [key]: value }));
@@ -68,6 +70,9 @@ export function ItineraryPlanner({ locale }: { locale: string }) {
       }
       const data = await response.json();
       setResult(data);
+      if (typeof data.meteredUsesRemaining === "number") {
+        refreshMeteredUsage();
+      }
     } catch (error) {
       console.error("Itinerary generation failed", error);
       toast("旅程生成に失敗しました");
@@ -80,6 +85,14 @@ export function ItineraryPlanner({ locale }: { locale: string }) {
     <div className="grid gap-6 md:grid-cols-[1.2fr_1fr]">
       <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
         <MembershipTokenBanner />
+        {meteredSummary.totalRemaining > 0 ? (
+          <div className="mb-4 rounded-2xl border border-dashed border-brand/40 bg-brand/5 p-3 text-sm text-slate-700">
+            <p className="font-semibold text-slate-900">
+              従量パス残り {meteredSummary.totalRemaining} 回
+            </p>
+            <p className="text-xs text-slate-500">旅程生成を実行すると1回分が消費されます。</p>
+          </div>
+        ) : null}
         <div className="mb-4 flex flex-col gap-2 text-xs text-slate-500 sm:flex-row sm:items-center sm:justify-between">
           <span>旅程の言語</span>
           <select

@@ -123,7 +123,7 @@ export const billingPlans: BillingPlan[] = [
     id: "std-1",
     productCode: "Voynexus-AI-1回",
     displayName: "Voynexus-AI-1回",
-    priceJPY: 100,
+    priceJPY: 120,
     unitLabel: "1回 / 税抜",
     description: "スポットやイベントを1件だけチェック",
     bestFor: "最終確認や急ぎの質問を1回だけ行いたいとき。",

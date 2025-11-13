@@ -2,13 +2,15 @@ import Link from "next/link";
 import { cookies } from "next/headers";
 import { auth } from "@/auth";
 import { verifyMembershipTokenValue, type MembershipSuccess } from "@/lib/membership";
+import { getMeteredPassSummary } from "@/lib/metered-pass-store";
 
 export default async function MembersPage() {
   const session = await auth();
-  if (!session?.user) {
+  const userId = session?.user?.id ?? null;
+  if (!session?.user || !userId) {
     return (
       <div className="mx-auto max-w-2xl space-y-6 px-4 py-16">
-        <p className="text-sm uppercase text-brand">Voynezus Membership</p>
+        <p className="text-sm uppercase text-brand">Voynexus Membership</p>
         <h1 className="text-3xl font-semibold text-slate-900">会員専用ページ</h1>
         <div className="rounded-3xl border border-amber-200 bg-white p-6 text-slate-700">
           <p>会員ページを表示するにはGoogleアカウントでログインしてください。</p>
@@ -25,13 +27,55 @@ export default async function MembersPage() {
 
   const membershipCookie = cookies().get("membership_token")?.value;
   const membership = membershipCookie
-    ? await verifyMembershipTokenValue(membershipCookie, session.user.id)
+    ? await verifyMembershipTokenValue(membershipCookie, userId)
     : { ok: false, status: 401, message: "会員トークンが見つかりませんでした。" };
+  const meteredSummary = await getMeteredPassSummary(userId);
 
   if (!membership.ok) {
+    if (meteredSummary.totalRemaining > 0) {
+      return (
+        <div className="mx-auto max-w-2xl space-y-6 px-4 py-16">
+          <p className="text-sm uppercase text-brand">Voynexus Membership</p>
+          <h1 className="text-3xl font-semibold text-slate-900">従量パスのご利用状況</h1>
+          <div className="rounded-3xl border border-dashed border-brand/40 bg-white p-6 shadow-sm">
+            <p className="text-sm text-slate-600">
+              サブスクリプションは未連携ですが、従量パスが残っています。AIチャット/旅程生成を実行すると1回ずつ消費されます。
+            </p>
+            <p className="mt-3 text-2xl font-semibold text-slate-900">
+              残り {meteredSummary.totalRemaining} 回
+            </p>
+            <ul className="mt-3 space-y-2 text-sm text-slate-600">
+              {meteredSummary.passes
+                .filter((pass) => pass.remainingUses > 0)
+                .map((pass) => (
+                  <li key={pass.id} className="rounded-2xl border border-slate-100 bg-slate-50 p-3">
+                    <span className="font-semibold">{pass.planCode}</span>
+                    <span className="ml-2 text-xs text-slate-500">
+                      残り {pass.remainingUses} 回
+                      {pass.expiresAt
+                        ? ` / 期限 ${new Date(pass.expiresAt).toLocaleDateString("ja-JP")}`
+                        : ""}
+                    </span>
+                  </li>
+                ))}
+            </ul>
+            <p className="mt-3 text-xs text-slate-500">
+              使い切った後もAIを利用するには定額プランを購入するか、従量パスを追加でご購入ください。
+            </p>
+          </div>
+          <Link
+            href="/ja"
+            className="inline-flex rounded-full bg-brand px-6 py-3 text-sm font-semibold text-white"
+          >
+            トップに戻る
+          </Link>
+        </div>
+      );
+    }
+
     return (
       <div className="mx-auto max-w-2xl space-y-6 px-4 py-16">
-        <p className="text-sm uppercase text-brand">Voynezus Membership</p>
+        <p className="text-sm uppercase text-brand">Voynexus Membership</p>
         <h1 className="text-3xl font-semibold text-slate-900">会員専用ページ</h1>
         <div className="rounded-3xl border border-rose-200 bg-white p-6 text-rose-700">
           <p>
@@ -50,11 +94,50 @@ export default async function MembersPage() {
   }
 
   const activeMembership = membership as MembershipSuccess;
+
+  if (activeMembership.accessType === "metered") {
+    const remaining = activeMembership.meteredUsesRemaining ?? meteredSummary.totalRemaining;
+    return (
+      <div className="mx-auto max-w-2xl space-y-6 px-4 py-16">
+        <p className="text-sm uppercase text-brand">Voynexus Membership</p>
+        <h1 className="text-3xl font-semibold text-slate-900">従量パスのご利用状況</h1>
+        <div className="rounded-3xl border border-dashed border-brand/40 bg-white p-6 shadow-sm">
+          <p className="text-sm text-slate-600">Googleアカウント: {session.user.email ?? "N/A"}</p>
+          <p className="mt-2 text-2xl font-semibold text-slate-900">残り {remaining} 回</p>
+          <p className="mt-2 text-xs text-slate-500">
+            AIチャットと旅程生成はいずれも1リクエストにつき1回分を消費します。
+          </p>
+          <ul className="mt-3 space-y-2 text-sm text-slate-600">
+            {meteredSummary.passes
+              .filter((pass) => pass.remainingUses > 0)
+              .map((pass) => (
+                <li key={pass.id} className="rounded-2xl border border-slate-100 bg-slate-50 p-3">
+                  <span className="font-semibold">{pass.planCode}</span>
+                  <span className="ml-2 text-xs text-slate-500">
+                    残り {pass.remainingUses} 回
+                    {pass.expiresAt
+                      ? ` / 期限 ${new Date(pass.expiresAt).toLocaleDateString("ja-JP")}`
+                      : ""}
+                  </span>
+                </li>
+              ))}
+          </ul>
+        </div>
+        <Link
+          href="/ja"
+          className="inline-flex rounded-full bg-brand px-6 py-3 text-sm font-semibold text-white"
+        >
+          ホームへ
+        </Link>
+      </div>
+    );
+  }
+
   const daysSincePayment = activeMembership.daysSincePayment ?? 0;
 
   return (
     <div className="mx-auto max-w-4xl space-y-6 px-4 py-16">
-      <p className="text-sm uppercase text-brand">Voynezus Membership</p>
+      <p className="text-sm uppercase text-brand">Voynexus Membership</p>
       <h1 className="text-3xl font-semibold text-slate-900">AI機能を使いこなす</h1>
       <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
         <p className="text-sm text-slate-600">StripeカスタマーID: {activeMembership.memberId}</p>
@@ -83,6 +166,17 @@ export default async function MembersPage() {
       >
         ホームへ
       </Link>
+      {meteredSummary.totalRemaining > 0 ? (
+        <div className="rounded-3xl border border-dashed border-brand/40 bg-white/80 p-6 text-sm text-slate-700">
+          <p className="font-semibold text-slate-900">従量パスも併用できます</p>
+          <p className="mt-1 text-xs text-slate-500">
+            現在の残り: {meteredSummary.totalRemaining} 回
+          </p>
+          <p className="mt-2 text-xs text-slate-500">
+            取材でサブスクを解約した後も、回数券でAI機能を引き続き利用できます。
+          </p>
+        </div>
+      ) : null}
     </div>
   );
 }

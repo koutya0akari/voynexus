@@ -4,6 +4,7 @@ import { useState } from "react";
 import { toast } from "@/components/toaster";
 import { MembershipTokenBanner } from "@/components/membership/token-banner";
 import { locales } from "@/lib/i18n";
+import { useMeteredUsage } from "@/hooks/use-metered-usage";
 
 type Message = {
   id: string;
@@ -22,6 +23,7 @@ export function AiChatPanel({ locale }: Props) {
   const [references, setReferences] = useState<{ title: string; url: string }[]>([]);
   const [aiLang, setAiLang] = useState(locale);
   const [downloading, setDownloading] = useState(false);
+  const { summary: meteredSummary, refresh: refreshMeteredUsage } = useMeteredUsage();
 
   const send = async () => {
     if (!query.trim()) return;
@@ -50,6 +52,9 @@ export function AiChatPanel({ locale }: Props) {
         { id: crypto.randomUUID(), role: "assistant", content: data.answer as string },
       ]);
       setReferences(data.references ?? []);
+      if (typeof data.meteredUsesRemaining === "number") {
+        refreshMeteredUsage();
+      }
     } catch (error) {
       console.error("AI chat failed", error);
       toast("コンシェルジュの呼び出しに失敗しました");
@@ -61,6 +66,14 @@ export function AiChatPanel({ locale }: Props) {
   return (
     <div className="flex h-full flex-col gap-4">
       <MembershipTokenBanner />
+      {meteredSummary.totalRemaining > 0 ? (
+        <div className="rounded-2xl border border-dashed border-brand/40 bg-brand/5 p-3 text-sm text-slate-700">
+          <p className="font-semibold text-slate-900">
+            従量パス残り {meteredSummary.totalRemaining} 回
+          </p>
+          <p className="text-xs text-slate-500">AIチャット送信ごとに1回消費されます。</p>
+        </div>
+      ) : null}
       <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
         <div className="mb-3 flex flex-col gap-2 text-xs text-slate-500 sm:flex-row sm:items-center sm:justify-between">
           <span>回答言語</span>

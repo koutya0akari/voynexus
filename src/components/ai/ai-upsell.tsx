@@ -4,6 +4,7 @@ import type { Locale } from "@/lib/i18n";
 import type { AiAccessDenied, AiAccessDeniedReason } from "@/lib/ai-access";
 import { BillingCheckoutCTA } from "@/components/billing/checkout-cta";
 import { GoogleLoginButton } from "@/components/auth/google-login-button";
+import { useMeteredUsage } from "@/hooks/use-metered-usage";
 
 type Props = {
   locale: Locale;
@@ -54,6 +55,7 @@ const benefits = [
 export function AiUpsell({ locale, denied }: Props) {
   const membersHref = `/${locale}/members` as Route;
   const loginReason = denied ? reasonCopy[denied.reason] : null;
+  const { summary: meteredSummary } = useMeteredUsage(0);
 
   return (
     <div className="mx-auto max-w-5xl space-y-8 px-4 py-12">
@@ -64,6 +66,11 @@ export function AiUpsell({ locale, denied }: Props) {
           {loginReason?.description ??
             "Googleアカウントでログインし、定額または従量プランを選んでStripe決済を完了するとAIチャットと旅程生成が解放されます。"}
         </p>
+        {meteredSummary.totalRemaining > 0 ? (
+          <div className="rounded-2xl border border-dashed border-emerald-200 bg-emerald-50 px-3 py-2 text-xs font-semibold text-emerald-800">
+            従量パスの残り: {meteredSummary.totalRemaining} 回
+          </div>
+        ) : null}
         {loginReason ? (
           <span className="inline-flex rounded-full border border-amber-200 bg-amber-50 px-4 py-1 text-xs font-semibold text-amber-800">
             {loginReason.badge}
