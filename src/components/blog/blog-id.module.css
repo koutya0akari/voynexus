@@ -40,3 +40,64 @@
   max-width: 100%;
   border-radius: 0.5rem;
 }
+
+.sponsor {
+  margin: 2.5rem 0;
+  padding: 1.5rem;
+  border-radius: 1.5rem;
+  border: 1px solid rgba(15, 23, 42, 0.08);
+  background: linear-gradient(135deg, rgba(15, 23, 42, 0.9), rgba(15, 118, 110, 0.9));
+  color: #f8fafc;
+  box-shadow: 0 15px 30px rgba(15, 23, 42, 0.25);
+}
+
+.sponsorBadge {
+  display: inline-block;
+  padding: 0.1rem 0.75rem;
+  border-radius: 999px;
+  font-size: 0.7rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  background: rgba(255, 255, 255, 0.15);
+  color: #e2e8f0;
+}
+
+.sponsorTitle {
+  margin-top: 0.75rem;
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+
+.sponsorBody {
+  margin-top: 0.5rem;
+  font-size: 0.9rem;
+  color: rgba(248, 250, 252, 0.9);
+  line-height: 1.6;
+}
+
+.sponsorActions {
+  margin-top: 1rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.primaryCta {
+  background: #fff;
+  color: #0f172a;
+  border-radius: 999px;
+  padding: 0.45rem 1.25rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.secondaryCta {
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  color: #f1f5f9;
+  border-radius: 999px;
+  padding: 0.45rem 1.25rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-decoration: none;
+}
