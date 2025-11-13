@@ -10,6 +10,20 @@ type Props = {
 
 type Diagnostics = Record<string, unknown>;
 
+type SubscriptionSuccessInfo = {
+  type: "subscription";
+  linkStatus: "linked" | "skipped" | "conflict" | "unauthenticated";
+};
+
+type MeteredSuccessInfo = {
+  type: "metered";
+  planName?: string;
+  creditsAdded?: number;
+  totalRemaining?: number;
+};
+
+type SessionInfo = SubscriptionSuccessInfo | MeteredSuccessInfo;
+
 const MAX_ATTEMPTS = 6;
 
 export function BillingSuccessContent({ fallbackSessionId }: Props) {
@@ -18,6 +32,7 @@ export function BillingSuccessContent({ fallbackSessionId }: Props) {
   const [status, setStatus] = useState<"loading" | "pending" | "success" | "error">("loading");
   const [message, setMessage] = useState("決済を確認しています...");
   const [pendingAttempt, setPendingAttempt] = useState(0);
+  const [sessionInfo, setSessionInfo] = useState<SessionInfo | null>(null);
   const router = useRouter();
   const { data: authSession } = useSession();
 
@@ -70,18 +85,46 @@ export function BillingSuccessContent({ fallbackSessionId }: Props) {
           throw new ApiError(errorType, res.status, payload ?? undefined);
         }
 
-        const data = payload;
-        if (!data?.customerId) {
+        const data = payload as
+          | (SessionInfo & {
+              customerId?: string;
+              linkStatus?: SubscriptionSuccessInfo["linkStatus"];
+            })
+          | null;
+        if (!data) {
+          throw new Error("missing session payload");
+        }
+        if (data.type !== "metered" && !("customerId" in data && data.customerId)) {
           throw new Error("missing customerId");
         }
         if (cancelled) return;
         setPendingAttempt(0);
         setStatus("success");
-        if (data.linkStatus === "conflict") {
+        if (data.type === "metered") {
+          setSessionInfo({
+            type: "metered",
+            planName: (data as MeteredSuccessInfo).planName,
+            creditsAdded: (data as MeteredSuccessInfo).creditsAdded,
+            totalRemaining: (data as MeteredSuccessInfo).totalRemaining,
+          });
+          const remainingText =
+            (data as MeteredSuccessInfo).totalRemaining !== undefined
+              ? `${(data as MeteredSuccessInfo).totalRemaining}回`
+              : "最新の残回数";
+          setMessage(
+            `従量パスをアカウントに追加しました。残り${remainingText}はメンバーズページで確認できます。`
+          );
+          return;
+        }
+        const linkStatus = (
+          data as SubscriptionSuccessInfo & { linkStatus: SubscriptionSuccessInfo["linkStatus"] }
+        ).linkStatus;
+        setSessionInfo({ type: "subscription", linkStatus });
+        if (linkStatus === "conflict") {
           setMessage("決済が別のGoogleアカウントに紐付いています。サポートへご連絡ください。");
           return;
         }
-        if (authSession?.user && data.linkStatus !== "unauthenticated") {
+        if (authSession?.user && linkStatus !== "unauthenticated") {
           setMessage("会員トークンを保存しました。会員ページへ移動します...");
           router.replace("/members");
         } else {
@@ -138,10 +181,23 @@ export function BillingSuccessContent({ fallbackSessionId }: Props) {
           {`確認を再試行中 (${Math.min(Math.max(pendingAttempt, 1), MAX_ATTEMPTS)}/${MAX_ATTEMPTS})`}
         </p>
       )}
-      {status === "success" && (
+      {status === "success" && sessionInfo?.type === "subscription" && (
         <div className="mt-4 space-y-2 text-sm text-slate-600">
           <p>ホームに戻り、AIコンシェルジュや旅程生成をお試しください。</p>
           <p>メールに送付された領収書からStripeポータルを開くこともできます。</p>
+        </div>
+      )}
+      {status === "success" && sessionInfo?.type === "metered" && (
+        <div className="mt-4 space-y-2 text-sm text-slate-600">
+          <p>
+            {sessionInfo.creditsAdded
+              ? `${sessionInfo.creditsAdded}回分の従量パスを追加しました。`
+              : "従量パスを追加しました。"}
+          </p>
+          {sessionInfo.totalRemaining !== undefined ? (
+            <p>現在の残り回数: {sessionInfo.totalRemaining} 回</p>
+          ) : null}
+          <p>メンバーズページから残り回数と利用履歴を確認できます。</p>
         </div>
       )}
       {sessionId && status !== "success" ? (

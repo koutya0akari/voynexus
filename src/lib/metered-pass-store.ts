@@ -9,6 +9,8 @@ export type MeteredPassRecord = {
   expiresAt: string | null;
   source?: string | null;
   notes?: string | null;
+  stripeSessionId?: string | null;
+  stripePaymentIntentId?: string | null;
 };
 
 export type MeteredPassSummary = {
@@ -34,7 +36,9 @@ export async function getMeteredPassSummary(googleUserId: string): Promise<Meter
 
   const { data, error } = await supabaseAdmin
     .from(TABLE_NAME)
-    .select("id, plan_code, remaining_uses, expires_at, source, notes")
+    .select(
+      "id, plan_code, remaining_uses, expires_at, source, notes, stripe_session_id, stripe_payment_intent_id"
+    )
     .eq("google_user_id", googleUserId)
     .order("expires_at", { ascending: true, nullsFirst: false })
     .order("created_at", { ascending: true });
@@ -52,6 +56,8 @@ export async function getMeteredPassSummary(googleUserId: string): Promise<Meter
       expiresAt: row.expires_at ?? null,
       source: row.source ?? undefined,
       notes: row.notes ?? undefined,
+      stripeSessionId: row.stripe_session_id ?? undefined,
+      stripePaymentIntentId: row.stripe_payment_intent_id ?? undefined,
     })) ?? [];
 
   const totalRemaining = passes.reduce((sum, pass) => sum + Math.max(pass.remainingUses, 0), 0);
@@ -101,4 +107,53 @@ export async function consumeMeteredPassUse(googleUserId: string): Promise<Consu
 
   const summary = await getMeteredPassSummary(googleUserId);
   return { ok: true, remaining: summary.totalRemaining };
+}
+
+type GrantMeteredPassInput = {
+  googleUserId: string;
+  planCode: string;
+  credits: number;
+  source?: string;
+  notes?: string;
+  stripeSessionId?: string;
+  stripePaymentIntentId?: string | null;
+};
+
+export async function grantMeteredPassCredits(input: GrantMeteredPassInput) {
+  if (!supabaseAdmin) {
+    console.warn("Supabase admin not configured; skipping metered pass grant.");
+    return false;
+  }
+  if (input.credits <= 0) {
+    console.warn("Ignoring metered pass grant with non-positive credits", input);
+    return false;
+  }
+
+  if (input.stripeSessionId) {
+    const existing = await supabaseAdmin
+      .from(TABLE_NAME)
+      .select("id")
+      .eq("stripe_session_id", input.stripeSessionId)
+      .maybeSingle();
+    if (existing.data) {
+      return true;
+    }
+  }
+
+  const { error } = await supabaseAdmin.from(TABLE_NAME).insert({
+    google_user_id: input.googleUserId,
+    plan_code: input.planCode,
+    remaining_uses: input.credits,
+    source: input.source ?? "stripe",
+    notes: input.notes ?? null,
+    stripe_session_id: input.stripeSessionId ?? null,
+    stripe_payment_intent_id: input.stripePaymentIntentId ?? null,
+  });
+
+  if (error) {
+    console.error("Failed to grant metered pass credits", error);
+    return false;
+  }
+
+  return true;
 }

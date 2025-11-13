@@ -3,6 +3,8 @@ import { NextResponse } from "next/server";
 import { auth } from "@/auth";
 import { createMembershipToken } from "@/lib/membership-token";
 import { upsertMembershipRecord } from "@/lib/membership-store";
+import { getMeteredPassSummary } from "@/lib/metered-pass-store";
+import { getPlanByProductCode } from "@/lib/billing-plan-utils";
 import { retrieveSessionWithFallback } from "@/lib/stripe";
 
 export async function GET(request: Request) {
@@ -14,17 +16,20 @@ export async function GET(request: Request) {
 
   try {
     const session = await retrieveSessionWithFallback(sessionId);
+    const planKind = session.metadata?.plan_kind;
+    const isMetered = planKind === "payment";
     const customer = session.customer;
     const paymentStatus = session.payment_status ?? "unpaid";
     const paymentSettled = paymentStatus === "paid" || paymentStatus === "no_payment_required";
     const completed = session.status === "complete" && paymentSettled;
 
-    if (!completed || !customer) {
-      const pendingReason = !customer
-        ? "missing-customer"
-        : paymentSettled
-          ? "session-incomplete"
-          : "payment-incomplete";
+    if (!completed || (!customer && !isMetered)) {
+      const pendingReason =
+        !customer && !isMetered
+          ? "missing-customer"
+          : paymentSettled
+            ? "session-incomplete"
+            : "payment-incomplete";
       return NextResponse.json(
         {
           pending: true,
@@ -37,7 +42,12 @@ export async function GET(request: Request) {
         { status: 202 }
       );
     }
-    const customerId = typeof customer === "string" ? customer : customer.id;
+    let customerId: string | undefined;
+    if (typeof customer === "string") {
+      customerId = customer;
+    } else if (customer && "id" in customer) {
+      customerId = customer.id;
+    }
     const lineItems = session.line_items?.data?.map((item) => ({
       description: item.description,
       quantity: item.quantity,
@@ -46,6 +56,37 @@ export async function GET(request: Request) {
       currency: item.currency,
     }));
 
+    if (isMetered) {
+      const planId = session.metadata?.plan_id;
+      const plan = planId ? getPlanByProductCode(planId) : undefined;
+      const creditsFromMetadata = session.metadata?.plan_credits
+        ? Number(session.metadata.plan_credits)
+        : undefined;
+      const creditsAdded = creditsFromMetadata ?? plan?.creditsPerPurchase ?? null;
+      const googleUserId = session.metadata?.google_user_id;
+      let totalRemaining: number | undefined;
+      if (googleUserId) {
+        const summary = await getMeteredPassSummary(googleUserId);
+        totalRemaining = summary.totalRemaining;
+      }
+      return NextResponse.json({
+        type: "metered",
+        customerId,
+        amountTotal: session.amount_total,
+        currency: session.currency,
+        planId,
+        planName: session.metadata?.plan_label ?? plan?.displayName,
+        creditsAdded: creditsAdded ?? undefined,
+        totalRemaining,
+        sessionStatus: session.status,
+        paymentStatus,
+        livemode: session.livemode,
+      });
+    }
+
+    if (!customerId) {
+      throw new Error("missing customerId");
+    }
     const token = createMembershipToken(customerId);
     let linkStatus: "linked" | "skipped" | "conflict" | "unauthenticated" = "skipped";
 
@@ -90,6 +131,7 @@ export async function GET(request: Request) {
     }
 
     const response = NextResponse.json({
+      type: "subscription",
       customerId,
       amountTotal: session.amount_total,
       currency: session.currency,

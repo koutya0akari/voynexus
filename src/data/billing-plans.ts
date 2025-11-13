@@ -1,5 +1,7 @@
 export type PlanType = "flat" | "metered";
 
+export type BillingMode = "subscription" | "payment";
+
 export type BillingPlan = {
   id: string;
   productCode: string;
@@ -11,6 +13,9 @@ export type BillingPlan = {
   type: PlanType;
   tier: "pro" | "standard";
   supportsCheckout: boolean;
+  billingMode: BillingMode;
+  creditsPerPurchase?: number;
+  successPath?: string;
   badge?: string;
 };
 
@@ -45,6 +50,7 @@ export const billingPlans: BillingPlan[] = [
     type: "flat",
     tier: "pro",
     supportsCheckout: true,
+    billingMode: "subscription",
     badge: "人気",
   },
   {
@@ -58,6 +64,7 @@ export const billingPlans: BillingPlan[] = [
     type: "flat",
     tier: "pro",
     supportsCheckout: true,
+    billingMode: "subscription",
   },
   {
     id: "std-7d",
@@ -70,6 +77,7 @@ export const billingPlans: BillingPlan[] = [
     type: "flat",
     tier: "standard",
     supportsCheckout: true,
+    billingMode: "subscription",
   },
   {
     id: "std-1d",
@@ -82,6 +90,7 @@ export const billingPlans: BillingPlan[] = [
     type: "flat",
     tier: "standard",
     supportsCheckout: true,
+    billingMode: "subscription",
   },
   {
     id: "pro-5",
@@ -93,7 +102,9 @@ export const billingPlans: BillingPlan[] = [
     bestFor: "特定スポットの安全情報やスポンサー枠を事前に確認したい場合。",
     type: "metered",
     tier: "pro",
-    supportsCheckout: false,
+    supportsCheckout: true,
+    billingMode: "payment",
+    creditsPerPurchase: 5,
   },
   {
     id: "pro-1",
@@ -105,7 +116,9 @@ export const billingPlans: BillingPlan[] = [
     bestFor: "1問だけAIに確認しておきたい現場チェック用。",
     type: "metered",
     tier: "pro",
-    supportsCheckout: false,
+    supportsCheckout: true,
+    billingMode: "payment",
+    creditsPerPurchase: 1,
   },
   {
     id: "std-5",
@@ -117,7 +130,9 @@ export const billingPlans: BillingPlan[] = [
     bestFor: "旅程の一部だけAIに調整を任せたい場合。",
     type: "metered",
     tier: "standard",
-    supportsCheckout: false,
+    supportsCheckout: true,
+    billingMode: "payment",
+    creditsPerPurchase: 5,
   },
   {
     id: "std-1",
@@ -129,6 +144,12 @@ export const billingPlans: BillingPlan[] = [
     bestFor: "最終確認や急ぎの質問を1回だけ行いたいとき。",
     type: "metered",
     tier: "standard",
-    supportsCheckout: false,
+    supportsCheckout: true,
+    billingMode: "payment",
+    creditsPerPurchase: 1,
   },
 ];
+
+export function findPlanByProductCode(code: string) {
+  return billingPlans.find((plan) => plan.productCode === code);
+}
