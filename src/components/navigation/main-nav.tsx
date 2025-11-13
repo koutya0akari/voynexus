@@ -29,6 +29,7 @@ export function MainNav({ locale }: Props) {
   const secondaryLinks: { href: Route; label: string }[] = [
     { href: `/${locale}/chat` as Route, label: t("cta.chat") },
     { href: `/${locale}/upgrade` as Route, label: "Membership" },
+    { href: `/${locale}/partners` as Route, label: "Partners" },
     { href: `/${locale}/contact` as Route, label: "Contact" },
   ];
 

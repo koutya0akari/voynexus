@@ -22,6 +22,7 @@ export async function Footer({ locale }: Props) {
         <div className="flex flex-col gap-2">
           <Link href="mailto:info@voynexus.com">info@voynexus.com</Link>
           <Link href={`/${locale}/contact`}>Contact</Link>
+          <Link href={`/${locale}/partners`}>Partners</Link>
           <Link href={`/${locale}/contact#ads`}>広告掲載・タイアップのご相談</Link>
           <Link href="/api/status">Status</Link>
         </div>
