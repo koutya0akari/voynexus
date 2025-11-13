@@ -4,7 +4,7 @@
   "private": true,
   "description": "voynexus travel OS for nationwide journeys with microCMS integration, AI itinerary planner, and facility widget.",
   "engines": {
-    "node": ">=20.0.0"
+    "node": "20.x"
   },
   "packageManager": "pnpm@9.11.0",
   "scripts": {
