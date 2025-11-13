@@ -54,6 +54,17 @@
   border-radius: 0.5rem;
 }
 
+.post :global(figure) {
+  margin: 1.5rem 0;
+  text-align: center;
+}
+
+.post :global(figcaption) {
+  margin-top: 0.5rem;
+  font-size: 0.85rem;
+  color: #64748b;
+}
+
 .sponsor {
   margin: 2.5rem 0;
   padding: 1.5rem;

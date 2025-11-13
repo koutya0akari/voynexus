@@ -5,6 +5,7 @@ export function sanitizeRichText(html: string) {
     whiteList: {
       a: ["href", "title", "rel", "target"],
       p: ["class"],
+      br: [],
       ul: [],
       ol: [],
       li: [],
@@ -15,9 +16,11 @@ export function sanitizeRichText(html: string) {
       h4: [],
       blockquote: [],
       img: ["src", "alt", "width", "height", "loading"],
+      figure: ["class"],
+      figcaption: [],
       code: [],
-      pre: []
+      pre: [],
     },
-    stripIgnoreTag: true
+    stripIgnoreTag: true,
   });
 }
