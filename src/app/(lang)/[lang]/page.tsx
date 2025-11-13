@@ -422,7 +422,7 @@ export default async function LocaleHome({ params }: Props) {
           </div>
           <div className="grid gap-6 lg:grid-cols-2">
             <FacilityWidgetCTA locale={locale} />
-            <BillingCheckoutCTA />
+            <BillingCheckoutCTA locale={locale} />
           </div>
         </div>
       </section>

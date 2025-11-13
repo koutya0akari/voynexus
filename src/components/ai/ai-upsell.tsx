@@ -34,8 +34,8 @@ const steps = [
     body: "右上のメニュー、または下のボタンからGoogleログインします。旅の好みは後から変更できます。",
   },
   {
-    title: "2. Stripeで決済",
-    body: "メールアドレスを入力してサブスクリプションを開始すると会員トークンが自動で保存されます。スポンサー情報も表示ルールに沿って配信されます。",
+    title: "2. プランを選んで決済",
+    body: "定額パス（1日/7日）か従量パス（回数制）を選び、メールアドレスを入力します。決済完了と同時に会員トークンが保存されます。",
   },
   {
     title: "3. AIチャット/旅程生成を起動",
@@ -62,7 +62,7 @@ export function AiUpsell({ locale, denied }: Props) {
         <h1 className="text-3xl font-semibold text-slate-900">AIコンシェルジュは会員限定です</h1>
         <p className="text-sm text-slate-600">
           {loginReason?.description ??
-            "Googleアカウントでログインし、Stripeでメンバー登録を完了するとAIチャットと旅程生成が解放されます。"}
+            "Googleアカウントでログインし、定額または従量プランを選んでStripe決済を完了するとAIチャットと旅程生成が解放されます。"}
         </p>
         {loginReason ? (
           <span className="inline-flex rounded-full border border-amber-200 bg-amber-50 px-4 py-1 text-xs font-semibold text-amber-800">
@@ -98,7 +98,7 @@ export function AiUpsell({ locale, denied }: Props) {
             決済成功ページを表示すると会員トークンがHTTP-onlyクッキーとして保存され、安全にAIリクエストへ付与されます。
           </p>
         </div>
-        <BillingCheckoutCTA />
+        <BillingCheckoutCTA locale={locale} />
       </div>
 
       <div className="rounded-3xl border border-dashed border-brand/40 bg-white/80 p-6 shadow-sm">

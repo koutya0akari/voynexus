@@ -6,12 +6,16 @@ const schema = z.object({
   customerId: z.string().optional(),
   email: z.string().email().optional(),
   successUrl: z.string().url().optional(),
-  cancelUrl: z.string().url().optional()
+  cancelUrl: z.string().url().optional(),
+  planId: z.string().optional(),
+  planName: z.string().optional(),
 });
 
 const priceId = process.env.STRIPE_PRICE_ID;
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
-const defaultSuccess = ensureSuccessUrl(process.env.STRIPE_SUCCESS_URL ?? `${siteUrl}/billing/success`);
+const defaultSuccess = ensureSuccessUrl(
+  process.env.STRIPE_SUCCESS_URL ?? `${siteUrl}/billing/success`
+);
 const defaultCancel = process.env.STRIPE_CANCEL_URL ?? `${siteUrl}/`;
 
 function ensureSuccessUrl(url: string) {
@@ -36,15 +40,26 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "email or customerId is required" }, { status: 400 });
   }
 
+  const metadata: Record<string, string> = {};
+  if (parsed.data.planId) {
+    metadata.selected_plan_id = parsed.data.planId;
+  }
+  if (parsed.data.planName) {
+    metadata.selected_plan_name = parsed.data.planName;
+  }
+
   try {
     const session = await stripe.checkout.sessions.create({
       mode: "subscription",
       line_items: [{ price: priceId, quantity: 1 }],
       customer: parsed.data.customerId,
       customer_email: parsed.data.customerId ? undefined : parsed.data.email,
-      success_url: parsed.data.successUrl ? ensureSuccessUrl(parsed.data.successUrl) : defaultSuccess,
+      success_url: parsed.data.successUrl
+        ? ensureSuccessUrl(parsed.data.successUrl)
+        : defaultSuccess,
       cancel_url: parsed.data.cancelUrl ?? defaultCancel,
-      allow_promotion_codes: true
+      allow_promotion_codes: true,
+      metadata: Object.keys(metadata).length ? metadata : undefined,
     });
 
     return NextResponse.json({ url: session.url, sessionId: session.id });
@@ -79,7 +94,7 @@ export async function GET(request: Request) {
       customer_email: customerId ? undefined : email,
       success_url: ensureSuccessUrl(successUrl),
       cancel_url: cancelUrl,
-      allow_promotion_codes: true
+      allow_promotion_codes: true,
     });
 
     if (!session.url) {
