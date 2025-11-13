@@ -191,10 +191,10 @@ export function BillingCheckoutCTA({ locale }: Props) {
           </p>
           <div className="mt-3 flex flex-wrap gap-3">
             <a
-              href="mailto:billing@voynexus.jp"
+              href="mailto:info@voynexus.com"
               className="rounded-full border border-brand px-4 py-2 text-xs font-semibold text-brand"
             >
-              billing@voynexus.jp
+              info@voynexus.com
             </a>
             <Link
               href={contactHref}

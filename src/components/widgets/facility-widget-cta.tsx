@@ -28,7 +28,7 @@ export function FacilityWidgetCTA({ locale }: Props) {
             専用ページを見る
           </Link>
           <a
-            href="mailto:partners@voynexus.jp"
+            href="mailto:info@voynexus.com"
             className="rounded-full border border-brand px-4 py-2 text-sm font-semibold text-brand"
           >
             導入について相談

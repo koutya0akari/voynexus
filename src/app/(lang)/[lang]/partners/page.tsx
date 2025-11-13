@@ -39,7 +39,7 @@ const content: Record<Locale, Copy> = {
       "危険ワードや緊急相談は即座にスタッフへ転送",
     ],
     heroPrimaryCta: "導入ガイドを受け取る",
-    heroSecondaryCta: "partners@voynexus.jp",
+    heroSecondaryCta: "info@voynexus.com",
     heroSecondaryLabel: "メールで相談",
     sections: [
       {
@@ -112,7 +112,7 @@ const content: Record<Locale, Copy> = {
       "Sensitive keywords alert on-site staff immediately",
     ],
     heroPrimaryCta: "Request onboarding kit",
-    heroSecondaryCta: "partners@voynexus.jp",
+    heroSecondaryCta: "info@voynexus.com",
     heroSecondaryLabel: "Email support",
     sections: [
       {
@@ -185,7 +185,7 @@ const content: Record<Locale, Copy> = {
       "偵測危險關鍵字後立刻通知值班人員",
     ],
     heroPrimaryCta: "索取導入資料",
-    heroSecondaryCta: "partners@voynexus.jp",
+    heroSecondaryCta: "info@voynexus.com",
     heroSecondaryLabel: "Email 洽詢",
     sections: [
       {
@@ -240,7 +240,7 @@ const content: Record<Locale, Copy> = {
 export default function PartnersPage({ params }: Props) {
   const locale = params.lang;
   const copy = content[locale] ?? content.ja;
-  const contactEmail = "partners@voynexus.jp";
+  const contactEmail = "info@voynexus.com";
 
   return (
     <div className="mx-auto max-w-5xl space-y-10 px-4 py-12">
