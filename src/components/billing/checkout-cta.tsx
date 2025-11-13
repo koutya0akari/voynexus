@@ -43,6 +43,10 @@ export function BillingCheckoutCTA({ locale }: Props) {
     }),
     [locale]
   );
+  const partnersHref = useMemo(
+    () => (locale ? `/${locale}/partners` : "/partners") as Route,
+    [locale]
+  );
 
   const startCheckout = async () => {
     if (!selectedPlan.supportsCheckout) {
@@ -154,6 +158,13 @@ export function BillingCheckoutCTA({ locale }: Props) {
           <li key={hint}>{hint}</li>
         ))}
       </ul>
+      <p className="mt-2 text-xs text-slate-500">
+        企業・自治体向けの紹介ページは{" "}
+        <Link href={partnersHref} className="text-brand underline underline-offset-2">
+          こちら
+        </Link>
+        からご覧いただけます。
+      </p>
 
       {selectedPlan.supportsCheckout ? (
         <div className="mt-4 flex flex-col gap-3 sm:flex-row">
