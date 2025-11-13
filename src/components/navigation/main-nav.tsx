@@ -43,8 +43,11 @@ export function MainNav({ locale }: Props) {
   const handleMobileNavigate = () => setMobileMenuOpen(false);
 
   return (
-    <header className="sticky top-0 z-40 border-b border-slate-100 bg-white/90 backdrop-blur">
-      <div className="mx-auto max-w-6xl px-4 py-3">
+    <header className="sticky top-0 z-40 w-full border-b border-slate-100 bg-white/90 backdrop-blur">
+      <div
+        className="mx-auto max-w-6xl px-4 pb-3 pt-4"
+        style={{ paddingTop: "calc(env(safe-area-inset-top, 0px) + 0.75rem)" }}
+      >
         <div className="flex items-center justify-between gap-4">
           <div>
             <Link href={`/${locale}`} className="font-semibold">
@@ -103,7 +106,10 @@ export function MainNav({ locale }: Props) {
             </Link>
           ))}
         </div>
-        <div className={clsx("mt-4 flex-col gap-3 md:hidden", mobileMenuOpen ? "flex" : "hidden")}>
+        <div
+          className={clsx("mt-4 flex-col gap-3 md:hidden", mobileMenuOpen ? "flex" : "hidden")}
+          style={{ maxHeight: "calc(100vh - 6rem)", overflowY: "auto" }}
+        >
           <div className="rounded-2xl border border-slate-200 bg-white p-3">
             <p className="text-xs uppercase tracking-wide text-slate-400">Languages</p>
             <div className="mt-2">

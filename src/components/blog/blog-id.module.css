@@ -48,14 +48,30 @@
 }
 
 .post :global(img) {
-  margin: 1.5rem auto;
   display: block;
-  max-width: 100%;
-  border-radius: 0.5rem;
+  width: 100%;
+  max-width: min(100%, 720px);
+  height: auto;
+  margin: 1.5rem auto;
+  border-radius: 0.875rem;
+  background-color: #f8fafc;
+  box-shadow: 0 12px 30px rgba(15, 23, 42, 0.08);
+  object-fit: contain;
+}
+
+@media (max-width: 640px) {
+  .post :global(img) {
+    margin: 1rem 0;
+    border-radius: 0.75rem;
+    box-shadow: 0 8px 18px rgba(15, 23, 42, 0.08);
+  }
 }
 
 .post :global(figure) {
   margin: 1.5rem 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
   text-align: center;
 }
 

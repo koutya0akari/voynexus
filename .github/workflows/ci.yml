@@ -1,0 +1,44 @@
+name: CI
+
+on:
+  push:
+    branches: ["main", "staging"]
+  pull_request:
+    branches: ["main", "staging"]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    env:
+      NODE_VERSION: 20.18.0
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: pnpm
+          cache-dependency-path: pnpm-lock.yaml
+      - name: Enable pnpm via Corepack
+        run: |
+          corepack enable
+          corepack prepare pnpm@9 --activate
+      - name: Install dependencies
+        run: |
+          pnpm install --frozen-lockfile
+      - name: Lint
+        run: |
+          pnpm lint
+      - name: Type check
+        run: |
+          pnpm typecheck
+      - name: Unit tests
+        run: |
+          pnpm test
+      - name: Build sitemap
+        run: |
+          pnpm tsx scripts/build-sitemap.ts
