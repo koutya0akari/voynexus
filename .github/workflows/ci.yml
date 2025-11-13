@@ -16,29 +16,42 @@ jobs:
         shell: bash
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: ${{ env.NODE_VERSION }}
-          cache: pnpm
-          cache-dependency-path: pnpm-lock.yaml
-      - name: Enable pnpm via Corepack
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
+          git init
+          git remote add origin https://x-access-token:${GITHUB_TOKEN}@github.com/${{ github.repository }}.git
+          git fetch --depth=1 origin ${{ github.sha }}
+          git checkout --detach ${{ github.sha }}
+          git config --global --add safe.directory "${GITHUB_WORKSPACE}"
+      - name: Set up Node.js
+        run: |
+          export NVM_DIR="$HOME/.nvm"
+          curl -fsSL https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
+          source "$NVM_DIR/nvm.sh"
+          nvm install "$NODE_VERSION"
+          nvm use "$NODE_VERSION"
+          echo "NVM_DIR=$NVM_DIR" >> "$GITHUB_ENV"
+          echo "$NVM_DIR/versions/node/v$NODE_VERSION/bin" >> "$GITHUB_PATH"
           corepack enable
           corepack prepare pnpm@9 --activate
       - name: Install dependencies
         run: |
+          source "$NVM_DIR/nvm.sh"
           pnpm install --frozen-lockfile
       - name: Lint
         run: |
+          source "$NVM_DIR/nvm.sh"
           pnpm lint
       - name: Type check
         run: |
+          source "$NVM_DIR/nvm.sh"
           pnpm typecheck
       - name: Unit tests
         run: |
+          source "$NVM_DIR/nvm.sh"
           pnpm test
       - name: Build sitemap
         run: |
+          source "$NVM_DIR/nvm.sh"
           pnpm tsx scripts/build-sitemap.ts

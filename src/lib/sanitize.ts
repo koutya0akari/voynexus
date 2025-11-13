@@ -36,28 +36,24 @@ function normalizeImageTags(markup: string) {
       }
     };
 
-    attrs = attrs.replace(
-      /\bsrc\s*=\s*"(\/\/[^\"]*)"/iu,
-      (_match: string, resource: string) => ` src="https://${resource.slice(2)}"`
-    );
-    attrs = attrs.replace(
-      /\bsrc\s*=\s*'(\/\/[^']*)'/iu,
-      (_match: string, resource: string) => ` src='https://${resource.slice(2)}'`
-    );
-    attrs = attrs.replace(/\bsrcset\s*=\s*"([^\"]*)"/iu, (_match: string, value: string) => {
-      const normalized = value.replace(
+    const normalizeSchemeRelative = (value: string) =>
+      value.replace(
         /(^|\s)(\/\/[^\s,]+)/giu,
-        (_segment: string, prefix: string, url: string) => `${prefix}https://${url.slice(2)}`
+        (_segment: string, prefix: string, url: string) => `${prefix}https:${url}`
       );
-      return ` srcset="${normalized}"`;
-    });
-    attrs = attrs.replace(/\bsrcset\s*=\s*'([^']*)'/iu, (_match: string, value: string) => {
-      const normalized = value.replace(
-        /(^|\s)(\/\/[^\s,]+)/giu,
-        (_segment: string, prefix: string, url: string) => `${prefix}https://${url.slice(2)}`
-      );
-      return ` srcset='${normalized}'`;
-    });
+
+    attrs = attrs.replace(
+      /\bsrc\s*=\s*(['"])(\/\/[^'"\s>]+)\1/iu,
+      (_match: string, quote: string, resource: string) => ` src=${quote}https:${resource}${quote}`
+    );
+
+    attrs = attrs.replace(
+      /\bsrcset\s*=\s*(['"])([^'"]*)\1/iu,
+      (_match: string, quote: string, value: string) => {
+        const normalized = normalizeSchemeRelative(value);
+        return ` srcset=${quote}${normalized}${quote}`;
+      }
+    );
 
     ensureAttr("class", "voynexus-rich-img");
     ensureAttr("loading", "lazy");
