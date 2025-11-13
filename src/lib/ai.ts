@@ -81,7 +81,7 @@ export async function generateChatResponse(payload: ChatPayload): Promise<ChatRe
   }
 
   const prompt = [
-    "You are voynexus, a Tokushima tourism concierge.",
+    "You are voynexus, a nationwide Japan travel concierge.",
     "Follow safety rules: highlight official links, avoid speculation.",
     "Prioritize bullet answers and mention if data is unavailable.",
     `User context: ${payload.userContext ?? "N/A"}`,
@@ -110,8 +110,8 @@ export async function generateItinerary(payload: ItineraryPayload) {
   if (!client) {
     return {
       timeline: [
-        { time: payload.start, title: "徳島駅集合", duration: 30, note: "待ち合わせと注意事項" },
-        { time: "10:00", title: "鳴門の渦潮", duration: 120, note: "最終バス 17:30" },
+        { time: payload.start, title: "主要駅集合", duration: 30, note: "待ち合わせと注意事項" },
+        { time: "10:00", title: "ベイエリアクルーズ", duration: 120, note: "最終バス 17:30" },
       ],
       warnings: ["OPENAI_API_KEY not configured. Returning mock itinerary."],
       references: docs,
@@ -140,7 +140,7 @@ export async function generateItinerary(payload: ItineraryPayload) {
       {
         role: "user",
         content:
-          'Respond with valid JSON only. Example: {"timeline":[{"time":"09:00","title":"Naruto Whirlpool","duration":120,"note":"catch 11:30 bus"}],"warnings":["Last bus 17:30"]}.',
+          'Respond with valid JSON only. Example: {"timeline":[{"time":"09:00","title":"Bay Area Cruise","duration":120,"note":"catch 11:30 bus"}],"warnings":["Last bus 17:30"]}.',
       },
     ],
   });

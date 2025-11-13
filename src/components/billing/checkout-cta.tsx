@@ -94,7 +94,7 @@ export function BillingCheckoutCTA({ locale }: Props) {
       <p className="text-xs uppercase text-brand">voynexus Membership</p>
       <h2 className="text-2xl font-semibold text-slate-900">プランを選んでAIパスを取得</h2>
       <p className="text-sm text-slate-600">
-        徳島滞在が長い方には定額パス、スポット確認だけなら従量パスがおすすめです。利用スタイルに合わせてプランを切り替えてください。
+        長期ロケや連泊が多い方には定額パス、出張ついでの下見やFAQ確認だけなら従量パスがおすすめです。利用スタイルに合わせてプランを切り替えてください。
       </p>
 
       <div className="mt-4 flex flex-wrap gap-2">

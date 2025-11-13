@@ -11,13 +11,13 @@ export type RagDocument = {
 
 const fallbackDocs: RagDocument[] = [
   {
-    id: "naruto-guide",
+    id: "seaside-guide",
     type: "spot",
-    title: "鳴門の渦潮の見頃",
+    title: "ベイエリアクルーズの見頃",
     summary: "潮位に合わせたおすすめ時間帯と雨天時の代替案を紹介。",
-    url: "/ja/spots/naruto-whirlpool",
-    lang: "ja"
-  }
+    url: "/ja/spots/seaside-sunrise",
+    lang: "ja",
+  },
 ];
 
 export async function searchRag(query: string, lang: Locale): Promise<RagDocument[]> {
@@ -34,9 +34,9 @@ export async function searchRag(query: string, lang: Locale): Promise<RagDocumen
       headers: {
         "Content-Type": "application/json",
         apikey: supabaseKey,
-        Authorization: `Bearer ${supabaseKey}`
+        Authorization: `Bearer ${supabaseKey}`,
       },
-      body: JSON.stringify({ query, lang, topK: 5 })
+      body: JSON.stringify({ query, lang, topK: 5 }),
     });
 
     if (!response.ok) {

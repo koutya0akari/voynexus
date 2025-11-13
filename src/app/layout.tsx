@@ -14,11 +14,11 @@ const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://voynexusus.com";
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {
-    default: "voynexus | 徳島トラベルOS",
+    default: "voynexus | トラベルOS",
     template: "%s | voynexus",
   },
   description:
-    "voynexusは徳島に特化したトラベルOS。天候と交通に合わせたAI旅程、現地レポート、多言語コンシェルジュをまとめて提供します。",
+    "voynexusは全国に対応したトラベルOS。天候と交通に合わせたAI旅程、現地レポート、多言語コンシェルジュをまとめて提供します。",
   alternates: {
     canonical: "/",
     languages: {
@@ -29,7 +29,7 @@ export const metadata: Metadata = {
   },
   openGraph: {
     title: "voynexus",
-    description: "旅程生成・多言語記事・AIチャットを備えた徳島向けトラベルOS。",
+    description: "旅程生成・多言語記事・AIチャットを備えた全国向けトラベルOS。",
     url: siteUrl,
     siteName: "voynexus",
     images: [`${siteUrl}/og/default.svg`],

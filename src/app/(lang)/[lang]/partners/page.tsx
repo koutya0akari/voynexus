@@ -119,7 +119,7 @@ const content: Record<Locale, Copy> = {
         title: "One tag for FAQ board + chat",
         body: "Drop the widget into your facility site or signage and let the AI handle opening hours, transportation, and ticket explanations. Only unresolved topics are escalated to the operator inbox.",
         bullets: [
-          "Pre-trained with Tokushima-specific nouns and spellings",
+          "Pre-trained with city-specific nouns and spellings",
           "Live timeline for pop-up events and last buses",
           "Weather-aware alternative plans ready out of the box",
         ],

@@ -21,31 +21,31 @@ const itineraryEndpoint = process.env.MICROCMS_ITINERARIES_ENDPOINT || "itinerar
 
 const fallbackSpots: Spot[] = [
   {
-    id: "naruto-whirlpool",
+    id: "seaside-sunrise",
     lang: "ja",
-    translationGroupId: "grp-naruto-whirlpool",
-    slug: "naruto-whirlpool",
-    title: "鳴門の渦潮クルーズ",
-    summary: "潮が最大になる時間帯をAIが提案し、渦潮観測船のチケットリンクを提供。",
+    translationGroupId: "grp-seaside-sunrise",
+    slug: "seaside-sunrise",
+    title: "ベイエリアサンライズクルーズ",
+    summary: "潮の動きと天候をAIが提案し、観光船のチケットリンクを提供。",
     ogImage: "/sample/naruto.png",
     updatedAt: new Date().toISOString(),
     publishedAt: new Date().toISOString(),
-    name: "鳴門の渦潮",
-    area: "鳴門",
+    name: "サンライズクルーズ",
+    area: "横浜",
     tags: ["自然", "雨天OK", "車なし"],
     openHours: "9:00-17:00",
     requiredTime: 120,
     access: {
-      busLine: "徳島バス",
-      stop: "鳴門公園",
+      busLine: "シティバス",
+      stop: "みなと公園",
       lastBusTime: "18:10",
     },
     accessibility: {
       stepFree: true,
       stroller: true,
     },
-    mapLink: "https://maps.google.com/?q=naruto+whirlpool",
-    images: [{ url: "/sample/naruto.png", alt: "鳴門の渦潮" }],
+    mapLink: "https://maps.google.com/?q=seaside+sunrise+cruise",
+    images: [{ url: "/sample/naruto.png", alt: "ベイエリアサンライズクルーズ" }],
     lastVerifiedAt: new Date().toISOString(),
   },
 ];
@@ -68,23 +68,23 @@ const fallbackItineraries: Itinerary[] = [
     transport: "bus",
     timeline: [
       { time: "09:00", spotRef: "museum", stayMin: 60, moveMin: 20, note: "ワークショップ参加" },
-      { time: "11:00", spotRef: "naruto-whirlpool", stayMin: 90, moveMin: 30 },
+      { time: "11:00", spotRef: "seaside-sunrise", stayMin: 90, moveMin: 30 },
     ],
     alternatives: ["屋外公園"],
     foodToiletNotes: "館内に授乳室あり",
     warnings: ["最終バス 17:30 までに帰路へ"],
     links: [{ label: "PDF", url: "/sample/sample.pdf" }],
-    mapLink: "https://maps.google.com/?q=tokushima",
+    mapLink: "https://maps.google.com/?q=japan+family+course",
   },
 ];
 
 const fallbackArticles: Article[] = [
   {
-    id: "awa-odori-guide",
+    id: "fireworks-guide",
     lang: "ja",
     translationGroupId: "grp-awa-odori-guide",
-    slug: "awa-odori-guide",
-    title: "阿波おどりを120%楽しむ学生ガイド",
+    slug: "fireworks-guide",
+    title: "全国花火フェスを120%楽しむガイド",
     summary: "混雑回避や雨天の持ち物などを学生ライターが現地からレポート。",
     ogImage: "/sample/awa.png",
     updatedAt: new Date().toISOString(),
@@ -92,18 +92,18 @@ const fallbackArticles: Article[] = [
     type: "guide",
     body: "<p>本文リッチテキスト</p>",
     heroImage: "/sample/awa.png",
-    related: ["naruto-whirlpool"],
+    related: ["seaside-sunrise"],
   },
 ];
 
 const fallbackBlogs: Blog[] = [
   {
-    id: "welcome-to-tokushima",
-    slug: "welcome-to-tokushima",
-    title: "徳島トラベルブログを公開しました",
+    id: "welcome-to-voynexus",
+    slug: "welcome-to-voynexus",
+    title: "全国トラベルブログを公開しました",
     publishedAt: new Date().toISOString(),
     category: { name: "お知らせ" },
-    body: "<p>徳島での旅のヒントやイベント情報を発信するブログをスタートしました。現地スタッフや学生ライターのリポートを順次公開していきます。</p>",
+    body: "<p>全国の旅のヒントやイベント情報を発信するブログをスタートしました。現地スタッフや学生ライターのリポートを順次公開していきます。</p>",
   },
 ];
 
@@ -113,8 +113,8 @@ const fallbackSponsors: Sponsor[] = [
     lang: "ja",
     translationGroupId: "grp-sponsor-hotel",
     slug: "sponsor-hotel",
-    title: "徳島シーサイドホテル",
-    summary: "渦潮エリア徒歩5分のホテル。",
+    title: "ベイエリアシーサイドホテル",
+    summary: "港エリア徒歩5分のホテル。",
     ogImage: "/sample/hotel.png",
     updatedAt: new Date().toISOString(),
     publishedAt: new Date().toISOString(),

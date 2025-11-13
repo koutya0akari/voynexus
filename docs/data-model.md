@@ -2,23 +2,23 @@
 
 ## Base Fields
 
-| Field | Type | Notes |
-| --- | --- | --- |
-| `lang` | enum (ja/en/zh) | 必須、URL/L10n制御 |
-| `translation_group_id` | UUID | 各言語同一ID |
-| `slug` | string | `[a-z0-9-]+` |
-| `title` | string (<=80 chars) |
-| `summary` | string (<=160 chars) |
-| `og_image` | asset |
-| `publishedAt` | datetime |
-| `updatedAt` | datetime |
-| `last_verified_at` | datetime | 編集時自動更新 (スポット/FAQ) |
+| Field                  | Type                 | Notes                         |
+| ---------------------- | -------------------- | ----------------------------- |
+| `lang`                 | enum (ja/en/zh)      | 必須、URL/L10n制御            |
+| `translation_group_id` | UUID                 | 各言語同一ID                  |
+| `slug`                 | string               | `[a-z0-9-]+`                  |
+| `title`                | string (<=80 chars)  |
+| `summary`              | string (<=160 chars) |
+| `og_image`             | asset                |
+| `publishedAt`          | datetime             |
+| `updatedAt`            | datetime             |
+| `last_verified_at`     | datetime             | 編集時自動更新 (スポット/FAQ) |
 
 ## Content Types
 
 ### Spots
 
-- `area` (select: 徳島市/鳴門/三好/南部/東部…)
+- `area` (select: 札幌/東京/名古屋/大阪/福岡 など主要エリア)
 - `tags` (multi-select: 雨天OK/車なし/子連れ/学割/バリアフリー/屋内/自然/文化)
 - `open_hours` (rich text), `closed_days`, `price`
 - `required_time` (number/min)

@@ -1,6 +1,6 @@
 # voynexus Travel PWA
 
-徳島観光に特化した多言語ダッシュボード「voynexus」。microCMSで管理するコンテンツをNext.js 14 (App Router) で配信し、AIチャット・旅程生成・施設向けウィジェットを備えています。
+全国の観光情報をワンストップで届ける多言語ダッシュボード「voynexus」。microCMSで管理するコンテンツをNext.js 14 (App Router) で配信し、AIチャット・旅程生成・施設向けウィジェットを備えています。
 
 ## アーキテクチャ概要
 

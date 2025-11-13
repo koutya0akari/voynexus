@@ -17,18 +17,18 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     return {};
   }
   return {
-    title: `${spot.name} | 徳島観光`,
+    title: `${spot.name} | 全国観光`,
     description: spot.summary,
     alternates: {
-      canonical: `/${params.lang}/spots/${spot.slug}`
+      canonical: `/${params.lang}/spots/${spot.slug}`,
     },
     openGraph: {
       title: spot.name,
       description: spot.summary,
       type: "article",
       url: `/${params.lang}/spots/${spot.slug}`,
-      images: spot.images?.[0]?.url ? [spot.images[0].url] : undefined
-    }
+      images: spot.images?.[0]?.url ? [spot.images[0].url] : undefined,
+    },
   };
 }
 
@@ -54,7 +54,7 @@ export default async function SpotDetailPage({ params }: Props) {
           .filter(([, value]) => Boolean(value))
           .map(([key]) => key)
           .join(", ")
-      : undefined
+      : undefined,
   };
 
   return (
@@ -64,7 +64,8 @@ export default async function SpotDetailPage({ params }: Props) {
         <h1 className="text-3xl font-semibold text-slate-900">{spot.name}</h1>
         <p className="mt-2 text-slate-600">{spot.summary}</p>
         <div className="mt-2 text-xs text-slate-500">
-          {t("spot.lastVerified")}: {spot.lastVerifiedAt && new Date(spot.lastVerifiedAt).toLocaleDateString(locale)}
+          {t("spot.lastVerified")}:{" "}
+          {spot.lastVerifiedAt && new Date(spot.lastVerifiedAt).toLocaleDateString(locale)}
         </div>
       </header>
       <section className="grid gap-4 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm md:grid-cols-2">
@@ -81,7 +82,10 @@ export default async function SpotDetailPage({ params }: Props) {
           <h2 className="font-semibold text-slate-900">{t("spot.tags")}</h2>
           <div className="mt-2 flex flex-wrap gap-2">
             {spot.tags.map((tag) => (
-              <span key={tag} className="rounded-full bg-slate-100 px-3 py-1 text-sm text-slate-700">
+              <span
+                key={tag}
+                className="rounded-full bg-slate-100 px-3 py-1 text-sm text-slate-700"
+              >
                 {tag}
               </span>
             ))}
@@ -109,7 +113,10 @@ export default async function SpotDetailPage({ params }: Props) {
           公式サイトを見る →
         </a>
       )}
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
     </article>
   );
 }
