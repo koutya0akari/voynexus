@@ -1,7 +1,11 @@
 import Link from "next/link";
 import { cookies } from "next/headers";
 import { auth } from "@/auth";
-import { verifyMembershipTokenValue, type MembershipSuccess } from "@/lib/membership";
+import {
+  verifyMembershipTokenValue,
+  type MembershipSuccess,
+  getMembershipStatusForUser,
+} from "@/lib/membership";
 import { getMeteredPassSummary } from "@/lib/metered-pass-store";
 
 export default async function MembersPage() {
@@ -28,7 +32,7 @@ export default async function MembersPage() {
   const membershipCookie = cookies().get("membership_token")?.value;
   const membership = membershipCookie
     ? await verifyMembershipTokenValue(membershipCookie, userId)
-    : { ok: false, status: 401, message: "会員トークンが見つかりませんでした。" };
+    : await getMembershipStatusForUser(userId);
   const meteredSummary = await getMeteredPassSummary(userId);
 
   if (!membership.ok) {

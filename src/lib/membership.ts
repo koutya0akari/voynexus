@@ -143,6 +143,39 @@ export async function verifyMembershipTokenValue(
   return verification;
 }
 
+export async function getMembershipStatusForUser(
+  googleUserId: string
+): Promise<MembershipSuccess | MembershipFailure> {
+  const record = await getMembershipByGoogleUserId(googleUserId);
+  if (record) {
+    const subscriptionResult = await verifyActiveMembershipForCustomer(
+      record.stripeCustomerId,
+      googleUserId,
+      record
+    );
+    if (subscriptionResult.ok) {
+      return subscriptionResult;
+    }
+  }
+
+  const meteredSummary = await getMeteredPassSummary(googleUserId);
+  if (meteredSummary.totalRemaining > 0) {
+    return {
+      ok: true,
+      memberId: `metered:${googleUserId}`,
+      linkedGoogleUserId: googleUserId,
+      meteredUsesRemaining: meteredSummary.totalRemaining,
+      accessType: "metered",
+    };
+  }
+
+  return {
+    ok: false,
+    status: 401,
+    message: "会員トークンが見つかりません。決済完了後に同期を行ってください。",
+  };
+}
+
 async function verifyActiveMembershipForCustomer(
   customerId: string,
   googleUserId?: string,
