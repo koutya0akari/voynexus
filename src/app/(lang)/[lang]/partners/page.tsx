@@ -1,4 +1,3 @@
-import Link from "next/link";
 import type { Locale } from "@/lib/i18n";
 
 type Props = {
@@ -260,14 +259,14 @@ export default function PartnersPage({ params }: Props) {
           ))}
         </ul>
         <div className="mt-6 flex flex-wrap gap-3">
-          <Link
+          <a
             href={copy.contactLink}
             target="_blank"
             rel="noreferrer"
             className="rounded-full bg-brand px-5 py-2 text-sm font-semibold text-white shadow-sm hover:bg-brand/90"
           >
             {copy.heroPrimaryCta}
-          </Link>
+          </a>
           <a
             href={`mailto:${copy.heroSecondaryCta}`}
             className="inline-flex items-center gap-2 rounded-full border border-brand px-5 py-2 text-sm font-semibold text-brand"
@@ -328,14 +327,14 @@ export default function PartnersPage({ params }: Props) {
         <h2 className="text-2xl font-semibold text-slate-900">{copy.contactTitle}</h2>
         <p className="mt-2 text-sm">{copy.contactBody}</p>
         <div className="mt-4 flex flex-wrap gap-3">
-          <Link
+          <a
             href={copy.contactLink}
             target="_blank"
             rel="noreferrer"
             className="rounded-full bg-brand px-5 py-2 text-sm font-semibold text-white shadow-sm hover:bg-brand/90"
           >
             {copy.contactButton}
-          </Link>
+          </a>
           <a
             href={`mailto:${contactEmail}`}
             className="rounded-full border border-brand px-5 py-2 text-sm font-semibold text-brand"
