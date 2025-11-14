@@ -76,6 +76,15 @@ export type Blog = {
   content?: string;
   slug?: string;
   publishedAt?: string;
+  studentId?: string;
+  tags?: string[];
+  cost?: number;
+  pictures?: {
+    url: string;
+    width?: number;
+    height?: number;
+    alt?: string;
+  }[];
   category?: {
     id?: string;
     name?: string;

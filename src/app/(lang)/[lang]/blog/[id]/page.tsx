@@ -29,8 +29,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     openGraph: {
       title: blog.title,
       description: plain,
-      type: "article"
-    }
+      type: "article",
+    },
   };
 }
 
@@ -43,7 +43,7 @@ export default async function LocaleBlogDetailPage({ params }: Props) {
 
   return (
     <div className="px-4 py-10">
-      <BlogId blog={blog} />
+      <BlogId blog={blog} locale={params.lang} />
     </div>
   );
 }

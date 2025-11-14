@@ -71,6 +71,30 @@ function normalizeImageTags(markup: string) {
   });
 }
 
+function normalizeFigureTags(markup: string) {
+  return markup.replace(/<figure\b([^>]*)>/gi, (_match: string, rawAttributes?: string) => {
+    let attrs = rawAttributes?.trim() ?? "";
+    if (attrs.length) {
+      attrs = ` ${attrs}`;
+    }
+
+    const classPattern = /\bclass\s*=\s*(['"])([^'"]*)\1/i;
+    if (classPattern.test(attrs)) {
+      attrs = attrs.replace(classPattern, (_full: string, quote: string, value: string) => {
+        const existing = value.split(/\s+/u).filter(Boolean);
+        if (!existing.includes("voynexus-rich-figure")) {
+          existing.push("voynexus-rich-figure");
+        }
+        return ` class=${quote}${existing.join(" ")}${quote}`;
+      });
+    } else {
+      attrs = `${attrs} class="voynexus-rich-figure"`;
+    }
+
+    return `<figure${attrs}>`;
+  });
+}
+
 export function sanitizeRichText(html: string) {
   const cleaned = xss(html, {
     whiteList: {
@@ -95,5 +119,5 @@ export function sanitizeRichText(html: string) {
     stripIgnoreTag: true,
   });
 
-  return normalizeImageTags(cleaned);
+  return normalizeFigureTags(normalizeImageTags(cleaned));
 }

@@ -2,13 +2,38 @@ import Link from "next/link";
 import { Fragment } from "react";
 import { sanitizeRichText } from "@/lib/sanitize";
 import type { Blog } from "@/lib/types/cms";
+import type { Locale } from "@/lib/i18n";
 import styles from "./blog-id.module.css";
 
 type Props = {
   blog: Blog;
+  locale: Locale;
 };
 
-export default function BlogId({ blog }: Props) {
+const copy: Record<Locale, { author: string; cost: string; tags: string; gallery: string }> = {
+  ja: {
+    author: "執筆",
+    cost: "旅費目安",
+    tags: "タグ",
+    gallery: "フォトレポート",
+  },
+  en: {
+    author: "Written by",
+    cost: "Approx. budget",
+    tags: "Tags",
+    gallery: "Photo report",
+  },
+  zh: {
+    author: "作者",
+    cost: "預算目安",
+    tags: "標籤",
+    gallery: "照片報導",
+  },
+};
+
+const dateLocaleMap: Record<Locale, string> = { ja: "ja-JP", en: "en-US", zh: "zh-TW" };
+
+export default function BlogId({ blog, locale }: Props) {
   const safeBody = sanitizeRichText(blog.body ?? "");
   const segments = safeBody
     .split(/(?=<(?:p|figure|img|blockquote|h2|h3|h4|ul|ol|pre|code))/gi)
@@ -34,6 +59,17 @@ export default function BlogId({ blog }: Props) {
   );
 
   const sponsorInsertIndex = segments.length > 1 ? Math.floor(segments.length / 2) : 0;
+  const localeCopy = copy[locale] ?? copy.ja;
+  const dateLocale = dateLocaleMap[locale] ?? dateLocaleMap.ja;
+  const formattedCost =
+    typeof blog.cost === "number"
+      ? new Intl.NumberFormat(dateLocale, {
+          style: "currency",
+          currency: "JPY",
+          maximumFractionDigits: 0,
+        }).format(blog.cost)
+      : null;
+  const tags = blog.tags?.map((tag) => tag.trim()).filter(Boolean);
 
   return (
     <main className={styles.main}>
@@ -46,10 +82,38 @@ export default function BlogId({ blog }: Props) {
       <h1 className={styles.title}>{blog.title}</h1>
       {blog.publishedAt ? (
         <p className={styles.publishedAt}>
-          {new Date(blog.publishedAt).toLocaleDateString("ja-JP")}
+          {new Date(blog.publishedAt).toLocaleDateString(dateLocale)}
         </p>
       ) : null}
       {blog.category?.name ? <p className={styles.category}>{blog.category.name}</p> : null}
+      {(blog.studentId || formattedCost || (tags?.length ?? 0) > 0) && (
+        <section className={styles.meta}>
+          {blog.studentId ? (
+            <div className={styles.metaItem}>
+              <p className={styles.metaLabel}>{localeCopy.author}</p>
+              <p className={styles.metaValue}>{blog.studentId}</p>
+            </div>
+          ) : null}
+          {formattedCost ? (
+            <div className={styles.metaItem}>
+              <p className={styles.metaLabel}>{localeCopy.cost}</p>
+              <p className={styles.metaValue}>{formattedCost}</p>
+            </div>
+          ) : null}
+          {tags?.length ? (
+            <div className={styles.metaItem}>
+              <p className={styles.metaLabel}>{localeCopy.tags}</p>
+              <div className={styles.tags}>
+                {tags.map((tag) => (
+                  <span key={tag} className={styles.tag}>
+                    {tag}
+                  </span>
+                ))}
+              </div>
+            </div>
+          ) : null}
+        </section>
+      )}
       <div className={styles.post}>
         {segments.length ? (
           segments.map((segment, index) => (
@@ -65,6 +129,25 @@ export default function BlogId({ blog }: Props) {
           </>
         )}
       </div>
+      {blog.pictures?.length ? (
+        <section className={styles.gallery}>
+          <h2 className={styles.galleryTitle}>{localeCopy.gallery}</h2>
+          <div className={styles.galleryGrid}>
+            {blog.pictures.map((picture, index) => (
+              <figure key={`${picture.url}-${index}`} className={styles.galleryItem}>
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={picture.url}
+                  alt={picture.alt ?? blog.title}
+                  loading="lazy"
+                  decoding="async"
+                />
+                {picture.alt ? <figcaption>{picture.alt}</figcaption> : null}
+              </figure>
+            ))}
+          </div>
+        </section>
+      ) : null}
     </main>
   );
 }

@@ -104,6 +104,10 @@ const fallbackBlogs: Blog[] = [
     publishedAt: new Date().toISOString(),
     category: { name: "お知らせ" },
     body: "<p>全国の旅のヒントやイベント情報を発信するブログをスタートしました。現地スタッフや学生ライターのリポートを順次公開していきます。</p>",
+    studentId: "voynexus編集部",
+    tags: ["リリース", "お知らせ"],
+    cost: 18000,
+    pictures: [{ url: "/sample/awa.png", alt: "voynexus ブログ" }],
   },
 ];
 
@@ -171,17 +175,108 @@ function getFallbackList<T>(endpoint: string, queries?: MicroCMSQueries) {
 
 type FallbackEntity = { id: string; slug?: string };
 
-type BlogLike = Blog & {
+type PrimitiveRecord = Record<string, unknown>;
+
+type BlogLike = Omit<Blog, "tags" | "category" | "pictures" | "studentId" | "cost" | "body"> & {
+  body?: string;
   content?: string;
-  category?: Blog["category"] & { category?: string };
+  contents?: string;
+  studentid?: string;
+  studentId?: string;
+  category?: Blog["category"] & { category?: string; categories?: string };
+  categories?: PrimitiveRecord;
+  tags?: PrimitiveRecord[];
+  costs?: number;
+  cost?: number;
+  pictures?: PrimitiveRecord[];
 };
 
+const preferredCategoryKeys = ["name", "category", "categories", "title"];
+const preferredTagKeys = ["tags", "tag", "name", "title", "label"];
+
+function readStringField(record: PrimitiveRecord | undefined, keys: string[]) {
+  if (!record) return undefined;
+  for (const key of keys) {
+    const value = record[key];
+    if (typeof value === "string" && value.trim().length) {
+      return value;
+    }
+  }
+  return undefined;
+}
+
+function normalizePictures(title: string, pictures?: PrimitiveRecord[]) {
+  if (!Array.isArray(pictures)) return undefined;
+  const normalized = pictures
+    .map((picture) => {
+      if (!picture) return null;
+      const imageCandidate = picture["image"];
+      const image =
+        imageCandidate && typeof imageCandidate === "object"
+          ? (imageCandidate as PrimitiveRecord)
+          : picture;
+      const urlValue = image["url"];
+      const url = typeof urlValue === "string" ? urlValue : undefined;
+      if (!url) return null;
+      const widthValue = image["width"];
+      const heightValue = image["height"];
+      const width = typeof widthValue === "number" ? widthValue : undefined;
+      const height = typeof heightValue === "number" ? heightValue : undefined;
+      const alt =
+        (typeof picture["alt"] === "string" && (picture["alt"] as string).trim().length
+          ? (picture["alt"] as string)
+          : typeof picture["caption"] === "string" && (picture["caption"] as string).trim().length
+            ? (picture["caption"] as string)
+            : typeof picture["description"] === "string" &&
+                (picture["description"] as string).trim().length
+              ? (picture["description"] as string)
+              : undefined) ?? title;
+      return { url, width, height, alt };
+    })
+    .filter(Boolean);
+  return normalized.length ? (normalized as Blog["pictures"]) : undefined;
+}
+
 function normalizeBlogEntry(entry: BlogLike): Blog {
-  const categoryName = entry.category?.name ?? entry.category?.category;
+  const categoryRecord =
+    (entry.category as PrimitiveRecord | undefined) ??
+    (typeof entry.categories === "object" ? (entry.categories as PrimitiveRecord) : undefined);
+  const categoryName = readStringField(categoryRecord, preferredCategoryKeys);
+  const categoryIdValue =
+    (categoryRecord && typeof categoryRecord["id"] === "string"
+      ? (categoryRecord["id"] as string)
+      : undefined) ?? entry.category?.id;
+  const tags = Array.isArray(entry.tags)
+    ? (
+        entry.tags
+          .map((tag) =>
+            typeof tag === "object" && tag
+              ? readStringField(tag as PrimitiveRecord, preferredTagKeys)
+              : null
+          )
+          .filter(Boolean) as string[]
+      ).filter((value, index, array) => array.indexOf(value) === index)
+    : entry.tags;
+  const costValue =
+    typeof entry.cost === "number"
+      ? entry.cost
+      : typeof entry.costs === "number"
+        ? entry.costs
+        : undefined;
+
   return {
-    ...entry,
-    body: entry.body ?? entry.content ?? "",
-    category: entry.category ? { ...entry.category, name: categoryName } : undefined,
+    id: entry.id,
+    title: entry.title,
+    slug: entry.slug,
+    publishedAt: entry.publishedAt,
+    eyecatch: entry.eyecatch,
+    studentId: entry.studentId ?? entry.studentid,
+    tags,
+    cost: costValue,
+    pictures: normalizePictures(entry.title, entry.pictures),
+    body: entry.body ?? entry.content ?? entry.contents ?? "",
+    category:
+      categoryName || categoryIdValue ? { id: categoryIdValue, name: categoryName } : undefined,
   };
 }
 

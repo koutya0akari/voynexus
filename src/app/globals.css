@@ -14,3 +14,38 @@ body {
 a {
   @apply text-brand underline-offset-2 hover:underline;
 }
+
+.voynexus-rich-figure {
+  margin: 1.5rem 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  align-items: center;
+  text-align: center;
+}
+
+.voynexus-rich-figure figcaption {
+  font-size: 0.85rem;
+  color: #64748b;
+}
+
+.voynexus-rich-img {
+  display: block;
+  width: min(100%, 720px);
+  max-width: 100%;
+  height: auto;
+  margin: 1.5rem auto;
+  border-radius: 0.875rem;
+  background-color: #f8fafc;
+  box-shadow: 0 12px 30px rgba(15, 23, 42, 0.08);
+  object-fit: contain;
+}
+
+@media (max-width: 640px) {
+  .voynexus-rich-img {
+    width: 100%;
+    margin: 1rem 0;
+    border-radius: 0.75rem;
+    box-shadow: 0 8px 18px rgba(15, 23, 42, 0.08);
+  }
+}
