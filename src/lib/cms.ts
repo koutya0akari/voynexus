@@ -21,6 +21,8 @@ const itineraryEndpoint = process.env.MICROCMS_ITINERARIES_ENDPOINT || "itinerar
 
 type PrimitiveRecord = Record<string, unknown>;
 
+type CategoryInput = PrimitiveRecord | string;
+
 type BlogLike = Omit<
   Blog,
   "tags" | "category" | "pictures" | "studentId" | "cost" | "body" | "eyecatch"
@@ -32,7 +34,12 @@ type BlogLike = Omit<
     studentid?: string;
     studentId?: string;
     tags?: (PrimitiveRecord | string)[];
-    categories?: PrimitiveRecord | PrimitiveRecord[];
+    categories?:
+      | CategoryInput
+      | CategoryInput[]
+      | PrimitiveRecord[]
+      | string[]
+      | (PrimitiveRecord | string)[];
     category?: Blog["category"] & { category?: string; categories?: string };
     costs?: number;
     cost?: number;
@@ -220,6 +227,31 @@ function readStringField(record: PrimitiveRecord | undefined, keys: string[]) {
   return undefined;
 }
 
+function ensureCategoryRecord(candidate: unknown): PrimitiveRecord | undefined {
+  if (!candidate) return undefined;
+  if (typeof candidate === "string") {
+    return { name: candidate };
+  }
+  if (typeof candidate !== "object") {
+    return undefined;
+  }
+  const record = candidate as PrimitiveRecord;
+  const nestedKeys = ["category", "value", "item", "entry"] as const;
+  for (const nestedKey of nestedKeys) {
+    const nestedValue = record[nestedKey];
+    if (nestedValue && typeof nestedValue === "object") {
+      const normalized = ensureCategoryRecord(nestedValue as PrimitiveRecord);
+      if (normalized) {
+        if (!normalized.id && typeof record["id"] === "string") {
+          return { ...normalized, id: record["id"] as string };
+        }
+        return normalized;
+      }
+    }
+  }
+  return record;
+}
+
 function normalizePictures(title: string, pictures?: PrimitiveRecord[]) {
   if (!Array.isArray(pictures)) return undefined;
   const normalized = pictures
@@ -253,18 +285,35 @@ function normalizePictures(title: string, pictures?: PrimitiveRecord[]) {
 }
 
 function normalizeBlogEntry(entry: BlogLike): Blog {
+  const categoryCandidates: PrimitiveRecord[] = [];
+  const normalizedPrimary = ensureCategoryRecord(entry.category);
+  if (normalizedPrimary) {
+    categoryCandidates.push(normalizedPrimary);
+  }
+  const categoriesField = entry.categories;
+  if (Array.isArray(categoriesField)) {
+    for (const candidate of categoriesField) {
+      const normalized = ensureCategoryRecord(candidate);
+      if (normalized) {
+        categoryCandidates.push(normalized);
+      }
+    }
+  } else {
+    const normalized = ensureCategoryRecord(categoriesField);
+    if (normalized) {
+      categoryCandidates.push(normalized);
+    }
+  }
   const categoryRecord =
-    (entry.category as PrimitiveRecord | undefined) ??
-    (Array.isArray(entry.categories)
-      ? (entry.categories[0] as PrimitiveRecord | undefined)
-      : typeof entry.categories === "object"
-        ? (entry.categories as PrimitiveRecord)
-        : undefined);
+    categoryCandidates.find((record) => !!readStringField(record, preferredCategoryKeys)) ??
+    categoryCandidates[0];
   const categoryName = readStringField(categoryRecord, preferredCategoryKeys);
   const categoryIdValue =
     (categoryRecord && typeof categoryRecord["id"] === "string"
       ? (categoryRecord["id"] as string)
-      : undefined) ?? entry.category?.id;
+      : categoryRecord && typeof categoryRecord["categoryId"] === "string"
+        ? (categoryRecord["categoryId"] as string)
+        : undefined) ?? entry.category?.id;
   const tags = Array.isArray(entry.tags)
     ? (
         entry.tags
