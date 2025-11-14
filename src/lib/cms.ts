@@ -19,6 +19,29 @@ const spotEndpoint = process.env.MICROCMS_SPOTS_ENDPOINT || "spots";
 const articleEndpoint = process.env.MICROCMS_ARTICLES_ENDPOINT || "articles";
 const itineraryEndpoint = process.env.MICROCMS_ITINERARIES_ENDPOINT || "itineraries";
 
+type PrimitiveRecord = Record<string, unknown>;
+
+type BlogLike = Omit<
+  Blog,
+  "tags" | "category" | "pictures" | "studentId" | "cost" | "body" | "eyecatch"
+> &
+  Partial<Pick<Blog, "eyecatch">> & {
+    body?: string;
+    content?: string;
+    contents?: string;
+    studentid?: string;
+    studentId?: string;
+    tags?: (PrimitiveRecord | string)[];
+    categories?: PrimitiveRecord | PrimitiveRecord[];
+    category?: Blog["category"] & { category?: string; categories?: string };
+    costs?: number;
+    cost?: number;
+    pictures?: PrimitiveRecord[];
+  };
+
+const preferredCategoryKeys = ["name", "category", "categories", "title"];
+const preferredTagKeys = ["tags", "tag", "name", "title", "label"];
+
 const fallbackSpots: Spot[] = [
   {
     id: "seaside-sunrise",
@@ -96,18 +119,29 @@ const fallbackArticles: Article[] = [
   },
 ];
 
-const fallbackBlogs: Blog[] = [
+const fallbackBlogs: BlogLike[] = [
   {
     id: "welcome-to-voynexus",
     slug: "welcome-to-voynexus",
     title: "全国トラベルブログを公開しました",
     publishedAt: new Date().toISOString(),
-    category: { name: "お知らせ" },
-    body: "<p>全国の旅のヒントやイベント情報を発信するブログをスタートしました。現地スタッフや学生ライターのリポートを順次公開していきます。</p>",
-    studentId: "voynexus編集部",
-    tags: ["リリース", "お知らせ"],
-    cost: 18000,
-    pictures: [{ url: "/sample/awa.png", alt: "voynexus ブログ" }],
+    eyecatch: { url: "/sample/awa.png", width: 1200, height: 630 },
+    studentid: "voynexus編集部",
+    categories: [{ id: "category-news", name: "お知らせ" }],
+    tags: [{ name: "リリース" }, { name: "お知らせ" }],
+    costs: 18000,
+    contents:
+      "<p>全国の旅のヒントやイベント情報を発信するブログをスタートしました。現地スタッフや学生ライターのリポートを順次公開していきます。</p>",
+    pictures: [
+      {
+        image: { url: "/sample/awa.png", width: 1200, height: 800 },
+        caption: "voynexus ブログ",
+      },
+      {
+        image: { url: "/sample/naruto.png", width: 1200, height: 800 },
+        caption: "現地取材の様子",
+      },
+    ],
   },
 ];
 
@@ -175,25 +209,6 @@ function getFallbackList<T>(endpoint: string, queries?: MicroCMSQueries) {
 
 type FallbackEntity = { id: string; slug?: string };
 
-type PrimitiveRecord = Record<string, unknown>;
-
-type BlogLike = Omit<Blog, "tags" | "category" | "pictures" | "studentId" | "cost" | "body"> & {
-  body?: string;
-  content?: string;
-  contents?: string;
-  studentid?: string;
-  studentId?: string;
-  category?: Blog["category"] & { category?: string; categories?: string };
-  categories?: PrimitiveRecord;
-  tags?: PrimitiveRecord[];
-  costs?: number;
-  cost?: number;
-  pictures?: PrimitiveRecord[];
-};
-
-const preferredCategoryKeys = ["name", "category", "categories", "title"];
-const preferredTagKeys = ["tags", "tag", "name", "title", "label"];
-
 function readStringField(record: PrimitiveRecord | undefined, keys: string[]) {
   if (!record) return undefined;
   for (const key of keys) {
@@ -240,7 +255,11 @@ function normalizePictures(title: string, pictures?: PrimitiveRecord[]) {
 function normalizeBlogEntry(entry: BlogLike): Blog {
   const categoryRecord =
     (entry.category as PrimitiveRecord | undefined) ??
-    (typeof entry.categories === "object" ? (entry.categories as PrimitiveRecord) : undefined);
+    (Array.isArray(entry.categories)
+      ? (entry.categories[0] as PrimitiveRecord | undefined)
+      : typeof entry.categories === "object"
+        ? (entry.categories as PrimitiveRecord)
+        : undefined);
   const categoryName = readStringField(categoryRecord, preferredCategoryKeys);
   const categoryIdValue =
     (categoryRecord && typeof categoryRecord["id"] === "string"
@@ -252,7 +271,9 @@ function normalizeBlogEntry(entry: BlogLike): Blog {
           .map((tag) =>
             typeof tag === "object" && tag
               ? readStringField(tag as PrimitiveRecord, preferredTagKeys)
-              : null
+              : typeof tag === "string"
+                ? tag
+                : null
           )
           .filter(Boolean) as string[]
       ).filter((value, index, array) => array.indexOf(value) === index)
