@@ -17,7 +17,7 @@ const reasonCopy: Record<AiAccessDeniedReason, { badge: string; description: str
   "not-logged-in": {
     badge: "ログインが必要です",
     description:
-      "voynexusのAI機能はGoogleアカウントでログインした状態でのみ利用できます。右上のログインボタン、もしくは下のボタンからサインインしてください。",
+      "voynexusのAI機能は最終的にGoogleアカウントでログインした状態で利用しますが、プラン購入自体はログイン前でも可能です。先に従量パスを取得し、後からサインインしてAIを解放できます。",
   },
   "missing-token": {
     badge: "決済が未完了です",
@@ -33,12 +33,12 @@ const reasonCopy: Record<AiAccessDeniedReason, { badge: string; description: str
 
 const steps = [
   {
-    title: "1. Googleでサインイン",
-    body: "右上のメニュー、または下のボタンからGoogleログインします。旅の好みは後から変更できます。",
+    title: "1. プランを選んで決済",
+    body: "回数制の従量パスを選び、メールアドレスだけでStripe決済を完了できます。Googleログイン前でも購入可能です。",
   },
   {
-    title: "2. プランを選んで決済",
-    body: "定額パス（1日/7日）か従量パス（回数制）を選び、メールアドレスを入力します。決済完了と同時に会員トークンが保存されます。",
+    title: "2. Googleでサインイン",
+    body: "決済後、右上のメニューか下のボタンからGoogleログインすると従量パスがアカウントに紐付いてAI機能が解放されます。",
   },
   {
     title: "3. AIチャット/旅程生成を起動",
@@ -47,6 +47,7 @@ const steps = [
 ];
 
 const benefits = [
+  "Googleログイン前にStripeチェックアウトで従量パスを購入し、後からサインインして反映できます。",
   "現地取材データ＋RAGで安全な回答を得られるAIチャット",
   "営業時間/最終バス/潮汐を反映した旅程自動生成とPDF出力",
   "Stripeポータルでの支払い管理と領収書ダウンロード",
@@ -66,7 +67,7 @@ export function AiUpsell({ locale, denied }: Props) {
         <h1 className="text-3xl font-semibold text-slate-900">AIコンシェルジュは会員限定です</h1>
         <p className="text-sm text-slate-600">
           {loginReason?.description ??
-            "Googleアカウントでログインし、定額または従量プランを選んでStripe決済を完了するとAIチャットと旅程生成が解放されます。"}
+            "Googleアカウントでログインし、従量パスをStripeで購入すればAIチャットと旅程生成が解放されます。"}
         </p>
         {meteredSummary.totalRemaining > 0 ? (
           <div className="rounded-2xl border border-dashed border-emerald-200 bg-emerald-50 px-3 py-2 text-xs font-semibold text-emerald-800">

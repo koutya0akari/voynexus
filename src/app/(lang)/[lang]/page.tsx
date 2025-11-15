@@ -15,6 +15,7 @@ import { SponsorRail } from "@/components/sponsors/sponsor-rail";
 import { FacilityWidgetCTA } from "@/components/widgets/facility-widget-cta";
 import { BlogSpotlight } from "@/components/blog/blog-spotlight";
 import { BillingCheckoutCTA } from "@/components/billing/checkout-cta";
+import { MenuBar } from "@/components/navigation/menu-bar";
 
 type Props = {
   params: {
@@ -71,62 +72,50 @@ export default async function LocaleHome({ params }: Props) {
     },
   ];
 
-  const quickLinkCopy: Record<
-    Locale,
-    { spots: string; plan: string; articles: string; blogDescription: string }
-  > = {
-    ja: {
-      spots: "旬のスポットと現地Tips",
-      plan: "AIが天気と所要時間を調整",
-      articles: "学生ライターによる現地レポ",
-      blogDescription: "旅の裏話やスタッフ日記",
-    },
-    en: {
-      spots: "Seasonal picks with on-site tips",
-      plan: "AI balances weather, time and transport",
-      articles: "Dispatches from student writers",
-      blogDescription: "Stories and deep dives from the blog",
-    },
-    zh: {
-      spots: "當季亮點與在地提醒",
-      plan: "AI 依天氣與時間客製行程",
-      articles: "學生作者的現場報導",
-      blogDescription: "部落格特輯與幕後花絮",
-    },
-  };
-
-  const copy = quickLinkCopy[locale] ?? quickLinkCopy.ja;
-
   const quickLinks: { title: string; body: string; href: Route; icon: string; accent: string }[] = [
     {
       title: t("sections.topSpots"),
-      body: copy.spots,
+      body: t("home.quickLinks.spots"),
       href: `/${locale}/spots` as Route,
       icon: "🧭",
       accent: "from-sky-50 via-white to-blue-50",
     },
     {
       title: t("sections.modelCourses"),
-      body: copy.plan,
+      body: t("home.quickLinks.plan"),
       href: `/${locale}/plan` as Route,
       icon: "🧳",
       accent: "from-amber-50 via-white to-rose-50",
     },
     {
       title: t("sections.latestArticles"),
-      body: copy.articles,
+      body: t("home.quickLinks.articles"),
       href: `/${locale}/articles` as Route,
       icon: "📓",
       accent: "from-emerald-50 via-white to-lime-50",
     },
     {
       title: t("sections.blog"),
-      body: copy.blogDescription,
+      body: t("home.quickLinks.blogDescription"),
       href: `/${locale}/blog` as Route,
       icon: "🌅",
       accent: "from-fuchsia-50 via-white to-sky-50",
     },
+    {
+      title: t("sections.blogTokushima"),
+      body: t("home.quickLinks.tokushimaBlog"),
+      href: `/${locale}/blog/tokushima` as Route,
+      icon: "🌀",
+      accent: "from-indigo-50 via-white to-emerald-50",
+    },
   ];
+
+  const menuBarItems = quickLinks.map((item) => ({
+    title: item.title,
+    description: item.body,
+    href: item.href,
+    icon: item.icon,
+  }));
 
   const blogSpotlightCopy = {
     title: t("blog.spotlightTitle"),
@@ -135,6 +124,12 @@ export default async function LocaleHome({ params }: Props) {
     emptyMessage: t("blog.spotlightEmpty"),
     tip: t("blog.spotlightTip"),
   };
+
+  const heroSidebarItems = [
+    t("heroSidebar.items.first"),
+    t("heroSidebar.items.second"),
+    t("heroSidebar.items.third"),
+  ];
 
   const featuredArticle = articles[0];
   const featuredSpot = spots[0];
@@ -153,6 +148,9 @@ export default async function LocaleHome({ params }: Props) {
               description={t("hero.description")}
               ctaPlan={t("cta.planTrip")}
               ctaChat={t("cta.chat")}
+              sidebarTitle={t("heroSidebar.title")}
+              sidebarItems={heroSidebarItems}
+              imageAlt={t("heroSidebar.imageAlt")}
               className="shadow-lg shadow-brand/10"
             />
             <BlogSpotlight
@@ -163,6 +161,10 @@ export default async function LocaleHome({ params }: Props) {
             />
           </div>
         </div>
+      </section>
+
+      <section className="border-b border-slate-100 bg-slate-50/80">
+        <MenuBar items={menuBarItems} ariaLabel={t("sections.navigator")} />
       </section>
 
       <section className="border-y border-slate-100 bg-slate-50">
@@ -232,9 +234,9 @@ export default async function LocaleHome({ params }: Props) {
             </div>
             <div className="space-y-4">
               <div className="rounded-3xl border border-slate-200 bg-white/90 p-6 shadow-sm">
-                <p className="text-xs uppercase text-amber-600">voynexus Journey Desk</p>
+                <p className="text-xs uppercase text-amber-600">{t("home.journeyDesk.eyebrow")}</p>
                 <h3 className="text-2xl font-semibold text-slate-900">{t("cta.planTrip")}</h3>
-                <p className="mt-2 text-sm text-slate-600">{copy.plan}</p>
+                <p className="mt-2 text-sm text-slate-600">{t("home.quickLinks.plan")}</p>
                 <div className="mt-4 flex flex-wrap gap-3">
                   <Link
                     href={`/${locale}/plan` as Route}
@@ -252,8 +254,8 @@ export default async function LocaleHome({ params }: Props) {
               </div>
               <div className="rounded-3xl border border-slate-200 bg-slate-900/90 p-6 text-white shadow-sm">
                 <p className="text-xs uppercase text-sky-200">{t("cta.chat")}</p>
-                <h3 className="text-xl font-semibold">Local concierge</h3>
-                <p className="mt-2 text-sm text-slate-200">{t("blog.spotlightDescription")}</p>
+                <h3 className="text-xl font-semibold">{t("home.concierge.title")}</h3>
+                <p className="mt-2 text-sm text-slate-200">{t("home.concierge.description")}</p>
                 <div className="mt-4 flex flex-wrap gap-3">
                   <Link
                     href={`/${locale}/chat` as Route}
@@ -265,7 +267,7 @@ export default async function LocaleHome({ params }: Props) {
                     href={`/${locale}/contact` as Route}
                     className="rounded-full border border-white/50 px-4 py-2 text-sm font-semibold text-white"
                   >
-                    Contact
+                    {t("nav.contact")}
                   </Link>
                 </div>
               </div>
@@ -377,8 +379,8 @@ export default async function LocaleHome({ params }: Props) {
               </Link>
             </div>
             <div className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm">
-              <p className="text-xs uppercase text-slate-400">Travel hotline</p>
-              <p className="mt-1 text-sm text-slate-600">{copy.blogDescription}</p>
+              <p className="text-xs uppercase text-slate-400">{t("home.hotline.eyebrow")}</p>
+              <p className="mt-1 text-sm text-slate-600">{t("home.quickLinks.blogDescription")}</p>
               <div className="mt-4 flex flex-wrap gap-3">
                 <Link
                   href={`/${locale}/chat` as Route}
@@ -390,7 +392,7 @@ export default async function LocaleHome({ params }: Props) {
                   href={`/${locale}/contact` as Route}
                   className="inline-flex rounded-full border border-slate-200 px-4 py-2 text-sm font-semibold text-slate-700"
                 >
-                  Contact
+                  {t("nav.contact")}
                 </Link>
               </div>
             </div>
@@ -405,7 +407,14 @@ export default async function LocaleHome({ params }: Props) {
       </section>
 
       <section className="mx-auto max-w-6xl space-y-10 px-4 py-12">
-        <SpotGrid locale={locale} spots={spots} title={t("sections.topSpots")} />
+        <SpotGrid
+          locale={locale}
+          spots={spots}
+          title={t("sections.topSpots")}
+          subtitle={t("spotGrid.subtitle")}
+          verifiedLabel={t("spot.lastVerified")}
+          viewLabel={t("spotCard.view")}
+        />
         <ItineraryShowcase
           locale={locale}
           itineraries={itineraries}

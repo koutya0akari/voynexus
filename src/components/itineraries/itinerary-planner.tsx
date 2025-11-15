@@ -1,12 +1,21 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { toast } from "@/components/toaster";
 import { MembershipTokenBanner } from "@/components/membership/token-banner";
 import { locales } from "@/lib/i18n";
 import { useMeteredUsage } from "@/hooks/use-metered-usage";
+import { TimelineEditor } from "./timeline-editor";
 
-type PlannerInput = {
+type TravelPace = "relaxed" | "balanced" | "active";
+
+const travelPaceLabels: Record<TravelPace, string> = {
+  relaxed: "ゆったり / 滞在長め",
+  balanced: "バランス / 標準",
+  active: "アクティブ / 密度高め",
+};
+
+export type PlannerInput = {
   start: string;
   end: string;
   transport: string;
@@ -14,6 +23,11 @@ type PlannerInput = {
   party: string;
   interests: string;
   weather: string;
+  area: string;
+  pace: TravelPace;
+  mustVisit: string;
+  cautions: string;
+  diningFocus: string;
 };
 
 type GeneratedTimelineItem = {
@@ -26,7 +40,20 @@ type GeneratedTimelineItem = {
 type GeneratedItinerary = {
   timeline?: GeneratedTimelineItem[];
   warnings?: string[];
+  references?: { title: string; url?: string }[];
 };
+
+export type SharedItineraryData = {
+  timeline: GeneratedTimelineItem[];
+  input?: Partial<PlannerInput>;
+  warnings?: string[];
+};
+
+const previewTimeline: GeneratedTimelineItem[] = [
+  { time: "09:00", title: "徳島駅集合", duration: 30, note: "チェックインと荷物預け" },
+  { time: "10:00", title: "阿波おどり会館", duration: 60, note: "実演＆資料館を見学" },
+  { time: "12:00", title: "地元食堂で昼食", duration: 60, note: "鳴門鯛の定食を想定" },
+];
 
 const defaultInput: PlannerInput = {
   start: "09:00",
@@ -36,23 +63,69 @@ const defaultInput: PlannerInput = {
   party: "family",
   interests: "culture,nature",
   weather: "sunny",
+  area: "",
+  pace: "balanced",
+  mustVisit: "",
+  cautions: "",
+  diningFocus: "",
 };
 
-export function ItineraryPlanner({ locale }: { locale: string }) {
-  const [input, setInput] = useState(defaultInput);
+type PlannerProps = {
+  locale: string;
+  canGenerate?: boolean;
+  showPreview?: boolean;
+  sharedData?: SharedItineraryData | null;
+};
+
+export function ItineraryPlanner({
+  locale,
+  canGenerate = true,
+  showPreview = false,
+  sharedData = null,
+}: PlannerProps) {
+  const [input, setInput] = useState<PlannerInput>(
+    sharedData?.input ? { ...defaultInput, ...sharedData.input } : defaultInput
+  );
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState<GeneratedItinerary | null>(null);
   const [aiLang, setAiLang] = useState(locale);
   const [downloading, setDownloading] = useState(false);
+  const [editableTimeline, setEditableTimeline] = useState<GeneratedTimelineItem[]>(
+    sharedData?.timeline ?? (showPreview ? previewTimeline : [])
+  );
+  const [previewActive, setPreviewActive] = useState(showPreview || Boolean(sharedData));
   const { summary: meteredSummary, refresh: refreshMeteredUsage } = useMeteredUsage();
+  const paceLabels = travelPaceLabels;
+
+  useEffect(() => {
+    if (sharedData?.input) {
+      setInput((prev) => ({ ...prev, ...sharedData.input }));
+    }
+    if (sharedData?.timeline?.length) {
+      setEditableTimeline(sharedData.timeline);
+      setPreviewActive(true);
+    }
+  }, [sharedData]);
+
+  useEffect(() => {
+    if (showPreview && !sharedData) {
+      setEditableTimeline(previewTimeline);
+      setPreviewActive(true);
+    }
+  }, [showPreview, sharedData]);
 
   const update = (key: keyof PlannerInput, value: string | number) => {
     setInput((prev) => ({ ...prev, [key]: value }));
   };
 
   const generate = async () => {
+    if (!canGenerate) {
+      toast("ログインし、従量パスをご購入いただくとAI旅程を生成できます。");
+      return;
+    }
     setLoading(true);
     setResult(null);
+    setEditableTimeline([]);
     try {
       const response = await fetch("/api/ai/itinerary", {
         method: "POST",
@@ -70,6 +143,8 @@ export function ItineraryPlanner({ locale }: { locale: string }) {
       }
       const data = await response.json();
       setResult(data);
+      setEditableTimeline(data.timeline ?? []);
+      setPreviewActive(false);
       if (typeof data.meteredUsesRemaining === "number") {
         refreshMeteredUsage();
       }
@@ -78,6 +153,61 @@ export function ItineraryPlanner({ locale }: { locale: string }) {
       toast("旅程生成に失敗しました");
     } finally {
       setLoading(false);
+    }
+  };
+
+  const exportableResult = result ? { ...result, timeline: editableTimeline } : null;
+  const shouldRenderEditor = Boolean(result) || previewActive || Boolean(sharedData);
+
+  const handleCopyShareLink = async () => {
+    if (!canGenerate) return;
+    try {
+      if (typeof window === "undefined") {
+        toast("ブラウザ環境で共有リンクを生成してください。");
+        return;
+      }
+      const sanitizedTimeline = sanitizeTimelineForExport(editableTimeline);
+      if (!sanitizedTimeline.length) {
+        toast("共有できる旅程がありません");
+        return;
+      }
+      const payload = {
+        timeline: sanitizedTimeline,
+        input: {
+          start: input.start,
+          end: input.end,
+          transport: input.transport,
+          budget: input.budget,
+          party: input.party,
+          interests: input.interests,
+          weather: input.weather,
+          area: input.area,
+          pace: input.pace,
+          mustVisit: input.mustVisit,
+          cautions: input.cautions,
+          diningFocus: input.diningFocus,
+        },
+        warnings: result?.warnings ?? undefined,
+      };
+      const encoded = encodeURIComponent(encodeSharePayload(payload));
+      const shareUrl = `${window.location.origin}/${locale}/plan?share=${encoded}`;
+      if (navigator.clipboard?.writeText) {
+        await navigator.clipboard.writeText(shareUrl);
+      } else {
+        const textarea = document.createElement("textarea");
+        textarea.value = shareUrl;
+        textarea.style.position = "fixed";
+        textarea.style.opacity = "0";
+        document.body.appendChild(textarea);
+        textarea.focus();
+        textarea.select();
+        document.execCommand("copy");
+        document.body.removeChild(textarea);
+      }
+      toast("共有リンクをコピーしました");
+    } catch (error) {
+      console.error("Failed to copy share link", error);
+      toast("共有リンクの生成に失敗しました");
     }
   };
 
@@ -108,7 +238,16 @@ export function ItineraryPlanner({ locale }: { locale: string }) {
           </select>
         </div>
         <h2 className="text-xl font-semibold text-slate-900">条件を入力</h2>
-        <div className="mt-4 grid gap-4">
+        <div className="mt-4 grid gap-4 sm:grid-cols-2">
+          <label className="flex flex-col text-sm text-slate-600 sm:col-span-2">
+            訪問エリア・都市
+            <input
+              value={input.area}
+              onChange={(event) => update("area", event.target.value)}
+              className="rounded-lg border border-slate-200 p-2"
+              placeholder="例: 徳島市内・鳴門エリア"
+            />
+          </label>
           <label className="flex flex-col text-sm text-slate-600">
             開始時間
             <input
@@ -138,6 +277,18 @@ export function ItineraryPlanner({ locale }: { locale: string }) {
               <option value="bus">バス</option>
               <option value="car">車</option>
               <option value="mixed">混在</option>
+            </select>
+          </label>
+          <label className="flex flex-col text-sm text-slate-600">
+            ペース
+            <select
+              value={input.pace}
+              onChange={(event) => update("pace", event.target.value as TravelPace)}
+              className="rounded-lg border border-slate-200 p-2"
+            >
+              <option value="relaxed">{paceLabels.relaxed}</option>
+              <option value="balanced">{paceLabels.balanced}</option>
+              <option value="active">{paceLabels.active}</option>
             </select>
           </label>
           <label className="flex flex-col text-sm text-slate-600">
@@ -177,27 +328,65 @@ export function ItineraryPlanner({ locale }: { locale: string }) {
               <option value="cloudy">曇</option>
             </select>
           </label>
+          <label className="flex flex-col text-sm text-slate-600 sm:col-span-2">
+            必ず寄りたい場所・テーマ
+            <textarea
+              value={input.mustVisit}
+              onChange={(event) => update("mustVisit", event.target.value)}
+              className="rounded-lg border border-slate-200 p-2"
+              rows={2}
+              placeholder="例: 阿波おどり会館、地元の朝市、鳴門金時スイーツ"
+            />
+          </label>
+          <label className="flex flex-col text-sm text-slate-600 sm:col-span-2">
+            注意してほしいこと（移動制約・混雑回避など）
+            <textarea
+              value={input.cautions}
+              onChange={(event) => update("cautions", event.target.value)}
+              className="rounded-lg border border-slate-200 p-2"
+              rows={2}
+              placeholder="例: 雨天時は屋内優先、子連れで階段は避けたい"
+            />
+          </label>
+          <label className="flex flex-col text-sm text-slate-600">
+            食の希望
+            <input
+              value={input.diningFocus}
+              onChange={(event) => update("diningFocus", event.target.value)}
+              className="rounded-lg border border-slate-200 p-2"
+              placeholder="例: 地元の海鮮、ビーガン対応"
+            />
+          </label>
         </div>
         <button
           type="button"
           className="mt-6 w-full rounded-full bg-brand px-4 py-3 font-semibold text-white disabled:opacity-60"
           onClick={generate}
-          disabled={loading}
+          disabled={loading || !canGenerate}
         >
-          {loading ? "生成中..." : "AIで旅程を生成"}
+          {loading ? "生成中..." : canGenerate ? "AIで旅程を生成" : "ログインしてAI生成"}
         </button>
-        {result?.timeline?.length ? (
+        {!canGenerate && (
+          <p className="mt-2 text-xs text-rose-500">
+            旅程のプレビューを表示中です。Googleログインと従量パス購入で実際の旅程を生成できます。
+          </p>
+        )}
+        {exportableResult?.timeline?.length ? (
           <div className="mt-4 flex flex-wrap gap-2 text-xs">
+            {canGenerate && editableTimeline.length ? (
+              <button
+                type="button"
+                onClick={handleCopyShareLink}
+                className="rounded-full border border-slate-200 px-4 py-2 font-semibold text-slate-600"
+              >
+                共有リンクをコピー
+              </button>
+            ) : null}
             <button
               type="button"
-              onClick={saveItineraryResult(result, input, aiLang)}
-              className="rounded-full border border-slate-200 px-4 py-2 font-semibold text-slate-600"
-            >
-              保存
-            </button>
-            <button
-              type="button"
-              onClick={() => downloadItineraryPdf(result, input, aiLang, setDownloading)}
+              onClick={() =>
+                downloadItineraryPdf(result, editableTimeline, input, aiLang, setDownloading)
+              }
               className="rounded-full bg-slate-900 px-4 py-2 font-semibold text-white disabled:opacity-60"
               disabled={downloading}
             >
@@ -210,29 +399,41 @@ export function ItineraryPlanner({ locale }: { locale: string }) {
         {loading && <p className="text-sm text-slate-500">AIが制約をチェック中...</p>}
         {!loading && !result && (
           <p className="text-sm text-slate-500">
-            営業時間・移動時間・最終バス・潮汐を考慮した旅程をここに表示します。生成後はPDF保存やURL共有が可能です。
+            営業時間・移動時間・最終バス・潮汐を考慮した旅程をここに表示します。AIが条件に沿って並べたステップは、好みに合わせて自由に編集・追加し、PDF保存やURL共有が可能です。
           </p>
         )}
-        {result && (
+        {shouldRenderEditor && (
           <div className="space-y-3">
-            <h3 className="text-lg font-semibold text-slate-900">生成結果</h3>
-            <ul className="space-y-2 text-sm text-slate-700">
-              {result.timeline?.map((item) => (
-                <li key={item.time} className="rounded-xl bg-white p-3 shadow-sm">
-                  <div className="flex items-center justify-between text-xs text-slate-500">
-                    <span>{item.time}</span>
-                    <span>{item.duration} min</span>
-                  </div>
-                  <p className="font-semibold">{item.title}</p>
-                  <p>{item.note}</p>
-                </li>
-              ))}
-            </ul>
-            {result.warnings?.length ? (
+            <div className="flex items-center justify-between">
+              <h3 className="text-lg font-semibold text-slate-900">旅程を編集</h3>
+              {result ? (
+                <button
+                  type="button"
+                  onClick={() => {
+                    setEditableTimeline(result.timeline ?? []);
+                    setPreviewActive(false);
+                  }}
+                  className="text-xs font-semibold text-brand"
+                >
+                  AIの案にリセット
+                </button>
+              ) : null}
+            </div>
+            <TimelineEditor
+              timeline={editableTimeline}
+              onChange={setEditableTimeline}
+              readOnly={!canGenerate || (!result && previewActive)}
+            />
+            {!result && previewActive ? (
+              <p className="text-xs text-slate-500">
+                サンプルの旅程を表示しています。AIで生成するとここに最新のステップが並び、編集が有効になります。
+              </p>
+            ) : null}
+            {(result?.warnings?.length ?? sharedData?.warnings?.length) ? (
               <div className="rounded-xl bg-amber-50 p-3 text-xs text-amber-900">
                 <p className="font-semibold">Warnings</p>
                 <ul className="list-disc pl-4">
-                  {result.warnings.map((warning: string) => (
+                  {(result?.warnings ?? sharedData?.warnings ?? []).map((warning: string) => (
                     <li key={warning}>{warning}</li>
                   ))}
                 </ul>
@@ -245,45 +446,47 @@ export function ItineraryPlanner({ locale }: { locale: string }) {
   );
 }
 
-function saveItineraryResult(result: GeneratedItinerary, input: PlannerInput, lang: string) {
-  return () => {
-    try {
-      const key = "voynexus_itinerary_history";
-      const existingRaw = typeof window === "undefined" ? null : localStorage.getItem(key);
-      const existing = existingRaw ? JSON.parse(existingRaw) : [];
-      existing.unshift({
-        id: crypto.randomUUID(),
-        createdAt: new Date().toISOString(),
-        lang,
-        input,
-        result,
-      });
-      if (existing.length > 20) existing.pop();
-      localStorage.setItem(key, JSON.stringify(existing));
-      toast("ローカルに保存しました");
-    } catch (error) {
-      console.error("Failed to save itinerary", error);
-      toast("保存に失敗しました");
-    }
-  };
-}
-
 async function downloadItineraryPdf(
-  result: GeneratedItinerary,
+  baseResult: GeneratedItinerary | null,
+  timeline: GeneratedTimelineItem[],
   input: PlannerInput,
   lang: string,
   setDownloading: (value: boolean) => void
 ) {
+  if (!baseResult) {
+    toast("旅程が生成されていません");
+    return;
+  }
   setDownloading(true);
   try {
+    const detailPayload = {
+      window: `${input.start} – ${input.end}`,
+      area: input.area,
+      pace: travelPaceLabels[input.pace] ?? input.pace,
+      transport: input.transport,
+      party: input.party,
+      budget: `¥${input.budget.toLocaleString("ja-JP")}`,
+      weather: input.weather,
+      mustVisit: input.mustVisit,
+      dining: input.diningFocus,
+      cautions: input.cautions,
+    };
+    const references = baseResult.references?.map((reference) => ({
+      title: reference.title,
+      url: reference.url,
+    }));
+    const sanitizedTimeline = sanitizeTimelineForExport(timeline);
+
     const response = await fetch("/api/pdf", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         title: `voynexus itinerary (${lang.toUpperCase()})`,
         summary: `Transport: ${input.transport} / Party: ${input.party} / Budget: ¥${input.budget}`,
-        timeline: result.timeline ?? [],
-        warnings: result.warnings ?? [],
+        details: detailPayload,
+        timeline: sanitizedTimeline,
+        warnings: baseResult.warnings ?? [],
+        references,
       }),
     });
     if (!response.ok) throw new Error("pdf");
@@ -300,4 +503,29 @@ async function downloadItineraryPdf(
   } finally {
     setDownloading(false);
   }
+}
+
+function sanitizeTimelineForExport(items: GeneratedTimelineItem[]) {
+  return items
+    .map((item) => ({
+      time: typeof item.time === "string" ? item.time : "",
+      title: typeof item.title === "string" ? item.title : "",
+      duration:
+        typeof item.duration === "number" && !Number.isNaN(item.duration) ? item.duration : 0,
+      note: typeof item.note === "string" && item.note.length ? item.note : undefined,
+    }))
+    .filter((item) => item.time && item.title);
+}
+
+function encodeSharePayload(payload: unknown) {
+  if (typeof window === "undefined") {
+    throw new Error("Share payload encoding requires browser APIs");
+  }
+  const json = JSON.stringify(payload);
+  const bytes = new TextEncoder().encode(json);
+  let binary = "";
+  for (let index = 0; index < bytes.length; index += 1) {
+    binary += String.fromCharCode(bytes[index]);
+  }
+  return window.btoa(binary);
 }

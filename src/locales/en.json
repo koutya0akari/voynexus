@@ -7,12 +7,93 @@
     "planTrip": "Plan itinerary",
     "chat": "Ask AI concierge"
   },
+  "home": {
+    "quickLinks": {
+      "spots": "Seasonal picks with on-site tips",
+      "plan": "AI balances weather, time and transport",
+      "articles": "Dispatches from student writers",
+      "blogDescription": "Stories and deep dives from the blog",
+      "tokushimaBlog": "Tokushima-only detours and alerts"
+    },
+    "journeyDesk": {
+      "eyebrow": "voynexus Journey Desk"
+    },
+    "concierge": {
+      "title": "Local concierge",
+      "description": "Chat with the AI assistant or escalate to editors when you need reroutes and heads-ups."
+    },
+    "hotline": {
+      "eyebrow": "Travel hotline"
+    }
+  },
+  "billing": {
+    "eyebrow": "voynexus Membership",
+    "title": "Choose a plan and unlock AI passes",
+    "description": "AI chat and itinerary generation use metered passes. Buy only what you need and spend credits whenever you run a request.",
+    "planType": {
+      "metered": {
+        "title": "Metered passes",
+        "description": "Credits are deducted per AI chat or itinerary generation. Unused credits stay valid until you spend them."
+      }
+    },
+    "planHint": "{{name}}: ¥{{price}} / {{unit}}",
+    "noPlans": "No metered passes are currently registered.",
+    "partners": {
+      "description": "See the dedicated overview for municipalities and venue operators:",
+      "linkLabel": "Open overview",
+      "suffix": ""
+    },
+    "form": {
+      "emailPlaceholder": "you@example.com",
+      "processing": "Processing...",
+      "purchase": "Buy {{plan}}"
+    },
+    "manual": {
+      "description": "Our team can issue passes manually. Contact us via email or the form and we will send payment instructions.",
+      "contactButton": "Contact form"
+    },
+    "notes": {
+      "checkoutInfo": "After payment you will receive a receipt and a link to the member portal. Manual passes also include a follow-up email with the total."
+    },
+    "toasts": {
+      "noPlan": "No available passes were found.",
+      "contactSales": "Please use the contact form to purchase this plan.",
+      "emailRequired": "Enter an email address.",
+      "checkoutError": "Failed to start checkout. Please try again."
+    },
+    "errors": {
+      "missingCheckoutUrl": "Checkout URL was not returned."
+    },
+    "plans": {
+      "pro-5": {
+        "unitLabel": "5 uses / tax excluded",
+        "description": "Check a handful of answers from the advanced AI tier.",
+        "bestFor": "Ideal when you want to verify safety notes or sponsor perks ahead of time."
+      },
+      "pro-1": {
+        "unitLabel": "1 use / tax excluded",
+        "description": "Perfect for a single pinpoint verification.",
+        "bestFor": "Use this for one-off reviews or editorial checks."
+      },
+      "std-5": {
+        "unitLabel": "5 uses / tax excluded",
+        "description": "Great for families or small teams scouting a route.",
+        "bestFor": "Let AI adjust just part of your trip."
+      },
+      "std-1": {
+        "unitLabel": "1 use / tax excluded",
+        "description": "Check one spot or event at a time.",
+        "bestFor": "Perfect for urgent last-minute confirmations."
+      }
+    }
+  },
   "sections": {
     "topSpots": "Today’s highlights",
     "latestArticles": "Latest articles",
     "modelCourses": "Model courses",
     "events": "Event spotlight",
-    "blog": "Travel blog",
+    "blog": "National blog",
+    "blogTokushima": "Tokushima blog",
     "navigator": "voynexus guide"
   },
   "filters": {
@@ -73,5 +154,78 @@
     "spotlightTip": "We share bite-size weather shifts, crowd alerts, and behind-the-scenes notes.",
     "listDescription": "A rotating roster of students and local editors contribute to this journal.",
     "empty": "No blog posts yet."
+  },
+  "blogTokushima": {
+    "badge": "Tokushima only",
+    "title": "Tokushima field blog",
+    "description": "Daily notes and alerts from the Tokushima ground team.",
+    "listDescription": "We cover awa-odori prep, ropeway checks, and detours around Naruto.",
+    "ctaNational": "View national blog",
+    "empty": "Tokushima posts are on the way. Please check again soon."
+  },
+  "nav": {
+    "home": "Home",
+    "spots": "Spots",
+    "articles": "Articles",
+    "events": "Events",
+    "plan": "Planning",
+    "blog": "National blog",
+    "blogTokushima": "Tokushima blog",
+    "membership": "Membership",
+    "partners": "Partners",
+    "contact": "Contact",
+    "menu": "Menu",
+    "closeMenu": "Close menu",
+    "languages": "Languages",
+    "account": "Account",
+    "planCta": "Try itinerary builder",
+    "chatCta": "Open AI concierge",
+    "tagline": "Travel OS · Concierge"
+  },
+  "heroSidebar": {
+    "title": "Travel-ready AI concierge",
+    "items": {
+      "first": "Routes adapt to weather, tides, and closures",
+      "second": "Offline-friendly notes for taxis, buses, and ferries",
+      "third": "Alerts for crowds, ticket caps, and last trains"
+    },
+    "imageAlt": "Background collage of journeys curated by voynexus"
+  },
+  "facility": {
+    "eyebrow": "Local facility support",
+    "title": "Resources for visitor centers and venues",
+    "description": "Install the voynexus chat window and FAQ board to answer multilingual questions and promote coupons with the same quality travelers see in the app. We published a dedicated guide that explains setup steps and sponsor policies.",
+    "bullets": {
+      "first": "Multilingual chat that replies during off-hours or rainy days",
+      "second": "Instant alerts when staff intervention is needed",
+      "third": "Highlight location-only coupons and booking links"
+    },
+    "ctaGuide": "Open partner guide",
+    "ctaContact": "Discuss onboarding"
+  },
+  "spotGrid": {
+    "subtitle": "Local editors confirm last visit dates and safety notes"
+  },
+  "spotCard": {
+    "view": "View details"
+  },
+  "themeToggle": {
+    "toLight": "Switch to light mode",
+    "toDark": "Switch to dark mode"
+  },
+  "userMenu": {
+    "checkingAuth": "Confirming authentication…",
+    "login": "Sign in with Google",
+    "signedIn": "Signed in",
+    "currentAccount": "Current account",
+    "logout": "Sign out",
+    "emailPlaceholder": "Logged in"
+  },
+  "spotsPage": {
+    "eyebrow": "Spots",
+    "title": "Find spots with filters",
+    "description": "Dial in rainy-day options, family-friendly picks, car-free routes, and budget filters to surface the best matches.",
+    "loading": "Loading...",
+    "resultsTitle": "Search results"
   }
 }

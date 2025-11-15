@@ -7,12 +7,93 @@
     "planTrip": "產生行程",
     "chat": "詢問 AI 管家"
   },
+  "home": {
+    "quickLinks": {
+      "spots": "當季亮點與在地提醒",
+      "plan": "AI 依天氣與時間客製行程",
+      "articles": "學生作者的現場報導",
+      "blogDescription": "部落格特輯與幕後花絮",
+      "tokushimaBlog": "德島限定路線與即時提醒"
+    },
+    "journeyDesk": {
+      "eyebrow": "voynexus 旅程服務台"
+    },
+    "concierge": {
+      "title": "在地管家",
+      "description": "先由 AI 管家回覆，必要時會轉交編輯團隊提供改道與提醒。"
+    },
+    "hotline": {
+      "eyebrow": "旅遊熱線"
+    }
+  },
+  "billing": {
+    "eyebrow": "voynexus 會員方案",
+    "title": "選擇方案取得 AI 點數",
+    "description": "AI 聊天與行程產生皆採回數制，按需求購買，直到用完都能反覆使用。",
+    "planType": {
+      "metered": {
+        "title": "回數票 (Metered)",
+        "description": "依 AI 聊天或行程產生的次數扣點，未使用的點數可保留直到用完。"
+      }
+    },
+    "planHint": "{{name}}：¥{{price}} / {{unit}}",
+    "noPlans": "目前沒有可購買的回數方案。",
+    "partners": {
+      "description": "企業與地方政府專用的介紹頁面：",
+      "linkLabel": "開啟頁面",
+      "suffix": ""
+    },
+    "form": {
+      "emailPlaceholder": "you@example.com",
+      "processing": "處理中...",
+      "purchase": "購買 {{plan}}"
+    },
+    "manual": {
+      "description": "若需要人工處理，我們會由工作人員立即發行回數票，請透過 email 或表單聯絡。",
+      "contactButton": "聯絡表單"
+    },
+    "notes": {
+      "checkoutInfo": "完成付款後會寄送收據與會員入口連結。人工處理的回數票也會另外寄送總金額與付款方式。"
+    },
+    "toasts": {
+      "noPlan": "找不到可購買的回數方案。",
+      "contactSales": "此方案請透過聯絡表單購買。",
+      "emailRequired": "請輸入電子郵件。",
+      "checkoutError": "啟動結帳失敗，請稍後再試。"
+    },
+    "errors": {
+      "missingCheckoutUrl": "無法取得結帳連結。"
+    },
+    "plans": {
+      "pro-5": {
+        "unitLabel": "5次 / 未稅",
+        "description": "適合想檢視進階 AI 回答的使用者。",
+        "bestFor": "提前確認安全資訊或贊助優惠。"
+      },
+      "pro-1": {
+        "unitLabel": "1次 / 未稅",
+        "description": "單次檢查或審稿最佳。",
+        "bestFor": "用於一次性的現場確認。"
+      },
+      "std-5": {
+        "unitLabel": "5次 / 未稅",
+        "description": "適合家庭或小型團隊先做路線勘查。",
+        "bestFor": "只想讓 AI 調整部分行程時使用。"
+      },
+      "std-1": {
+        "unitLabel": "1次 / 未稅",
+        "description": "快速檢查單一景點或活動。",
+        "bestFor": "處理臨時問題或最後確認。"
+      }
+    }
+  },
   "sections": {
     "topSpots": "今日推薦",
     "latestArticles": "最新文章",
     "modelCourses": "經典行程",
     "events": "活動特輯",
-    "blog": "旅遊部落格",
+    "blog": "全國部落格",
+    "blogTokushima": "德島專欄",
     "navigator": "voynexus 導覽"
   },
   "filters": {
@@ -73,5 +154,78 @@
     "spotlightTip": "分享天氣變化、人潮提醒及幕後小故事。",
     "listDescription": "由學生與在地編輯輪流撰寫。",
     "empty": "目前還沒有部落格文章。"
+  },
+  "blogTokushima": {
+    "badge": "Tokushima 限定",
+    "title": "德島在地筆記",
+    "description": "由德島編輯室即時更新的天氣、活動與祭典幕後資訊。",
+    "listDescription": "聚焦阿波舞、鳴門沿線與地域交通，週更 3 次。",
+    "ctaNational": "前往全國部落格",
+    "empty": "德島專欄即將更新，敬請期待。"
+  },
+  "nav": {
+    "home": "首頁",
+    "spots": "景點",
+    "articles": "文章",
+    "events": "活動",
+    "plan": "行程規劃",
+    "blog": "全國部落格",
+    "blogTokushima": "德島部落格",
+    "membership": "會員方案",
+    "partners": "合作夥伴",
+    "contact": "聯絡",
+    "menu": "選單",
+    "closeMenu": "關閉選單",
+    "languages": "語言",
+    "account": "帳號",
+    "planCta": "體驗 AI 行程",
+    "chatCta": "開啟 AI 管家",
+    "tagline": "Travel OS · Concierge"
+  },
+  "heroSidebar": {
+    "title": "隨時可用的 AI 管家",
+    "items": {
+      "first": "路線會依天氣、潮汐與臨時休園自動調整",
+      "second": "提供計程車、巴士與渡輪的離線提示",
+      "third": "提醒人潮、票券限制與末班車"
+    },
+    "imageAlt": "voynexus 精選旅程的拼貼圖"
+  },
+  "facility": {
+    "eyebrow": "設施支援",
+    "title": "給設施與旅遊資訊中心",
+    "description": "導入 voynexus 聊天視窗與 FAQ 看板，就能以旅客應用程式同等的品質處理多語提問與優惠券宣傳。我們準備了導入流程與贊助規範的專屬頁面。",
+    "bullets": {
+      "first": "雨天或非營業時間也能自動回覆的多語聊天",
+      "second": "需要交接給工作人員的關鍵字會立即通知",
+      "third": "清楚引導限定優惠券與預約連結"
+    },
+    "ctaGuide": "開啟合作指南",
+    "ctaContact": "洽詢導入"
+  },
+  "spotGrid": {
+    "subtitle": "在地編輯已確認最後訪視日期與注意事項"
+  },
+  "spotCard": {
+    "view": "查看詳情"
+  },
+  "themeToggle": {
+    "toLight": "切換為淺色模式",
+    "toDark": "切換為深色模式"
+  },
+  "userMenu": {
+    "checkingAuth": "正在確認登入…",
+    "login": "使用 Google 登入",
+    "signedIn": "已登入",
+    "currentAccount": "目前帳號",
+    "logout": "登出",
+    "emailPlaceholder": "已登入"
+  },
+  "spotsPage": {
+    "eyebrow": "景點",
+    "title": "用條件尋找景點",
+    "description": "設定雨天備案、親子友善、無車出行與預算等條件，快速找到最合適的景點。",
+    "loading": "載入中...",
+    "resultsTitle": "搜尋結果"
   }
 }

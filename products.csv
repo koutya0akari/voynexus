@@ -1,8 +1,4 @@
 id,Name,Date (UTC),Description,Url,Tax Code,UnitPriceJPY,PlanType
-prod_TPlTEeg4znixY6,Voynexus-AI-Pro-7days,2025-11-13 08:31,"定額パス: Pro 7日利用","",txcd_10000000,18000,flat
-prod_TPlRBwDTjAN8E8,Voynexus-AI-Pro-1day,2025-11-13 08:30,"定額パス: Pro 1日利用","",txcd_10000000,3000,flat
-prod_TPlP6GrrsWpdYr,Voynexus-AI-7day,2025-11-13 08:28,"定額パス: Standard 7日利用","",txcd_10000000,6000,flat
-prod_TPlOo6IP42bDd9,Voynexus-AI-1day,2025-11-13 08:26,"定額パス: Standard 1日利用","",txcd_10000000,1000,flat
 prod_TPlNtCkThFCx8U,Voynexus-AI-Pro-5回,2025-11-13 08:25,"従量パス: Pro 5回","",txcd_10000000,1400,metered
 prod_TPlM45ThegDxyp,Voynexus-AI-Pro-1回,2025-11-13 08:24,"従量パス: Pro 1回","",txcd_10000000,300,metered
 prod_TPlKnlAaAHWYwB,Voynexus-AI-5回,2025-11-13 08:23,"従量パス: Standard 5回","",txcd_10000000,500,metered

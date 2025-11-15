@@ -64,7 +64,7 @@ export default async function MembersPage() {
                 ))}
             </ul>
             <p className="mt-3 text-xs text-slate-500">
-              使い切った後もAIを利用するには定額プランを購入するか、従量パスを追加でご購入ください。
+              使い切った後もAIを利用するには従量パスを追加でご購入ください。
             </p>
           </div>
           <Link
@@ -160,7 +160,9 @@ export default async function MembersPage() {
         <p className="mt-2 text-xs text-slate-500">最終決済から{daysSincePayment}日経過</p>
         <div className={`mt-4 grid gap-3 ${hasMeteredAddOn ? "sm:grid-cols-2" : "sm:grid-cols-1"}`}>
           <div className="rounded-2xl border border-slate-100 bg-slate-50 p-4 text-sm text-slate-600">
-            <p className="text-xs font-semibold uppercase tracking-wide text-brand">定額パス</p>
+            <p className="text-xs font-semibold uppercase tracking-wide text-brand">
+              メンバーシップ
+            </p>
             <p className="mt-2 text-2xl font-semibold text-slate-900">
               {daysRemaining !== null ? `${daysRemaining}日` : "更新待ち"}
             </p>

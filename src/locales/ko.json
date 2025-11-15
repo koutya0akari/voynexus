@@ -1,0 +1,231 @@
+{
+  "hero": {
+    "title": "voynexus로 완성하는 일본 여행",
+    "description": "날씨와 교통을 반영한 AI 일정과 현지 에디터의 업데이트로 매일 최신 꿀팁과 우회로를 제공합니다."
+  },
+  "cta": {
+    "planTrip": "일정 만들기",
+    "chat": "AI 상담하기"
+  },
+  "home": {
+    "quickLinks": {
+      "spots": "계절에 맞는 스팟과 현지 팁",
+      "plan": "AI가 날씨와 소요 시간을 조정",
+      "articles": "학생 기자의 현장 리포트",
+      "blogDescription": "여행 비하인드와 스태프 다이어리",
+      "tokushimaBlog": "도쿠시마 현장 업데이트와 한정 코스"
+    },
+    "journeyDesk": {
+      "eyebrow": "voynexus 저니 데스크"
+    },
+    "concierge": {
+      "title": "로컬 컨시어지",
+      "description": "AI 상담으로 시작하고 필요하면 에디터가 우회 루트와 주의 사항을 안내합니다."
+    },
+    "hotline": {
+      "eyebrow": "트래블 핫라인"
+    }
+  },
+  "billing": {
+    "eyebrow": "voynexus 멤버십",
+    "title": "플랜을 선택해 AI 패스를 받으세요",
+    "description": "AI 챗과 일정 생성은 회수제 패스로 동작합니다. 필요한 만큼만 구입해 크레딧이 소진될 때까지 사용할 수 있습니다.",
+    "planType": {
+      "metered": {
+        "title": "회수제 패스",
+        "description": "AI 챗 또는 일정 생성 1회마다 차감되며, 남은 크레딧은 그대로 유지됩니다."
+      }
+    },
+    "planHint": "{{name}}: ¥{{price}} / {{unit}}",
+    "noPlans": "현재 구매 가능한 회수제가 등록되어 있지 않습니다.",
+    "partners": {
+      "description": "지자체·시설 담당자용 소개 페이지는",
+      "linkLabel": "여기에서",
+      "suffix": "확인할 수 있습니다."
+    },
+    "form": {
+      "emailPlaceholder": "you@example.com",
+      "processing": "처리 중...",
+      "purchase": "{{plan}} 구입"
+    },
+    "manual": {
+      "description": "회수제 패스는 담당 스태프가 즉시 발행해 드립니다. 이메일 또는 문의 폼으로 요청해 주세요.",
+      "contactButton": "문의 폼"
+    },
+    "notes": {
+      "checkoutInfo": "결제가 완료되면 영수증과 회원 포털 링크가 이메일로 전송됩니다. 수동 발행 시에는 총액과 결제 방법을 별도로 안내합니다."
+    },
+    "toasts": {
+      "noPlan": "구매 가능한 패스를 찾을 수 없습니다.",
+      "contactSales": "이 플랜은 문의 폼을 통해 신청해 주세요.",
+      "emailRequired": "이메일 주소를 입력해 주세요.",
+      "checkoutError": "결제 페이지 생성에 실패했습니다. 잠시 후 다시 시도해 주세요."
+    },
+    "errors": {
+      "missingCheckoutUrl": "결제 페이지 주소를 가져오지 못했습니다."
+    },
+    "plans": {
+      "pro-5": {
+        "unitLabel": "5회 / 세금 별도",
+        "description": "고급 AI 답변을 소량만 확인하고 싶을 때",
+        "bestFor": "스팟 안전 정보나 스폰서 혜택을 미리 확인하기에 적합합니다."
+      },
+      "pro-1": {
+        "unitLabel": "1회 / 세금 별도",
+        "description": "단일 질문을 검증할 때 유용합니다.",
+        "bestFor": "현장 점검이나 에디트 확인을 한 번만 하고 싶을 때 사용하세요."
+      },
+      "std-5": {
+        "unitLabel": "5회 / 세금 별도",
+        "description": "가족이나 소규모 팀이 사전 답사를 할 때 적합합니다.",
+        "bestFor": "여행의 일부만 AI에 맡겨 조정하고 싶을 때 활용하세요."
+      },
+      "std-1": {
+        "unitLabel": "1회 / 세금 별도",
+        "description": "스팟 또는 이벤트를 한 건만 빠르게 확인합니다.",
+        "bestFor": "급한 문의나 최종 확인이 필요할 때 좋습니다."
+      }
+    }
+  },
+  "sections": {
+    "topSpots": "오늘의 추천 스팟",
+    "latestArticles": "최신 기사",
+    "modelCourses": "모델 코스",
+    "events": "이벤트 스포트라이트",
+    "blog": "전국 블로그",
+    "blogTokushima": "도쿠시마 블로그",
+    "navigator": "voynexus 네비"
+  },
+  "filters": {
+    "title": "조건으로 검색",
+    "kidFriendly": "아이 동반 가능",
+    "noCar": "차 없이 이동",
+    "rainy": "우천 시 OK",
+    "lowBudget": "저예산",
+    "duration": "소요 시간"
+  },
+  "spot": {
+    "lastVerified": "최종 확인",
+    "access": "교통",
+    "tags": "태그"
+  },
+  "itinerary": {
+    "generate": "AI로 생성",
+    "conditions": "조건 입력",
+    "timeline": "타임라인"
+  },
+  "widget": {
+    "title": "시설 지원",
+    "cta": "도입 가이드 받기"
+  },
+  "footer": {
+    "disclaimer": "voynexus는 여행자 업데이트와 스폰서 콘텐츠를 구분해 제공합니다. 공식 정보를 다시 확인해 주세요."
+  },
+  "stats": {
+    "title": "여행 업데이트",
+    "subtitle": "현지 팀이 매일 검수",
+    "description": "영업시간 변경, 이벤트 뉴스, 예상 혼잡도를 추적해 일정 조정을 돕습니다.",
+    "spots": "스팟 업데이트",
+    "spotsNote": "현지 에디터 검수",
+    "articles": "현장 리포트",
+    "articlesNote": "학생 기자 작성",
+    "itineraries": "스마트 일정",
+    "itinerariesNote": "날씨/교통 자동 조정",
+    "events": "이벤트 알림",
+    "eventsNote": "주말 & 우천 대안"
+  },
+  "feed": {
+    "title": "오늘의 다이제스트",
+    "subtitle": "날씨·조수·교통에 반응하는 추천",
+    "spotCard": "주목 스팟",
+    "itineraryCard": "대표 일정",
+    "eventCard": "다음 이벤트",
+    "ctaArticle": "기사 보기",
+    "ctaSpot": "스팟 보기",
+    "ctaItinerary": "일정 보기",
+    "ctaEvent": "이벤트 상세",
+    "empty": "특집 콘텐츠를 준비 중입니다. 곧 업데이트됩니다."
+  },
+  "blog": {
+    "spotlightTitle": "트래블 블로그",
+    "spotlightDescription": "현지 스태프와 학생 기자가 전하는 생생한 이야기.",
+    "spotlightCta": "전체 기사",
+    "spotlightEmpty": "기사 준비 중입니다. 조금만 기다려 주세요.",
+    "spotlightTip": "날씨 변화와 혼잡도 팁을 한 발 빠르게 제공.",
+    "listDescription": "학생과 현지 에디터가 교대로 집필합니다.",
+    "empty": "아직 블로그 글이 없습니다."
+  },
+  "blogTokushima": {
+    "badge": "Tokushima 한정",
+    "title": "도쿠시마 필드 블로그",
+    "description": "도쿠시마 현장팀이 매일 업데이트하는 노트와 알림.",
+    "listDescription": "아와오도리 준비, 나루토 주변 우회로 등을 중심으로 다룹니다.",
+    "ctaNational": "전국 블로그 보기",
+    "empty": "도쿠시마 한정 글을 준비 중입니다."
+  },
+  "nav": {
+    "home": "홈",
+    "spots": "스팟",
+    "articles": "기사",
+    "events": "이벤트",
+    "plan": "일정 만들기",
+    "blog": "전국 블로그",
+    "blogTokushima": "도쿠시마 블로그",
+    "membership": "멤버십",
+    "partners": "파트너",
+    "contact": "문의",
+    "menu": "메뉴",
+    "closeMenu": "메뉴 닫기",
+    "languages": "언어",
+    "account": "계정",
+    "planCta": "AI 일정 만들기",
+    "chatCta": "AI 상담 열기",
+    "tagline": "트래블 OS · 컨시어지"
+  },
+  "heroSidebar": {
+    "title": "여행 준비가 끝난 AI 컨시어지",
+    "items": {
+      "first": "날씨·조수·임시 휴관에 맞춰 자동 조정",
+      "second": "택시·버스·선박 안내용 오프라인 메모",
+      "third": "혼잡, 티켓 제한, 막차 알림 제공"
+    },
+    "imageAlt": "voynexus가 큐레이션한 여행 이미지"
+  },
+  "facility": {
+    "eyebrow": "시설 지원",
+    "title": "시설·관광안내소를 위한 안내",
+    "description": "voynexus 채팅창과 FAQ 보드를 설치하면 다국어 문의와 쿠폰 안내를 여행자 앱과 동일한 품질로 제공할 수 있습니다. 도입 방법과 스폰서 정책을 정리한 전용 페이지를 공개했습니다.",
+    "bullets": {
+      "first": "우천·영업외 시간에도 대응 가능한 다국어 챗봇",
+      "second": "직원에게 전달해야 할 키워드는 즉시 알림",
+      "third": "시설 한정 쿠폰과 예약 링크를 명확히 안내"
+    },
+    "ctaGuide": "전용 페이지 열기",
+    "ctaContact": "도입 상담"
+  },
+  "spotGrid": {
+    "subtitle": "현지 스태프가 마지막 방문일과 주의사항을 검수했습니다"
+  },
+  "spotCard": {
+    "view": "자세히 보기"
+  },
+  "themeToggle": {
+    "toLight": "라이트 모드로 전환",
+    "toDark": "다크 모드로 전환"
+  },
+  "userMenu": {
+    "checkingAuth": "인증 확인 중...",
+    "login": "Google로 로그인",
+    "signedIn": "로그인 완료",
+    "currentAccount": "현재 계정",
+    "logout": "로그아웃",
+    "emailPlaceholder": "로그인 상태"
+  },
+  "spotsPage": {
+    "eyebrow": "스팟",
+    "title": "조건으로 스팟 찾기",
+    "description": "우천 대체, 아이 동반, 차량 없이 이동, 예산 등 필터를 지정해 최적의 장소를 찾아보세요.",
+    "loading": "로딩 중...",
+    "resultsTitle": "검색 결과"
+  }
+}

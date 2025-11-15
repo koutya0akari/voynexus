@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+  <html lang="ja">
+  <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>voynexus</title>
+      <style>
+      @charset "UTF-8";
+      :root {
+        --font-size: 3.9466666666666663mm
+      }
+      html {
+      orphans: 1;
+      widows: 1;
+      color: black;
+      }
+
+      body{
+        writing-mode: vertical-rl;
+        color: black;
+      }
+
+      * {
+      margin: 0;
+      padding: 0;
+      }
+
+      @page {
+        size: 148mm 210mm;
+        block-size: calc(3.9466666666666663mm * 1.75 * 18 + (3.9466666666666663mm * 0.4));
+        margin-top: 10%;
+        margin-bottom: 10%;
+        margin-left: 8%;
+        margin-right: 8%;
+        /* 以下、マージンボックスに継承される */
+        font-size: 6pt;
+        font-family: "游明朝", "YuMincho", serif;
+        /* 本来不要（<span class="smaller"><span class="smaller">ルート要素の指定が継承される</span></span>）だが、現時点のvivliostyle.jsの制限により必要 */
+        vertical-align: top;
+      }
+
+      @page : first {
+        counter-reset: page 0;
+      }
+
+      @page :left {
+        margin-right: 6%;
+        margin-left: 10%;
+        @bottom-left {
+          content: "voynexus 42字×18行 "counter(page)"";
+          margin-left: 0mm;
+          margin-bottom: 5%;
+          writing-mode: horizontal-tb;
+          font-size:10q;
+          /* CSS仕様上は@pageルール内に書けばよいが、現時点のvivliostyle.jsの制限によりここに書く */
+      }
+    }
+      
+      @page :right {
+        margin-left: 6%;
+        margin-right: 10%;
+        /* border-bottom: 1pt solid black; */
+      /* 右下ノンブル */
+      @bottom-right {
+          content: "voynexus 42字×18行 "counter(page)"";
+          margin-right: 0mm;
+          margin-bottom: 5%;
+          writing-mode: horizontal-tb;
+          font-size:10q;
+          /* CSS仕様上は@pageルール内に書けばよいが、現時点のvivliostyle.jsの制限によりここに書く */
+      }
+      }
+  
+      html {
+      font-family: "游明朝", "YuMincho", serif;
+      font-weight: Medium;
+      text-align: justify;
+      hanging-punctuation: allow-end;
+      text-spacing: none;
+      }
+  
+      body{
+        break-before: left;
+
+        
+      }
+  
+      div#draft{
+        inline-size: calc(165.76mm + 0.5em);
+        margin-inline-start: auto;
+        margin-inline-end: auto;
+      }
+
+      h1 {
+        /* 五行トリ2倍角 */
+        display:flex;
+        align-items: center;
+        block-size: calc(3.9466666666666663mm * 1.75 * 5);
+        /* フォント */
+        font-weight: Extrabold;
+        letter-spacing: 0.25em;
+        font-size: calc(3.9466666666666663mm * 2);
+        /* 字下げ */
+        text-indent: 0;
+        /* 直後の改ページ・改段禁止 */
+      }
+  
+      h2 {
+        /* 二行トリ1.6倍角 */
+        display:flex;
+        align-items: center;
+        block-size: calc(3.9466666666666663mm * 1.75 * 2);
+        /* フォント */
+        font-weight: Extrabold;
+        font-size: calc(3.9466666666666663mm * 1.6);
+        /* 字下げ */
+        text-indent: calc(3.9466666666666663mm * 1 * 1);
+        /* 直後の改ページ・改段禁止 */
+      }
+
+      h3 {
+        /* 一行トリ1.2倍角 */
+        display:flex;
+        align-items: center;
+        block-size: calc(3.9466666666666663mm * 1.75);
+        /* フォント */
+        font-weight: demi-bold;
+        font-size: calc(3.9466666666666663mm * 1.2);
+        /* 字下げ */
+        text-indent: calc(3.9466666666666663mm * 1 * 1);
+        /* 直後の改ページ・改段禁止 */
+        page-break-after:avoid;
+      }
+
+      h4,h5,h6 {
+        /* 一行トリ1.2倍角 */
+        display:flex;
+        align-items: center;
+        block-size: calc(3.9466666666666663mm * 1.75);
+        /* フォント */
+        font-weight: demi-bold;
+        font-size: calc(3.9466666666666663mm * 1);
+        /* 字下げ */
+        text-indent: calc(3.9466666666666663mm * 1 * 1);
+        /* 直後の改ページ・改段禁止 */
+        page-break-after:avoid;
+      }
+
+      h1 + h2 {
+      margin-block-start: 16pt;
+      }
+
+      p + h3 {
+        margin-block-start: calc(3.9466666666666663mm * 1.75);
+      }
+      
+      p.ruby-offset {
+       margin-right: -0.15em;
+      }
+
+      body.vertical-rl ruby > rt {
+        font-size: 0.5em;
+        width: 0.75em;
+      }
+
+      body.horizontal-tb ruby > rt {
+        font-size: 0.5em;
+        width: 0.75em;
+      }
+
+      p {
+        font-size: 3.9466666666666663mm;
+        line-height: 1.75;
+        inline-size: calc(165.76mm + 0.5em);
+        text-indent: 0em;
+        hanging-punctuation: allow-end;
+        line-break:strict;
+        page-break-inside: auto;
+      }
+
+    div.indent-1 p:first-of-type, div.indent-2 p:first-of-type, div.indent-3 p:first-of-type{
+      padding-block-start: calc( 3.9466666666666663mm * 1.75);
+      }
+
+      div.indent-1 p:last-of-type, div.indent-2 p:last-of-type, div.indent-3 p:last-of-type{
+      padding-block-end: calc( 3.9466666666666663mm * 1.75);
+      }
+
+    
+    div.indent-1 p{
+    inline-size: calc( calc(165.76mm + 0.5em) - 3.9466666666666663mm);
+    padding-inline-start: calc( 3.9466666666666663mm);
+    }
+
+    div.indent-2 p{
+    inline-size: calc( calc(165.76mm + 0.5em) - (3.9466666666666663mm * 2));
+    padding-inline-start: calc(3.9466666666666663mm * 2);
+    }
+
+    div.indent-3 p{
+    inline-size: calc( calc(165.76mm + 0.5em) - (3.9466666666666663mm * 3));
+    padding-inline-start: calc(3.9466666666666663mm * 3);
+    }
+
+    p.goth {
+    margin-inline-start: 3em;
+    font-family: "游ゴシック", "YuGothic", san-serif;
+    margin-block-start: 1em;
+    margin-block-end: 1em;
+    }
+
+    p.align-rb {
+    text-align: end;
+    }
+
+    p.goth + p.goth {
+    margin-block-start: -1em;
+    }
+
+    div.codes {
+    display: inline-block;
+    margin: 3em 1em;
+    writing-mode: horizontal-tb;
+    padding: 1em;
+    font-family: "Courier", monospace;
+    font-size: 0.8em;
+    }
+  
+    div.codes p {
+    text-orientation: sideways;
+    }
+
+    p.star {
+    text-indent: 3em;
+    margin-right: 16pt;
+    margin-left: 16pt;
+    }
+
+    hr {
+    border: none;
+    border-right: 1pt solid black;
+    block-size: 6em;
+    margin: auto 8.5pt;
+    }
+
+    /* 縦中横 */
+    .tcy {
+    -webkit-text-combine: horizontal;
+    text-combine: horizontal;
+    -ms-text-combine-horizontal: all;
+    text-combine-horizontal: digit 2;
+    text-combine-upright: digit 2;
+    }
+
+    span.bottom {
+      display: block;
+      float: right;
+    }
+    
+    span.bottom-1 {
+      display: block;
+      float: right;
+      padding-inline-end: 1em;
+    }
+    
+    span.bottom-2 {
+      display: block;
+      float: right;
+      padding-inline-end: 2em;
+    }
+    
+    span.bottom-3 {
+      display: block;
+      float: right;
+      padding-inline-end: 3em;
+    }
+        
+
+    /* 圏点（<span class="smaller">ゴマ</span>） */
+    em.side-dot, em.sesame_dot {
+    font-style: normal;
+    -webkit-text-emphasis-style: sesame;
+    text-emphasis-style: sesame;
+    margin-block-start: -1em;
+    display: inline-block;
+    }
+
+    /*著作者*/
+    .author {
+    position: absolute;
+    bottom: 0;
+    font-size: 8.5pt;
+    margin-inline-start: 50pt;
+    letter-spacing: normal;
+    }
+
+    /*画像＋キャプション*/
+    figure {
+    display: block;
+    width: 236pt;
+    -ms-writing-mode: lr-tb;
+    -webkit-writing-mode: horizontal-tb;
+    writing-mode: horizontal-tb;
+    }
+
+    figure img {
+    width: 100%;
+    block-size: auto;
+    vertical-align: bottom;
+    }
+
+    figcaption {
+    text-align: start;
+    font-size: 7pt;
+    }
+
+    /*奥付*/
+    .colophon {
+    font-size: 7pt;
+    margin-right: 48pt;
+    }
+    /* 級さげ */
+    span.smaller{
+        font-size:6.5pt
+    }
+  
+    div.comment {
+        display:none;
+    }
+
+    p.blank {
+        color:transparent;
+    }
+
+    span.blank{
+      display:none;
+    }
+    </style>
+  </head>
+  <body class="vertical-rl">
+  <div id="draft">
+  <p id="l-0">Copyright 2014 The M PLUS Project Authors (https://github.com/coz-m/MPLUS_FONTS)</p><p id="l-1" class="blank">_</p><p id="l-2">This Font Software is licensed under the SIL Open Font License, Version 1.1.</p><p id="l-3">This license is copied below, and is also available with a FAQ at:</p><p id="l-4">http://scripts.sil.org/OFL</p><p id="l-5" class="blank">_</p><p id="l-6" class="blank">_</p><p id="l-7">-----------------------------------------------------------</p><p id="l-8">SIL OPEN FONT LICENSE Version 1.1 - 26 February 2007</p><p id="l-9">-----------------------------------------------------------</p><p id="l-10" class="blank">_</p><p id="l-11">PREAMBLE</p><p id="l-12">The goals of the Open Font License (OFL) are to stimulate worldwide</p><p id="l-13">development of collaborative font projects, to support the font creation</p><p id="l-14">efforts of academic and linguistic communities, and to provide a free and</p><p id="l-15">open framework in which fonts may be shared and improved in partnership</p><p id="l-16">with others.</p><p id="l-17" class="blank">_</p><p id="l-18">The OFL allows the licensed fonts to be used, studied, modified and</p><p id="l-19">redistributed freely as long as they are not sold by themselves. The</p><p id="l-20">fonts, including any derivative works, can be bundled, embedded, </p><p id="l-21">redistributed and/or sold with any software provided that any reserved</p><p id="l-22">names are not used by derivative works. The fonts and derivatives,</p><p id="l-23">however, cannot be released under any other type of license. The</p><p id="l-24">requirement for fonts to remain under this license does not apply</p><p id="l-25">to any document created using the fonts or their derivatives.</p><p id="l-26" class="blank">_</p><p id="l-27">DEFINITIONS</p><p id="l-28">"Font Software" refers to the set of files released by the Copyright</p><p id="l-29">Holder(s) under this license and clearly marked as such. This may</p><p id="l-30">include source files, build scripts and documentation.</p><p id="l-31" class="blank">_</p><p id="l-32">"Reserved Font Name" refers to any names specified as such after the</p><p id="l-33">copyright statement(s).</p><p id="l-34" class="blank">_</p><p id="l-35">"Original Version" refers to the collection of Font Software components as</p><p id="l-36">distributed by the Copyright Holder(s).</p><p id="l-37" class="blank">_</p><p id="l-38">"Modified Version" refers to any derivative made by adding to, deleting,</p><p id="l-39">or substituting -- in part or in whole -- any of the components of the</p><p id="l-40">Original Version, by changing formats or by porting the Font Software to a</p><p id="l-41">new environment.</p><p id="l-42" class="blank">_</p><p id="l-43">"Author" refers to any designer, engineer, programmer, technical</p><p id="l-44">writer or other person who contributed to the Font Software.</p><p id="l-45" class="blank">_</p><p id="l-46">PERMISSION & CONDITIONS</p><p id="l-47">Permission is hereby granted, free of charge, to any person obtaining</p><p id="l-48"> a copy of the Font Software, to use, study, copy, merge, embed, modify,</p><p id="l-49">redistribute, and sell modified and unmodified copies of the Font</p><p id="l-50">Software, subject to the following conditions:</p><p id="l-51" class="blank">_</p><p id="l-52">1) Neither the Font Software nor any of its individual components,</p><p id="l-53">in Original or Modified Versions, may be sold by itself.</p><p id="l-54" class="blank">_</p><p id="l-55">2) Original or Modified Versions of the Font Software may be bundled,</p><p id="l-56">redistributed and/or sold with any software, provided that each copy</p><p id="l-57">contains the above copyright notice and this license. These can be</p><p id="l-58">included either as stand-alone text files, human-readable headers or</p><p id="l-59">in the appropriate machine-readable metadata fields within text or</p><p id="l-60">binary files as long as those fields can be easily viewed by the user.</p><p id="l-61" class="blank">_</p><p id="l-62">3) No Modified Version of the Font Software may use the Reserved Font</p><p id="l-63">Name(s) unless explicit written permission is granted by the corresponding</p><p id="l-64">Copyright Holder. This restriction only applies to the primary font name as</p><p id="l-65">presented to the users.</p><p id="l-66" class="blank">_</p><p id="l-67">4) The name(s) of the Copyright Holder(s) or the Author(s) of the Font</p><p id="l-68">Software shall not be used to promote, endorse or advertise any</p><p id="l-69">Modified Version, except to acknowledge the contribution(s) of the</p><p id="l-70">Copyright Holder(s) and the Author(s) or with their explicit written</p><p id="l-71">permission.</p><p id="l-72" class="blank">_</p><p id="l-73">5) The Font Software, modified or unmodified, in part or in whole,</p><p id="l-74">must be distributed entirely under this license, and must not be</p><p id="l-75">distributed under any other license. The requirement for fonts to</p><p id="l-76">remain under this license does not apply to any document created</p><p id="l-77">using the Font Software.</p><p id="l-78" class="blank">_</p><p id="l-79">TERMINATION</p><p id="l-80">This license becomes null and void if any of the above conditions are</p><p id="l-81">not met.</p><p id="l-82" class="blank">_</p><p id="l-83">DISCLAIMER</p><p id="l-84">THE FONT SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,</p><p id="l-85">EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO ANY WARRANTIES OF</p><p id="l-86">MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT</p><p id="l-87">OF COPYRIGHT, PATENT, TRADEMARK, OR OTHER RIGHT. IN NO EVENT SHALL THE</p><p id="l-88">COPYRIGHT HOLDER BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,</p><p id="l-89">INCLUDING ANY GENERAL, SPECIAL, INDIRECT, INCIDENTAL, OR CONSEQUENTIAL</p><p id="l-90">DAMAGES, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING</p><p id="l-91">FROM, OUT OF THE USE OR INABILITY TO USE THE FONT SOFTWARE OR FROM</p><p id="l-92">OTHER DEALINGS IN THE FONT SOFTWARE.</p><p id="l-93" class="blank">_</p>
+  </div>
+  </body>
+  </html>

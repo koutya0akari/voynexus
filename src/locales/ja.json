@@ -7,12 +7,93 @@
     "planTrip": "旅程を作成",
     "chat": "AIに相談"
   },
+  "home": {
+    "quickLinks": {
+      "spots": "旬のスポットと現地Tips",
+      "plan": "AIが天気と所要時間を調整",
+      "articles": "学生ライターによる現地レポ",
+      "blogDescription": "旅の裏話やスタッフ日記",
+      "tokushimaBlog": "徳島の現場速報と限定ルート"
+    },
+    "journeyDesk": {
+      "eyebrow": "voynexusジャーニーデスク"
+    },
+    "concierge": {
+      "title": "ローカルコンシェルジュ",
+      "description": "AIコンシェルジュに相談し、必要に応じて現地編集チームが迂回ルートや注意点を共有します。"
+    },
+    "hotline": {
+      "eyebrow": "トラベルホットライン"
+    }
+  },
+  "billing": {
+    "eyebrow": "voynexus メンバーシップ",
+    "title": "プランを選んでAIパスを取得",
+    "description": "AIチャット/旅程生成はすべて回数制の従量パスで利用できます。必要な分だけ購入し、残回数がなくなるまで何度でも実行できます。",
+    "planType": {
+      "metered": {
+        "title": "従量パス (回数制)",
+        "description": "AIチャットや旅程生成の実行回数に応じてチャージする仕組みです。必要な分だけ購入でき、使い切るまで有効です。"
+      }
+    },
+    "planHint": "{{name}}: ¥{{price}} / {{unit}}",
+    "noPlans": "現在購入可能な従量パスが登録されていません。",
+    "partners": {
+      "description": "企業・自治体向けの紹介ページは",
+      "linkLabel": "こちら",
+      "suffix": "からご覧いただけます。"
+    },
+    "form": {
+      "emailPlaceholder": "you@example.com",
+      "processing": "処理中...",
+      "purchase": "{{plan}}を購入"
+    },
+    "manual": {
+      "description": "従量パスは担当スタッフが回数券を即時発行します。内容を確認のうえメールまたはお問い合わせフォームからご依頼ください。",
+      "contactButton": "フォームで連絡"
+    },
+    "notes": {
+      "checkoutInfo": "決済完了後は確認メールに領収書と会員ポータルへのリンクが届きます。従量パスの場合は担当者から合計金額と支払い方法をご案内します。"
+    },
+    "toasts": {
+      "noPlan": "購入可能な従量パスが見つかりません。",
+      "contactSales": "このプランはお問い合わせフォームからご依頼ください。",
+      "emailRequired": "メールアドレスを入力してください。",
+      "checkoutError": "決済ページの生成に失敗しました。時間をおいて再度お試しください。"
+    },
+    "errors": {
+      "missingCheckoutUrl": "決済ページのURLを取得できませんでした。"
+    },
+    "plans": {
+      "pro-5": {
+        "unitLabel": "5回 / 税抜",
+        "description": "高度なAI回答を少量だけ確認したい方向け",
+        "bestFor": "特定スポットの安全情報やスポンサー枠を事前に確認したい場合。"
+      },
+      "pro-1": {
+        "unitLabel": "1回 / 税抜",
+        "description": "ピンポイントの検証や監修に便利",
+        "bestFor": "1問だけAIに確認しておきたい現場チェック用。"
+      },
+      "std-5": {
+        "unitLabel": "5回 / 税抜",
+        "description": "家族や小規模チームでの下見に",
+        "bestFor": "旅程の一部だけAIに調整を任せたい場合。"
+      },
+      "std-1": {
+        "unitLabel": "1回 / 税抜",
+        "description": "スポットやイベントを1件だけチェック",
+        "bestFor": "最終確認や急ぎの質問を1回だけ行いたいとき。"
+      }
+    }
+  },
   "sections": {
     "topSpots": "今日のおすすめスポット",
     "latestArticles": "最新の記事",
     "modelCourses": "モデルコース",
     "events": "イベント特集",
-    "blog": "トラベルブログ",
+    "blog": "全国ブログ",
+    "blogTokushima": "徳島ローカルブログ",
     "navigator": "voynexusナビ"
   },
   "filters": {
@@ -73,5 +154,78 @@
     "spotlightTip": "気象や混雑の小ネタなど、アプリより一歩先の情報をお届けします。",
     "listDescription": "学生ライターと現地編集チームが交代で執筆しています。",
     "empty": "まだブログ記事がありません。"
+  },
+  "blogTokushima": {
+    "badge": "Tokushima限定",
+    "title": "徳島ローカルブログ",
+    "description": "徳島の現地スタッフが更新する速報と限定レポートをまとめています。",
+    "listDescription": "阿波おどり準備や地域イベントの舞台裏を中心に週3回更新します。",
+    "ctaNational": "全国ブログを見る",
+    "empty": "徳島限定記事を準備中です。少しお待ちください。"
+  },
+  "nav": {
+    "home": "ホーム",
+    "spots": "スポット",
+    "articles": "記事",
+    "events": "イベント",
+    "plan": "旅程作成",
+    "blog": "全国ブログ",
+    "blogTokushima": "徳島ブログ",
+    "membership": "会員プラン",
+    "partners": "パートナー",
+    "contact": "問い合わせ",
+    "menu": "メニュー",
+    "closeMenu": "メニューを閉じる",
+    "languages": "言語",
+    "account": "アカウント",
+    "planCta": "AI旅程を試す",
+    "chatCta": "AIチャットを開く",
+    "tagline": "トラベルOS · コンシェルジュ"
+  },
+  "heroSidebar": {
+    "title": "旅の準備が整ったAIコンシェルジュ",
+    "items": {
+      "first": "天候や潮位、臨時休業に合わせて自動調整",
+      "second": "タクシーやバス、船の一言フレーズを収録",
+      "third": "混雑や入場制限、最終列車の注意を通知"
+    },
+    "imageAlt": "voynexusがキュレーションした旅のコラージュ"
+  },
+  "facility": {
+    "eyebrow": "施設向けサポート",
+    "title": "施設・観光案内所のみなさまへ",
+    "description": "voynexusのチャット窓口とFAQボードを設置すると、多言語での問い合わせやクーポン案内を旅行者アプリと同じ品質で提供できます。導入方法やスポンサー掲載ルールをまとめた専用ページを公開しました。",
+    "bullets": {
+      "first": "雨天時や時間外でも自動案内できる多言語チャット",
+      "second": "スタッフにエスカレーションすべきワードは即時通知",
+      "third": "施設限定クーポンや予約ページを明示して案内"
+    },
+    "ctaGuide": "専用ページを見る",
+    "ctaContact": "導入について相談"
+  },
+  "spotGrid": {
+    "subtitle": "最終訪問日と注意点を現地スタッフが確認済み"
+  },
+  "spotCard": {
+    "view": "詳細を見る"
+  },
+  "themeToggle": {
+    "toLight": "ライトモードへ",
+    "toDark": "ダークモードへ"
+  },
+  "userMenu": {
+    "checkingAuth": "認証を確認中...",
+    "login": "Googleでログイン",
+    "signedIn": "ログイン中",
+    "currentAccount": "ログイン中のアカウント",
+    "logout": "ログアウト",
+    "emailPlaceholder": "ログイン中"
+  },
+  "spotsPage": {
+    "eyebrow": "スポット",
+    "title": "条件でスポットを探す",
+    "description": "雨天対応 / 子連れ / 車なし / 予算などのフィルターを指定して最適な場所を見つけましょう。",
+    "loading": "読み込み中...",
+    "resultsTitle": "検索結果"
   }
 }

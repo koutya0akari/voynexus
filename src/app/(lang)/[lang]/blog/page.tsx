@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import type { Route } from "next";
 import { getTranslations } from "next-intl/server";
@@ -37,11 +38,23 @@ export default async function LocaleBlogIndexPage({ params }: Props) {
 
   return (
     <div className="mx-auto max-w-4xl space-y-8 px-4 py-10">
-      <header className="space-y-2 text-center">
-        <p className="text-sm uppercase text-slate-500">{t("sections.blog")}</p>
-        <h1 className="text-3xl font-semibold text-slate-900">{t("blog.spotlightTitle")}</h1>
-        <p className="text-sm text-slate-500">{t("blog.listDescription")}</p>
-      </header>
+      <section className="overflow-hidden rounded-3xl border border-slate-200 shadow-sm">
+        <div className="relative h-48 w-full">
+          <Image
+            src="/blog_japan.png"
+            alt="Voynexus nationwide blog hero"
+            fill
+            className="object-cover"
+            priority
+          />
+          <div className="absolute inset-0 bg-slate-900/55" />
+          <div className="relative z-10 flex h-full flex-col items-center justify-center space-y-2 px-4 text-center text-white">
+            <p className="text-xs uppercase tracking-[0.4em]">{t("sections.blog")}</p>
+            <h1 className="text-3xl font-semibold">{t("blog.spotlightTitle")}</h1>
+            <p className="text-sm text-white/80">{t("blog.listDescription")}</p>
+          </div>
+        </div>
+      </section>
       <ul className="space-y-4">
         {posts.map((post) => {
           const formattedCost = formatCost(post.cost, locale);

@@ -15,6 +15,11 @@ const schema = z.object({
   interests: z.string(),
   weather: z.string(),
   tidesHint: z.string().optional(),
+  area: z.string().optional(),
+  pace: z.enum(["relaxed", "balanced", "active"]).optional(),
+  mustVisit: z.string().optional(),
+  cautions: z.string().optional(),
+  diningFocus: z.string().optional(),
 });
 
 export async function POST(request: Request) {

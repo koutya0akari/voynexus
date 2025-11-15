@@ -2,6 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import { signIn, signOut, useSession } from "next-auth/react";
+import { useTranslations } from "next-intl";
 import clsx from "clsx";
 
 type Variant = "inline" | "block";
@@ -12,6 +13,7 @@ type Props = {
 
 export function UserMenu({ variant = "inline" }: Props) {
   const { data, status } = useSession();
+  const t = useTranslations();
   const syncAttemptedRef = useRef(false);
 
   useEffect(() => {
@@ -31,7 +33,7 @@ export function UserMenu({ variant = "inline" }: Props) {
   if (status === "loading") {
     return (
       <span className={variant === "block" ? "text-sm text-slate-500" : "text-xs text-slate-400"}>
-        認証を確認中...
+        {t("userMenu.checkingAuth")}
       </span>
     );
   }
@@ -48,7 +50,7 @@ export function UserMenu({ variant = "inline" }: Props) {
             : "rounded-full border border-slate-200 px-3 py-1 text-xs text-slate-600 hover:border-brand hover:text-brand"
         )}
       >
-        Googleでログイン
+        {t("userMenu.login")}
       </button>
     );
   }
@@ -58,10 +60,10 @@ export function UserMenu({ variant = "inline" }: Props) {
       <div className="w-full space-y-3 rounded-2xl border border-slate-200 bg-white p-4 text-sm text-slate-700">
         <div>
           <p className="text-xs font-semibold uppercase tracking-wide text-slate-400">
-            ログイン中のアカウント
+            {t("userMenu.currentAccount")}
           </p>
           <p className="mt-1 font-semibold text-slate-900">
-            {data.user.email ?? data.user.name ?? "Signed in"}
+            {data.user.email ?? data.user.name ?? t("userMenu.signedIn")}
           </p>
         </div>
         <button
@@ -69,7 +71,7 @@ export function UserMenu({ variant = "inline" }: Props) {
           onClick={() => signOut({ callbackUrl: "/" })}
           className="w-full rounded-full bg-slate-900 px-4 py-2 text-sm font-semibold text-white hover:bg-slate-700"
         >
-          ログアウト
+          {t("userMenu.logout")}
         </button>
       </div>
     );
@@ -78,14 +80,14 @@ export function UserMenu({ variant = "inline" }: Props) {
   return (
     <div className="flex items-center gap-2">
       <span className="hidden text-xs text-slate-500 sm:inline">
-        {data.user.email ?? "ログイン中"}
+        {data.user.email ?? t("userMenu.emailPlaceholder")}
       </span>
       <button
         type="button"
         onClick={() => signOut({ callbackUrl: "/" })}
         className="rounded-full bg-slate-900 px-3 py-1 text-xs font-semibold text-white hover:bg-slate-700"
       >
-        ログアウト
+        {t("userMenu.logout")}
       </button>
     </div>
   );

@@ -1,18 +1,91 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss/base";
+@import "tailwindcss/components";
+@import "tailwindcss/utilities";
 
 :root {
   color-scheme: light;
   font-feature-settings: "palt";
+  --color-bg: #f8fafc;
+  --color-card: #ffffff;
+  --color-surface: #f1f5f9;
+  --color-text: #0f172a;
+  --color-muted: #475569;
+  --color-border: #e2e8f0;
+  --color-brand: #1f8ea8;
+}
+
+:root.dark,
+.dark {
+  color-scheme: dark;
+  --color-bg: #0f172a;
+  --color-card: #1f2937;
+  --color-surface: #0f172a;
+  --color-text: #f8fafc;
+  --color-muted: #cbd5f5;
+  --color-border: #334155;
+  --color-brand: #38bdf8;
 }
 
 body {
-  @apply min-h-screen bg-slate-50 text-slate-900 antialiased;
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease;
+  background-color: var(--color-bg);
+  color: var(--color-text);
 }
 
 a {
-  @apply text-brand underline-offset-2 hover:underline;
+  color: var(--color-brand);
+  text-underline-offset: 0.2em;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+@media (min-width: 1024px) {
+  body {
+    padding-left: 16rem;
+  }
+}
+
+.bg-white,
+.bg-white\/90 {
+  background-color: var(--color-card) !important;
+}
+
+.dark [class*="bg-white"] {
+  background-color: var(--color-card) !important;
+}
+
+.bg-slate-50,
+.bg-slate-100 {
+  background-color: var(--color-surface) !important;
+}
+
+.dark [class*="bg-slate-50"],
+.dark [class*="bg-slate-100"],
+.dark [class*="bg-slate-200"] {
+  background-color: var(--color-surface) !important;
+}
+
+.text-slate-900,
+.text-slate-800,
+.text-slate-700 {
+  color: var(--color-text) !important;
+}
+
+.text-slate-600,
+.text-slate-500,
+.text-slate-400 {
+  color: var(--color-muted) !important;
+}
+
+.border-slate-200,
+.border-slate-100 {
+  border-color: var(--color-border) !important;
 }
 
 .voynexus-rich-figure {

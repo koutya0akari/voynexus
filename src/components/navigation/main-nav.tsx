@@ -8,6 +8,7 @@ import clsx from "clsx";
 import type { Locale } from "@/lib/i18n";
 import { LangSwitcher } from "./lang-switcher";
 import { UserMenu } from "./user-menu";
+import { SideNav } from "./side-nav";
 
 type Props = {
   locale: Locale;
@@ -18,19 +19,20 @@ export function MainNav({ locale }: Props) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const primaryLinks: { href: Route; label: string }[] = [
-    { href: `/${locale}` as Route, label: "Home" },
-    { href: `/${locale}/spots` as Route, label: "Spots" },
-    { href: `/${locale}/articles` as Route, label: "Articles" },
-    { href: `/${locale}/events` as Route, label: "Events" },
-    { href: `/${locale}/plan` as Route, label: "Plan" },
-    { href: `/${locale}/blog` as Route, label: "Blog" },
+    { href: `/${locale}` as Route, label: t("nav.home") },
+    { href: `/${locale}/spots` as Route, label: t("nav.spots") },
+    { href: `/${locale}/articles` as Route, label: t("nav.articles") },
+    { href: `/${locale}/events` as Route, label: t("nav.events") },
+    { href: `/${locale}/plan` as Route, label: t("nav.plan") },
+    { href: `/${locale}/blog` as Route, label: t("nav.blog") },
+    { href: `/${locale}/blog/tokushima` as Route, label: t("nav.blogTokushima") },
   ];
 
   const secondaryLinks: { href: Route; label: string }[] = [
     { href: `/${locale}/chat` as Route, label: t("cta.chat") },
-    { href: `/${locale}/upgrade` as Route, label: "Membership" },
-    { href: `/${locale}/partners` as Route, label: "Partners" },
-    { href: `/${locale}/contact` as Route, label: "Contact" },
+    { href: `/${locale}/upgrade` as Route, label: t("nav.membership") },
+    { href: `/${locale}/partners` as Route, label: t("nav.partners") },
+    { href: `/${locale}/contact` as Route, label: t("nav.contact") },
   ];
 
   const navItems: { href: Route; label: string }[] = [...primaryLinks];
@@ -43,75 +45,29 @@ export function MainNav({ locale }: Props) {
   const handleMobileNavigate = () => setMobileMenuOpen(false);
 
   return (
-    <header className="sticky top-0 z-40 w-full border-b border-slate-100 bg-white/90 backdrop-blur">
-      <div
-        className="mx-auto max-w-6xl px-4 pb-3 pt-4"
-        style={{ paddingTop: "calc(env(safe-area-inset-top, 0px) + 0.75rem)" }}
-      >
-        <div className="flex items-center justify-between gap-4">
-          <div>
-            <Link href={`/${locale}`} className="font-semibold">
-              voynexus
-            </Link>
-            <p className="hidden text-xs text-slate-500 md:block">
-              voynexus Travel OS · Local data · AI concierge
-            </p>
-          </div>
-
-          <nav className="hidden items-center gap-4 text-sm md:flex">
-            {primaryLinks.map((item) => (
-              <Link
-                key={item.href}
-                href={item.href}
-                className="text-slate-700 transition hover:text-brand"
-              >
-                {item.label}
-              </Link>
-            ))}
-          </nav>
-
-          <div className="flex items-center gap-3">
-            <Link
-              href={`/${locale}/plan`}
-              className="hidden rounded-full bg-brand px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-brand/90 md:inline-flex"
-            >
-              {t("cta.planTrip")}
-            </Link>
-            <div className="hidden md:block">
-              <LangSwitcher current={locale} />
-            </div>
-            <button
-              type="button"
-              onClick={() => setMobileMenuOpen((prev) => !prev)}
-              className="inline-flex items-center rounded-full border border-slate-200 px-3 py-1 text-xs font-semibold text-slate-600 md:hidden"
-              aria-expanded={mobileMenuOpen}
-              aria-label="Toggle navigation menu"
-            >
-              {mobileMenuOpen ? "メニューを閉じる" : "メニュー"}
-            </button>
-            <div className="hidden md:block">
-              <UserMenu />
-            </div>
-          </div>
-        </div>
-        <div className="mt-2 hidden items-center gap-3 text-xs text-slate-500 md:flex">
-          {secondaryLinks.map((item) => (
-            <Link
-              key={item.href}
-              href={item.href}
-              className="inline-flex items-center gap-1 text-slate-500 hover:text-brand"
-            >
-              <span className="h-2 w-2 rounded-full bg-slate-200" />
-              {item.label}
-            </Link>
-          ))}
+    <>
+      <SideNav locale={locale} links={navItems} />
+      <nav className="border-b border-slate-100 bg-white/95 px-4 py-3 shadow-sm lg:hidden">
+        <div className="flex items-center justify-between">
+          <Link href={`/${locale}`} className="font-semibold">
+            voynexus
+          </Link>
+          <button
+            type="button"
+            onClick={() => setMobileMenuOpen((prev) => !prev)}
+            className="inline-flex items-center rounded-full border border-slate-200 px-3 py-1 text-xs font-semibold text-slate-600"
+            aria-expanded={mobileMenuOpen}
+            aria-label={t("nav.menu")}
+          >
+            {mobileMenuOpen ? t("nav.closeMenu") : t("nav.menu")}
+          </button>
         </div>
         <div
-          className={clsx("mt-4 flex-col gap-3 md:hidden", mobileMenuOpen ? "flex" : "hidden")}
+          className={clsx("mt-3 flex-col gap-3", mobileMenuOpen ? "flex" : "hidden")}
           style={{ maxHeight: "calc(100vh - 6rem)", overflowY: "auto" }}
         >
           <div className="rounded-2xl border border-slate-200 bg-white p-3">
-            <p className="text-xs uppercase tracking-wide text-slate-400">Languages</p>
+            <p className="text-xs uppercase tracking-wide text-slate-400">{t("nav.languages")}</p>
             <div className="mt-2">
               <LangSwitcher current={locale} />
             </div>
@@ -129,13 +85,13 @@ export function MainNav({ locale }: Props) {
             ))}
           </div>
           <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
-            <p className="text-xs uppercase tracking-wide text-slate-400">Account</p>
+            <p className="text-xs uppercase tracking-wide text-slate-400">{t("nav.account")}</p>
             <div className="mt-3">
               <UserMenu variant="block" />
             </div>
           </div>
         </div>
-      </div>
-    </header>
+      </nav>
+    </>
   );
 }

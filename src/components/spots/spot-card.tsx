@@ -1,14 +1,20 @@
 import Link from "next/link";
 import Image from "next/image";
 import type { Spot } from "@/lib/types/cms";
+import type { Locale } from "@/lib/i18n";
 
 type Props = {
-  locale: string;
+  locale: Locale;
   spot: Spot;
+  verifiedLabel: string;
+  viewLabel: string;
 };
 
-export function SpotCard({ locale, spot }: Props) {
+export function SpotCard({ locale, spot, verifiedLabel, viewLabel }: Props) {
   const tagList = spot.tags.slice(0, 3);
+  const verification =
+    spot.lastVerifiedAt &&
+    `${verifiedLabel}: ${new Intl.DateTimeFormat(locale, { dateStyle: "medium" }).format(new Date(spot.lastVerifiedAt))}`;
 
   return (
     <article className="rounded-2xl border border-slate-200 bg-white shadow-sm transition hover:-translate-y-1">
@@ -28,7 +34,7 @@ export function SpotCard({ locale, spot }: Props) {
       <div className="space-y-2 p-4">
         <div className="flex items-center justify-between text-xs text-slate-500">
           <span>{spot.area}</span>
-          {spot.lastVerifiedAt && <span>✓ {new Date(spot.lastVerifiedAt).toLocaleDateString()}</span>}
+          {verification ? <span>{verification}</span> : null}
         </div>
         <h3 className="text-lg font-semibold text-slate-900">{spot.name}</h3>
         <p className="text-sm text-slate-600">{spot.summary}</p>
@@ -43,7 +49,7 @@ export function SpotCard({ locale, spot }: Props) {
           href={`/${locale}/spots/${spot.slug}`}
           className="inline-flex text-sm font-semibold text-brand hover:underline"
         >
-          詳細を見る →
+          {viewLabel} →
         </Link>
       </div>
     </article>

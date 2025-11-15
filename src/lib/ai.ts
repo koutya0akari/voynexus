@@ -5,6 +5,18 @@ import { searchRag } from "@/lib/rag";
 const openAiKey = process.env.OPENAI_API_KEY;
 const client = openAiKey ? new OpenAI({ apiKey: openAiKey }) : null;
 
+const localeLanguageHints: Record<Locale, string> = {
+  ja: "Japanese",
+  en: "English",
+  zh: "Traditional Chinese (Taiwan)",
+};
+
+const paceDescriptions: Record<"relaxed" | "balanced" | "active", string> = {
+  relaxed: "relaxed pace with longer stays and fewer transfers",
+  balanced: "balanced pace with moderate transfers",
+  active: "active pace that maximizes stops and walking",
+};
+
 function extractOutputText(chunk: unknown): string | null {
   if (!chunk || typeof chunk !== "object" || !("content" in chunk)) {
     return null;
@@ -67,10 +79,16 @@ export type ItineraryPayload = {
   interests: string;
   weather: string;
   tidesHint?: string;
+  area?: string;
+  pace?: "relaxed" | "balanced" | "active";
+  mustVisit?: string;
+  cautions?: string;
+  diningFocus?: string;
 };
 
 export async function generateChatResponse(payload: ChatPayload): Promise<ChatResult> {
   const docs = await searchRag(payload.userQuery, payload.lang);
+  const langHint = localeLanguageHints[payload.lang] ?? "English";
 
   if (!client) {
     return {
@@ -84,6 +102,7 @@ export async function generateChatResponse(payload: ChatPayload): Promise<ChatRe
     "You are voynexus, a nationwide Japan travel concierge.",
     "Follow safety rules: highlight official links, avoid speculation.",
     "Prioritize bullet answers and mention if data is unavailable.",
+    `Always respond in ${langHint}.`,
     `User context: ${payload.userContext ?? "N/A"}`,
     `Documents: ${docs.map((doc) => `${doc.title}: ${doc.summary} (${doc.url})`).join("\n")}`,
   ].join("\n\n");
@@ -106,6 +125,7 @@ export async function generateChatResponse(payload: ChatPayload): Promise<ChatRe
 
 export async function generateItinerary(payload: ItineraryPayload) {
   const docs = await searchRag(payload.interests, payload.lang);
+  const langHint = localeLanguageHints[payload.lang] ?? "English";
 
   if (!client) {
     return {
@@ -127,8 +147,15 @@ export async function generateItinerary(payload: ItineraryPayload) {
     `Budget: ¥${payload.budget}`,
     `Party: ${payload.party}`,
     `Weather: ${payload.weather}`,
+    payload.area ? `Primary area focus: ${payload.area}` : "",
+    payload.pace ? `Preferred pace: ${paceDescriptions[payload.pace]}` : "",
+    payload.mustVisit ? `Must include: ${payload.mustVisit}` : "",
+    payload.diningFocus ? `Dining focus: ${payload.diningFocus}` : "",
+    payload.cautions ? `Cautions or constraints: ${payload.cautions}` : "",
+    payload.interests ? `Interests keywords: ${payload.interests}` : "",
     payload.tidesHint ? `Tides: ${payload.tidesHint}` : "",
     `Docs: ${docs.map((doc) => `${doc.title}:${doc.summary}`).join("|")}`,
+    `Use ${langHint} for every string in the JSON output (time stays HH:MM).`,
   ]
     .filter(Boolean)
     .join("\n");
