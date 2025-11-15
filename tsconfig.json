@@ -17,11 +17,7 @@
     "incremental": true,
     "baseUrl": ".",
     "paths": {
-      "@/*": ["./src/*"],
-      "src/*": [
-        "./node_modules/pdf-lib/src/*",
-        "./node_modules/.pnpm/pdf-lib@1.17.1/node_modules/pdf-lib/src/*"
-      ]
+      "@/*": ["./src/*"]
     },
     "plugins": [
       {

@@ -74,8 +74,10 @@ export async function POST(request: Request) {
 
   try {
     const pdfBytes = await buildItineraryPdf(parsed.data);
+    const pdfBuffer = new ArrayBuffer(pdfBytes.byteLength);
+    new Uint8Array(pdfBuffer).set(pdfBytes);
 
-    return new NextResponse(pdfBytes, {
+    return new NextResponse(pdfBuffer, {
       headers: {
         "Content-Type": "application/pdf",
         "Content-Disposition": `attachment; filename="itinerary.pdf"`,

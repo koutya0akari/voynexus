@@ -9,6 +9,7 @@ const localeLanguageHints: Record<Locale, string> = {
   ja: "Japanese",
   en: "English",
   zh: "Traditional Chinese (Taiwan)",
+  ko: "Korean",
 };
 
 const paceDescriptions: Record<"relaxed" | "balanced" | "active", string> = {

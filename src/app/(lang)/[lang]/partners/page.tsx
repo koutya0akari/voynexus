@@ -235,6 +235,70 @@ const content: Record<Locale, Copy> = {
     contactButton: "開啟申請表單",
     contactLink: "https://forms.gle/YccYQH5h5sPartners",
   },
+  ko: {
+    heroTitle: "시설·관광안내소 전용 지원",
+    heroDescription:
+      "voynexus 위젯을 웹사이트나 안내 키오스크에 삽입하면 다국어 FAQ와 실시간 상담이 즉시 동작하며, 해결이 필요한 케이스만 직원에게 전달됩니다. 스폰서 노출도 명확히 구분됩니다.",
+    highlights: [
+      "일/영/중 24시간 + 한국어 FAQ 번역 지원",
+      "우천·혼잡 시 자동 대체 루트 제안",
+      "위험 키워드 감지 시 담당자에게 즉시 알림",
+    ],
+    heroPrimaryCta: "도입 자료 받기",
+    heroSecondaryCta: "info@voynexus.com",
+    heroSecondaryLabel: "이메일 상담",
+    sections: [
+      {
+        title: "FAQ 보드와 챗봇을 한 번에",
+        body: "시설 웹사이트나 디지털 사이니지에 태그 하나만 붙이면 영업 정보, 이동 방법, 티켓 규정을 AI가 안내하고 해결이 어려운 항목만 직원 메일함으로 전달합니다.",
+        bullets: [
+          "지역 고유 명칭과 행사 용어를 사전에 학습",
+          "이벤트 타임라인과 막차 정보를 실시간 표시",
+          "날씨와 혼잡도에 따라 즉시 우회 제안",
+        ],
+      },
+      {
+        title: "투명한 스폰서 노출",
+        body: "제휴 숙박, 체험 예약, 쿠폰을 카드 형태로 제공하며 ‘협력 시설’ 라벨을 명시해 여행자가 출처를 바로 확인할 수 있습니다.",
+        bullets: [
+          "예약 링크에 추적 파라미터 자동 부여",
+          "쿠폰 재고와 중지 날짜를 동기화",
+          "앱과 동일한 심사 기준으로 운영",
+        ],
+      },
+      {
+        title: "안전 규칙과 리포트",
+        body: "금지어 사전, 담당자 연락처, 주간 요약 리포트를 설정해 운영 상황을 빠르게 파악할 수 있습니다.",
+        bullets: [
+          "SOS 키워드 발생 시 SMS/이메일 경보",
+          "언어·주제별 상담 건수 자동 집계",
+          "Supabase 대시보드에서 대화 기록 확인",
+        ],
+      },
+    ],
+    stepsTitle: "3단계 도입 절차",
+    steps: [
+      { title: "1. 킥오프 미팅", body: "영업 정보, 주의 사항, 스폰서 조건을 공유합니다." },
+      { title: "2. 템플릿 구성", body: "FAQ와 AI 사전을 제작하고 스테이징 URL에서 검수합니다." },
+      { title: "3. 공개 & 지원", body: "본 운영 태그를 배포하고 주간 리포트와 튜닝을 제공합니다." },
+    ],
+    faqTitle: "자주 묻는 질문",
+    faqs: [
+      {
+        q: "요금은 어떻게 책정되나요?",
+        a: "기본 플랫폼 비용에 스폰서 노출이나 방문자 수 기반 옵션을 추가할 수 있으며, 견적은 자료와 함께 전달됩니다.",
+      },
+      {
+        q: "직접 내용을 수정할 수 있나요?",
+        a: "가능합니다. 간단한 CMS에서 FAQ·쿠폰·공지사항을 수정하면 몇 분 안에 반영됩니다.",
+      },
+    ],
+    contactTitle: "자료 요청 및 상담",
+    contactBody:
+      "도입 매뉴얼, 태그 예시, 스폰서 가이드라인을 PDF로 보내드리며, 일본어나 영어로 라이브 데모도 예약하실 수 있습니다.",
+    contactButton: "신청서 열기",
+    contactLink: "https://forms.gle/YccYQH5h5sPartners",
+  },
 };
 
 export default function PartnersPage({ params }: Props) {

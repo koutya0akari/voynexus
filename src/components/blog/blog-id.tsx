@@ -10,7 +10,7 @@ type Props = {
   locale: Locale;
 };
 
-const copy: Record<Locale, { author: string; cost: string; tags: string; gallery: string }> = {
+const copy = {
   ja: {
     author: "執筆",
     cost: "旅費目安",
@@ -29,9 +29,20 @@ const copy: Record<Locale, { author: string; cost: string; tags: string; gallery
     tags: "標籤",
     gallery: "照片報導",
   },
-};
+  ko: {
+    author: "작성",
+    cost: "예상 예산",
+    tags: "태그",
+    gallery: "사진 보고서",
+  },
+} satisfies Record<Locale, { author: string; cost: string; tags: string; gallery: string }>;
 
-const dateLocaleMap: Record<Locale, string> = { ja: "ja-JP", en: "en-US", zh: "zh-TW" };
+const dateLocaleMap: Record<Locale, string> = {
+  ja: "ja-JP",
+  en: "en-US",
+  zh: "zh-TW",
+  ko: "ko-KR",
+};
 
 export default function BlogId({ blog, locale }: Props) {
   const safeBody = sanitizeRichText(blog.body ?? "");
